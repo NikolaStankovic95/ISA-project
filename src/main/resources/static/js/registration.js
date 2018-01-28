@@ -7,6 +7,24 @@ $(document).on('click','#register',function(e){
 	var city=$("#city").val();
 	var phone=$("#phone").val();
 	
+	
+	if(email==""){
+		return alert("Email is required");
+	}
+	if(password==""){
+		return alert("Password is required");
+	}
+	if(firstname==""){
+		return alert("Name is required");
+	}
+	if(lastname==""){
+		return alert("Surname is required");
+	}
+	
+	if(password!=checkpassword){
+		return alert("Password must be equals");
+
+	}
 	var user=JSON.stringify({
 		"email":email,
 		"password":password,

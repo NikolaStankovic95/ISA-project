@@ -29,17 +29,17 @@ public class UserServiceImp implements UserService {
 
 
 	@Override
-	public User findUserByEmail(String email) {
+	public User findUserById(Long id) {
 		// TODO Auto-generated method stub
-		System.out.println("Mail from FIND "+email);
-		return userRepository.findUserByEmail(email);
+		System.out.println("Mail from FIND "+id);
+		return userRepository.findUserById(id);
 	}
 
 
 	@Override
-	public int setFixedActivatedFor(boolean activated, String email) {
+	public int setFixedActivatedFor(boolean activated, Long id) {
 		// TODO Auto-generated method stub
-		System.out.println("Mail from message "+email);
-		return userRepository.setFixedActivatedFor(activated, email);
+		System.out.println("Mail from message "+id);
+		return userRepository.setFixedActivatedFor(activated, id);
 	}
 }

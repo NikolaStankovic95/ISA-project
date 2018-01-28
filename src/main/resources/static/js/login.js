@@ -14,10 +14,14 @@ $(document).on('click','#login',function(e){
 		dataType : 'json',
 		data:user,
 		success:function(data){
-			if(data!=null)
+			if(data!=null){
+				alert("Ulogovoan");
 				window.top.location="Cinema.html";
-			else 
+			}
+			else {
+				alert("Prihvatite aktivacioni mail");
 				window.top.location="Login.html";
+			}
 			
 		}
 	})

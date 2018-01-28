@@ -16,7 +16,20 @@ public class User implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	protected Long id;
+
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Column(name="email",nullable = false)
 	protected String email;
 	
@@ -38,7 +51,17 @@ public class User implements Serializable {
 	@Column(nullable=false)
 	protected boolean firstlogin;
 	
+	@Column(nullable=false)
+	protected UserRole role;
 	
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+
 	public boolean isActivated() {
 		return activated;
 	}
@@ -55,8 +78,9 @@ public class User implements Serializable {
 		this.firstlogin = firstlogin;
 	}
 
+
 	public User(String email, String password, String name, String surname, String city, boolean activated,
-			boolean firstlogin, String number) {
+			boolean firstlogin, UserRole role, String number) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -65,6 +89,7 @@ public class User implements Serializable {
 		this.city = city;
 		this.activated = activated;
 		this.firstlogin = firstlogin;
+		this.role = role;
 		this.number = number;
 	}
 

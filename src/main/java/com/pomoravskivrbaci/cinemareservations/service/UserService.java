@@ -7,9 +7,9 @@ public interface UserService {
 
 	User findUserByEmailAndPassword(String email, String password);
 	
-	User findUserByEmail(String email);
+	User findUserById(Long id);
 	
 	User createUser(User user);
 	
-	int setFixedActivatedFor(boolean activated,String email);
+	int setFixedActivatedFor(boolean activated,Long id);
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.pomoravskivrbaci.cinemareservations.model.User;
+import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.EmailService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
@@ -35,7 +36,7 @@ public class RegistrationController {
 		if(loggedUser!=null){
 			System.out.println(loggedUser.isActivated());
 			if(loggedUser.isActivated())
-			return new ResponseEntity<User>(user, HttpStatus.OK);
+				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
 			else 
 				return null;
 		}else 
@@ -48,21 +49,20 @@ public class RegistrationController {
 	 * @return stranica na koju se redirektuje
 	 */
 	
-	@RequestMapping(value="/activation/{email}")
-	private String activateAccount(@PathVariable String email){
-		User user=userService.findUserByEmail("nemanja.gavrilovic1995@gmail.com");
+	@RequestMapping(value="/activation/{id}")
+	private String activateAccount(@PathVariable String id){
+		User user=userService.findUserById(Long.parseLong(id));
 		if(user!=null){
 			
-		int flag=userService.setFixedActivatedFor(true, user.getEmail());
+		int flag=userService.setFixedActivatedFor(true, user.getId());
 		System.out.println(flag);
 			if(flag==1)
-			return "Cinema.html";
+			return "Cinema";
 			else
-				return "Login.html";
+				return "Login";
 		}else {
-			return "Login.html";
+			return "Login";
 		}
-	
 		
 	}
 	
@@ -72,7 +72,8 @@ public class RegistrationController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<User> registrateUser(
 			@RequestBody User user){
-		System.out.println(user);
+		
+		user.setRole(UserRole.USER);
 		user.setActivated(false);
 		user.setFirstlogin(false);
 		
