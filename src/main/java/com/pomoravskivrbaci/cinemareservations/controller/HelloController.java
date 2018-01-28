@@ -14,7 +14,7 @@ public class HelloController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getHomePage(HttpServletResponse response) {
 		response.setHeader("Content-Type","text/html");
-		return "index";
+		return "index.html";
 	}
 
 }

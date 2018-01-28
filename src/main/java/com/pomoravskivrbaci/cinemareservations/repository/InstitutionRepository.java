@@ -12,4 +12,6 @@ import com.pomoravskivrbaci.cinemareservations.model.InstitutionType;
 public interface InstitutionRepository extends PagingAndSortingRepository<Institution,Long> {
 
 	List<Institution> findByType(InstitutionType type);
+	
+	Institution findByName(String name);
 }

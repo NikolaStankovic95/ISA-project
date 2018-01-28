@@ -21,4 +21,10 @@ public class InstitutionServiceImpl implements InstitutionService {
 		return institutionRepositroy.findByType(type);
 	}
 
+	@Override
+	public Institution findByName(String name) {
+		// TODO Auto-generated method stub
+		return institutionRepositroy.findByName(name);
+	}
+
 }

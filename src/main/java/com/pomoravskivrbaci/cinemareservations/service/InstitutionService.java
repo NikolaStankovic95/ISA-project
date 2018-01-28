@@ -8,4 +8,6 @@ import com.pomoravskivrbaci.cinemareservations.model.InstitutionType;
 public interface InstitutionService {
 
 	List<Institution> findByType(InstitutionType type);
+
+	Institution findByName(String name);
 }
