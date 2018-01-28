@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<script src="jquery.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+<div id="reservation1" >
+
+    <input type="label" value="Naziv bioskopa">
+    <select name="id"></select>
+    <input type="button" value="Next" onclick="next(2)">
+</div>
+
+<div id="reservation2" style="display: none;">
+    <input type="label" value="Naziv bioskopa">
+    <select> </select><br>
+    <input type="label" value="Projekcija">
+    <select name="id"></select><br>
+    <input type="label" value="Datum:" >
+    <input type="Date" name=""><br>
+    <input type="label" value="Termin">
+    <select></select><br>
+    <input type="label" value="Sala">
+    <select></select><br>
+    <input type="button" value="Next" onclick="next(3)">
+    <input type="button" value="Back" onclick="back(1)">
+
+</div>
+
+<div id="reservation3" style="display: none">
+
+    <input type="label" value="Sala">
+    <select></select><br>
+    <div id="div">
+      
+    </div>
+      <input type="button" value="Next" onclick="next(4)">
+    <input type="button" value="Back" onclick="back(2)">
+
+  
+</div>
+
+<div id="reservation4" style="display: none;">
+
+  <input type="label" value="Pozovi prijatelje">
+  <select></select><br>
+  <input type="label" value="Pozvani prijatelji">
+  <select  size="5"></select>
+    <input type="button" value="Back" onclick="back(3)">
+</div>
+<script>
+
+function next(rbrDIV) {
+   document.getElementById("reservation"+(rbrDIV-1)).style.display = "none";
+   document.getElementById("reservation"+rbrDIV).style.display = "block";
+     
+}
+
+function back(rbrDIV) {
+
+   document.getElementById("reservation"+(rbrDIV)).style.display = "block";
+   document.getElementById("reservation"+(rbrDIV+1)).style.display = "none";
+     
+}
+
+
+
+var div=$('#div');
+var brmesta=11;
+var rbm=11;
+var redova=Math.ceil(brmesta/5);
+console.log(redova);
+var brkolona=5;
+for(var i=0;i<redova;i++){
+  for(var j=0;j<brkolona;j++){
+   var zauzeto=false;
+    if(zauzeto==false){
+      div.append('<input type=\'checkbox\'>');
+    //   div.append("<input type=\"radio\" ng-checked=\"zauzeto\" ng-model=\'"+rbm+"\'>");
+     }else {
+
+      div.append("<input type=\'checkbox\' checked>");
+//div.append("<input type=\"radio\" ng-checked=\"zauzeto\" ng-model=\'"+rbm+"\'>");
+  
+      }
+    rbm--;
+  }
+  
+    brmesta=brmesta-5;
+  if(brmesta<5){
+    brkolona=brmesta;
+  }
+
+  div.append("<br>");
+}
+</script>
+
+</body>
+</html>
