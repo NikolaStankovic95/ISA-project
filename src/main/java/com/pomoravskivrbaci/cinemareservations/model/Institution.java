@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Institution implements Serializable{
 
@@ -25,8 +27,31 @@ public class Institution implements Serializable{
 	@Column(name="type" ,nullable=false)
 	private InstitutionType type;
 
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
+	
+	@ManyToOne
+	protected Repertoire repertoire;
+	
+	
+	public Repertoire getRepertoire() {
+		return repertoire;
+	}
+
+	public void setRepertorie(Repertoire repertoire) {
+		this.repertoire = repertoire;
+	}
+	
+	@JsonIgnore
+	public List<Hall> getHalls() {
+		return halls;
+	}
+
+	public void setHalls(List<Hall> halls) {
+		this.halls = halls;
+	}
+
 	
 	public String getName() {
 		return name;

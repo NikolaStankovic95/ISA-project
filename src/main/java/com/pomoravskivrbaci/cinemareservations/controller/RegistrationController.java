@@ -27,7 +27,7 @@ public class RegistrationController {
 	private EmailService emailService;
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getHomePage() {
-		return "Registration";
+		return "redirect:/Registration.html";
 	}
 	@RequestMapping(value="/login")
 	private ResponseEntity<User> login(@RequestBody User user){
@@ -55,13 +55,10 @@ public class RegistrationController {
 		if(user!=null){
 			
 		int flag=userService.setFixedActivatedFor(true, user.getId());
-		System.out.println(flag);
-			if(flag==1)
-			return "Cinema";
-			else
-				return "Login";
+		return "redirect:/Login.html";
+		
 		}else {
-			return "Login";
+			return "redirect:/Login.html";
 		}
 		
 	}

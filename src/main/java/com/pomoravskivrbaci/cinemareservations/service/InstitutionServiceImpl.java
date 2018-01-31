@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.pomoravskivrbaci.cinemareservations.model.Institution;
 import com.pomoravskivrbaci.cinemareservations.model.InstitutionType;
+import com.pomoravskivrbaci.cinemareservations.model.Repertoire;
 import com.pomoravskivrbaci.cinemareservations.repository.InstitutionRepository;
 
 @Service
@@ -25,6 +26,12 @@ public class InstitutionServiceImpl implements InstitutionService {
 	public Institution findByName(String name) {
 		// TODO Auto-generated method stub
 		return institutionRepositroy.findByName(name);
+	}
+
+	@Override
+	public Repertoire findByRepertoire(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
