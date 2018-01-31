@@ -17,6 +17,7 @@ import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.service.HallService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -50,5 +51,19 @@ public class ReservationController {
 		
 		Institution cinema=institutionService.findByName(name);
 		return new ResponseEntity<Institution>(cinema,HttpStatus.OK);
+	}
+
+	@RequestMapping("/cinemas")
+	private String cinemasHomepage(HttpServletRequest request) {
+		List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
+		request.setAttribute("cinemas", listOfCinemas);
+		return "forward:/cinema_homepage.jsp";
+	}
+
+	@RequestMapping("/theatres")
+	private String theatresHomepage(HttpServletRequest request) {
+		List<Institution> listOfTheatres=institutionService.findByType(InstitutionType.THEATRE);
+		request.setAttribute("theatres", listOfTheatres);
+		return "forward:/theatre_homepage.jsp";
 	}
 }
