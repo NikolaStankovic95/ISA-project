@@ -8,21 +8,23 @@
     <label>Naziv bioskopa</label>
     <select id="nameOfCinema1"></select>
     <input type="button" value="Next" id="Next1" onclick="next(2)">
-    <input type="hidden" id="institutionID" >
+    <input type="hidden" id="repertoireID" >
+    
 </div>
 
 <div id="reservation2" style="display: none;">
+	<label id="repertoire"></label>
     <label>Naziv bioskopa</label>
     <select id="nameOfCinema"> </select><br>
     <label>Projekcija</label>
-    <select name="id"></select><br>
+    <select id="projections" name="id"></select><br>
      <label>Datum</label>
     <input type="Date" name=""><br>
     <label>Termin</label>
-    <select></select><br>
+    <select id="term"></select><br>
    	 <label>Sala</label>
-     <select id="cinemasHalls"></select><br>
-    <input type="button" value="Next" onclick="next(3)">
+     <select id="projectionHalls"></select><br>
+    <input type="button" value="Next" id="Next2" onclick="next(3)">
     <input type="button" value="Back" onclick="back(1)">
 
 </div>
@@ -30,11 +32,11 @@
 <div id="reservation3" style="display: none">
 
     <label>Sala</label>
-    <select id="cinemasHalls2"></select><br>
+    <select id="projectionHalls2"></select><br>
     <div id="div">
       
     </div>
-      <input type="button" value="Next" onclick="next(4)">
+      <input type="button" value="Next"  onclick="next(4)">
     <input type="button" value="Back" onclick="back(2)">
 
   
@@ -63,36 +65,6 @@ function back(rbrDIV) {
      
 }
 
-
-
-var div=$('#div');
-var brmesta=11;
-var rbm=11;
-var redova=Math.ceil(brmesta/5);
-console.log(redova);
-var brkolona=5;
-for(var i=0;i<redova;i++){
-  for(var j=0;j<brkolona;j++){
-   var zauzeto=false;
-    if(zauzeto==false){
-      div.append('<input type=\'checkbox\'>');
-    //   div.append("<input type=\"radio\" ng-checked=\"zauzeto\" ng-model=\'"+rbm+"\'>");
-     }else {
-
-      div.append("<input type=\'checkbox\' checked>");
-//div.append("<input type=\"radio\" ng-checked=\"zauzeto\" ng-model=\'"+rbm+"\'>");
-  
-      }
-    rbm--;
-  }
-  
-    brmesta=brmesta-5;
-  if(brmesta<5){
-    brkolona=brmesta;
-  }
-
-  div.append("<br>");
-}
 </script>
 
 </body>

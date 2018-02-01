@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Institution implements Serializable{
 
@@ -39,18 +41,28 @@ public class Institution implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
 	
-	public String getName() {
-		return name;
+	@ManyToOne
+	protected Repertoire repertoire;
+	
+	
+	public Repertoire getRepertoire() {
+		return repertoire;
 	}
 
-	public Long getId() {
-		return id;
+	public void setRepertorie(Repertoire repertoire) {
+		this.repertoire = repertoire;
+	}
+	
+	@JsonIgnore
+	public List<Hall> getHalls() {
+		return halls;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setHalls(List<Hall> halls) {
+		this.halls = halls;
 	}
 
+	
 	public String getAddress() {
 		return address;
 	}
@@ -73,6 +85,18 @@ public class Institution implements Serializable{
 
 	public void setRating(float rating) {
 		this.rating = rating;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Institution(){

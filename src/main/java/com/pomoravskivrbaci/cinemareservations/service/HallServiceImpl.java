@@ -18,5 +18,9 @@ public class HallServiceImpl implements HallService{
 		// TODO Auto-generated method stub
 		return hallRepository.findByInstitutionId(id);
 	}
-
+	@Override
+	public List<Hall> findByProjection_id(Long id) {
+		// TODO Auto-generated method stub
+		return hallRepository.findByProjections_id(id);
+	}
 }

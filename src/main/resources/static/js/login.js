@@ -9,7 +9,7 @@ $(document).on('click','#login',function(e){
 	})
 	$.ajax({
 		type:'POST',
-		url:'/userController/login',
+		url:'/registrationController/login',
 		contentType : 'application/json',
 		dataType : 'json',
 		data:user,

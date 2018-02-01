@@ -1,14 +1,19 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class User implements Serializable {
 
@@ -21,13 +26,35 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 
-	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	@OneToMany(cascade={ALL},fetch=FetchType.EAGER,mappedBy="user")
+	protected List<Friendship> friendships;
+	
+	@OneToMany(cascade={ALL},fetch=FetchType.EAGER,mappedBy="user")
+	protected List<Friendship> requests;
+	
+	@JsonIgnore
+	public List<Friendship> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(List<Friendship> requests) {
+		this.requests = requests;
+	}
+
+	@JsonIgnore
+	public List<Friendship> getFriendships() {
+		return friendships;
+	}
+
+	public void setFriendships(List<Friendship> friendships) {
+		this.friendships = friendships;
 	}
 
 	@Column(name="email",nullable = false)
@@ -62,6 +89,24 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
+
+	public User(Long id, List<Friendship> friendships, String email, String password,
+			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
+			String number) {
+		super();
+		this.id = id;
+		this.friendships = friendships;
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.city = city;
+		this.activated = activated;
+		this.firstlogin = firstlogin;
+		this.role = role;
+		this.number = number;
+	}
+
 	public boolean isActivated() {
 		return activated;
 	}
@@ -78,21 +123,6 @@ public class User implements Serializable {
 		this.firstlogin = firstlogin;
 	}
 
-
-	public User(String email, String password, String name, String surname, String city, boolean activated,
-			boolean firstlogin, UserRole role, String number) {
-		super();
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.surname = surname;
-		this.city = city;
-		this.activated = activated;
-		this.firstlogin = firstlogin;
-		this.role = role;
-		this.number = number;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -101,9 +131,14 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
+
 	public String getSurname() {
 		return surname;
 	}
+
+	
+
+
 
 	@Override
 	public String toString() {

@@ -1,5 +1,9 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,16 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.EmailService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 @Controller
-@RequestMapping("/userController")
+@RequestMapping("/registrationController")
 public class RegistrationController {
 
 	@Autowired
@@ -30,15 +32,16 @@ public class RegistrationController {
 	private EmailService emailService;
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getHomePage() {
-		return "Registration";
+		return "redirect:/Registration.html";
 	}
+	
 	@RequestMapping(value="/login")
-	private ResponseEntity<User> login(@RequestBody User user, HttpSession session){
-		User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
+	private ResponseEntity<User> login(@RequestBody User user,HttpServletRequest request){
+    User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
 		if(loggedUser!=null){
-			System.out.println(loggedUser.isActivated());
-			if(loggedUser.isActivated()) {
-				session.setAttribute("loggedUser", loggedUser);
+		
+			if(loggedUser.isActivated()){
+				request.getSession().setAttribute("loggedUser", loggedUser);
 				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
 			}
 			else 
@@ -59,13 +62,10 @@ public class RegistrationController {
 		if(user!=null){
 			
 		int flag=userService.setFixedActivatedFor(true, user.getId());
-		System.out.println(flag);
-			if(flag==1)
-			return "Cinema";
-			else
-				return "Login";
+		return "redirect:/Login.html";
+		
 		}else {
-			return "Login";
+			return "redirect:/Login.html";
 		}
 		
 	}
@@ -80,7 +80,7 @@ public class RegistrationController {
 		user.setRole(UserRole.USER);
 		user.setActivated(false);
 		user.setFirstlogin(false);
-		
+		user.setFriendships(new ArrayList<Friendship>());
 		User addedUser=userService.createUser(user);
 		
 		try {

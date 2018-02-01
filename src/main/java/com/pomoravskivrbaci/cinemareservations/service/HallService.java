@@ -7,4 +7,6 @@ import com.pomoravskivrbaci.cinemareservations.model.Hall;
 public interface HallService {
 
 	List<Hall> findByInstitutionId(Long id);
+	
+	List<Hall> findByProjection_id(Long id);
 }
