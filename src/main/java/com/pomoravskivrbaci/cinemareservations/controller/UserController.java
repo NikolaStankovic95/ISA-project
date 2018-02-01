@@ -63,7 +63,7 @@ public class UserController {
 	public ResponseEntity<Friendship>  checkFriendRequest(HttpServletRequest request,@RequestBody String userProfile){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
 		User friend=userService.findUserById(Long.parseLong(userProfile));
-		Friendship friendship=friendshipService.findByUserAndFriend(loggedUser, friend);
+		Friendship friendship=friendshipService.findByUserAndFriend(friend, loggedUser);
 		if(friendship!=null){
 			return  new ResponseEntity<Friendship>(friendship,HttpStatus.OK);
 				
@@ -125,27 +125,28 @@ public class UserController {
 		Friendship userFriendship=friendshipService.findByUserAndFriend(user, friend);
 		userFriendship.setAccepted(true);
 		friendshipService.update(userFriendship,userFriendship.getId());
-		Friendship friendFriendship=friendshipService.findByUserAndFriend(friend, user);
-		friendFriendship.setAccepted(true);
-		friendshipService.update(friendFriendship,friendFriendship.getId());
+		
+		Friendship friendship=new Friendship();
+		friendship.setAccepted(true);
+		friendship.setFriend(user);
+		friendship.setUser(friend);
+		friend.getFriendships().add(friendship);
+		friend.getFriendships().add(friendship);
+		
+		friend.setFriendships(friend.getFriendships());
+		User userReceived=userService.update(friend,friend.getId());
+		
 		
 		List<Friendship> userFriends=userService.findFriends(user,true);
 		return new ResponseEntity<List<Friendship>>(userFriends,HttpStatus.OK);
 	}
+	
+	
 	@RequestMapping(value="/sendFriendRequest/{friendId}")
 	private ResponseEntity<User> sendFriendRequest(HttpServletRequest request,@PathVariable("friendId") String friendId){
 		User user=(User) request.getSession().getAttribute("loggedUser");
 		
 		User friend=userService.findUserById(Long.parseLong(friendId));
-		Friendship friendship=new Friendship();
-		friendship.setFriend(friend);
-		friendship.setUser(user);
-		friendship.setAccepted(false);
-		user.getFriendships().add(friendship);
-		
-		user.getFriendships().add(friendship);
-		user.setFriendships(user.getFriendships());
-		
 		//--------------
 		Friendship friendshipFriend=new Friendship();
 		friendshipFriend.setFriend(user);
@@ -157,11 +158,9 @@ public class UserController {
 		//------------------------
 		
 		User userReceived=userService.update(friend,Long.parseLong(friendId));
-		User userSent=userService.update(user,user.getId());
 		
 		if(userReceived!=null){
 			System.out.println(userReceived.getFriendships().size());
-			System.out.println(userSent.getFriendships().size());
 			
 			return new ResponseEntity<User>(userReceived, HttpStatus.OK);
 		}else

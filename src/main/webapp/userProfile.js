@@ -22,7 +22,7 @@ window.onload=function(){
 		success:function(data){
 			var list=$("#friendRequestList").empty();
 			$.each(data,function(index,friend){
-				drawFriendsList(index,friend);
+				drawFriendsRequestList(index,friend);
 			})
 		}
 		})
@@ -38,6 +38,7 @@ function checkFriendRequest(){
 		data:$("#userId").val(),
 		async:false,
 		success:function(data){
+			$("#friendRequest").empty();
 			if(data.friend==null)
 				$("#friendRequest").append("<input type=\"button\" id=\"addFriend\" value=\"Send request\">") 
 			else if(data.accepted==true)
@@ -51,12 +52,25 @@ function checkFriendRequest(){
 function drawFriendsList(index,data){
 	var list=$("#friendList");
 	if(list!=null){
+		list.append("<li><a id=\"link"+index+"\" href='../user/"+data.user.id+"\'>"+data.user.name+" "+data.user.surname+"</a>");
+		if(data.accepted==false ){
+			list.append("&nbsp<input type=\"button\" onclick=\"addFriend(\'"+data.user.email+"\')\" value=\"Accept request\"></li>")
+	
+		}else{
+			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.user.email+"\')\" value=\"Delete friend\"></li>")
+
+		}
+	}
+}
+function drawFriendsRequestList(index,data){
+	var list=$("#friendRequestList");
+	if(list!=null){
 		list.append("<li><a id=\"link"+index+"\" href='../user/"+data.friend.id+"\'>"+data.friend.name+" "+data.friend.surname+"</a>");
 		if(data.accepted==false ){
 			list.append("&nbsp<input type=\"button\" onclick=\"addFriend(\'"+data.friend.email+"\')\" value=\"Accept request\"></li>")
 	
 		}else{
-			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Delete friend\"></li>")
+			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Reuest sent\"></li>")
 
 		}
 	}

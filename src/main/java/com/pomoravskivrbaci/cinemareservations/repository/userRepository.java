@@ -32,7 +32,7 @@ public interface userRepository extends PagingAndSortingRepository<User,Long> {
 	@Query("update User u set u.activated = ?1 where u.id = ?2")
 	int setFixedActivatedFor(boolean activated,Long id);
 	
-	@Query("Select  f FROM User AS u LEFT JOIN u.friendships AS f WHERE f.friend = ?1 and f.accepted=?2")
+	@Query("Select  f.user as user FROM User AS u LEFT JOIN u.friendships AS f WHERE f.friend = ?1 and f.accepted=?2")
 	List<Friendship> findFriends(User id,boolean accepted);
 	
 	@Query("Select  f FROM User AS u LEFT JOIN u.friendships AS f WHERE f.user = ?1 and f.accepted=?2")

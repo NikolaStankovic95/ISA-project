@@ -36,8 +36,18 @@ public class User implements Serializable {
 	@OneToMany(cascade={ALL},fetch=FetchType.EAGER,mappedBy="user")
 	protected List<Friendship> friendships;
 	
+	@OneToMany(cascade={ALL},fetch=FetchType.EAGER,mappedBy="user")
+	protected List<Friendship> requests;
 	
-	
+	@JsonIgnore
+	public List<Friendship> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(List<Friendship> requests) {
+		this.requests = requests;
+	}
+
 	@JsonIgnore
 	public List<Friendship> getFriendships() {
 		return friendships;
