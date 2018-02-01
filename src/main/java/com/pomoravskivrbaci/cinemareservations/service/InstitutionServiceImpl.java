@@ -22,9 +22,19 @@ public class InstitutionServiceImpl implements InstitutionService {
 	}
 
 	@Override
+	public Institution findById(Long id) {
+		return institutionRepositroy.findById(id);
+	}
+
+	@Override
 	public Institution findByName(String name) {
 		// TODO Auto-generated method stub
 		return institutionRepositroy.findByName(name);
+	}
+
+	@Override
+	public List<Institution> findAll() {
+		return institutionRepositroy.findAll();
 	}
 
 }

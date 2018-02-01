@@ -14,4 +14,8 @@ public interface InstitutionRepository extends PagingAndSortingRepository<Instit
 	List<Institution> findByType(InstitutionType type);
 	
 	Institution findByName(String name);
+
+	Institution findById(Long id);
+
+	List<Institution> findAll();
 }
