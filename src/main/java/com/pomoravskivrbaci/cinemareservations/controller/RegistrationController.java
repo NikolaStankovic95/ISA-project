@@ -1,9 +1,6 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
-
-
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,16 +34,13 @@ public class RegistrationController {
 	public String getHomePage() {
 		return "redirect:/Registration.html";
 	}
+	
 	@RequestMapping(value="/login")
 	private ResponseEntity<User> login(@RequestBody User user,HttpServletRequest request){
-		
-		User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
+    User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
 		if(loggedUser!=null){
+		
 			if(loggedUser.isActivated()){
-				System.out.println("Broj prijatelja");
-				System.out.println(loggedUser.getFriendships().size());
-				System.out.println("------------");
-				
 				request.getSession().setAttribute("loggedUser", loggedUser);
 				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
 			}
