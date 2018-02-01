@@ -1,5 +1,12 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.EmailService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
 @Controller
-@RequestMapping("/userController")
+@RequestMapping("/registrationController")
 public class RegistrationController {
 
 	@Autowired
@@ -30,13 +38,18 @@ public class RegistrationController {
 		return "redirect:/Registration.html";
 	}
 	@RequestMapping(value="/login")
-	private ResponseEntity<User> login(@RequestBody User user){
+	private ResponseEntity<User> login(@RequestBody User user,HttpServletRequest request){
 		
 		User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
 		if(loggedUser!=null){
-			System.out.println(loggedUser.isActivated());
-			if(loggedUser.isActivated())
+			if(loggedUser.isActivated()){
+				System.out.println("Broj prijatelja");
+				System.out.println(loggedUser.getFriendships().size());
+				System.out.println("------------");
+				
+				request.getSession().setAttribute("loggedUser", loggedUser);
 				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+			}
 			else 
 				return null;
 		}else 
@@ -73,7 +86,7 @@ public class RegistrationController {
 		user.setRole(UserRole.USER);
 		user.setActivated(false);
 		user.setFirstlogin(false);
-		
+		user.setFriendships(new ArrayList<Friendship>());
 		User addedUser=userService.createUser(user);
 		
 		try {

@@ -31,9 +31,7 @@ public class EmailService {
 		mail.setTo(user.getEmail());
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sistem bioskopa/pozorišta");
-		mail.setText("Pozdrav " + user.getName() + ",\n\n.");
-		mail.setText("Da bi ste se uspešno registrovali na sajt,morate aktivirati svoj nalog.");
-		mail.setText("Kliknite na sledeći link http://localhost:9000/userController/activation/"+user.getId());
+		mail.setText("Kliknite na sledeći link http://localhost:9000/registrationController/activation/"+user.getId());
 		
 		javaMailSender.send(mail);
 

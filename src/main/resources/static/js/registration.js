@@ -36,7 +36,7 @@ $(document).on('click','#register',function(e){
 	})
 	$.ajax({
 		type:'POST',
-		url:'/userController/register',
+		url:'/registrationController/register',
 		contentType : 'application/json',
 		dataType : 'json',
 		data:user,
