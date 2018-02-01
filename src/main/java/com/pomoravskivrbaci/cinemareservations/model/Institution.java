@@ -1,5 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import org.springframework.stereotype.Controller;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,6 +27,15 @@ public class Institution implements Serializable{
 	@Column(name="type" ,nullable=false)
 	private InstitutionType type;
 
+	@Column(name="address", nullable = false)
+	private String address;
+
+	@Column(name="description", nullable = false)
+	private String description;
+
+	@Column(name="rating", nullable = false)
+	private float rating;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
 	
@@ -38,6 +49,30 @@ public class Institution implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public float getRating() {
+		return rating;
+	}
+
+	public void setRating(float rating) {
+		this.rating = rating;
 	}
 
 	public Institution(){

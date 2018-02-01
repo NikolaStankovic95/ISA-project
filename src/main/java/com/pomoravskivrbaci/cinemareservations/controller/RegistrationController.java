@@ -16,6 +16,9 @@ import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.EmailService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/userController")
 public class RegistrationController {
@@ -30,13 +33,14 @@ public class RegistrationController {
 		return "Registration";
 	}
 	@RequestMapping(value="/login")
-	private ResponseEntity<User> login(@RequestBody User user){
-		
+	private ResponseEntity<User> login(@RequestBody User user, HttpSession session){
 		User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
 		if(loggedUser!=null){
 			System.out.println(loggedUser.isActivated());
-			if(loggedUser.isActivated())
+			if(loggedUser.isActivated()) {
+				session.setAttribute("loggedUser", loggedUser);
 				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+			}
 			else 
 				return null;
 		}else 

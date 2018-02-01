@@ -10,9 +10,17 @@
 
     <ul>
     <c:forEach var="cinema" items="${cinemas}">
-        <li>${ cinema.name }</li>
+        <li>
+            <div>
+                <h3>${ cinema.name }</h3>
+                <p> ${ cinema.description } </p>
+                <p> Adresa: ${ cinema.address } </p>
+                <p> Ocena: ${ cinema.rating } </p>
+            </div>
+        </li>
     </c:forEach>
     </ul>
+    <c:if test="${ not empty loggedUser }">Ulogovan</c:if>
 </body>
 
 </html>
