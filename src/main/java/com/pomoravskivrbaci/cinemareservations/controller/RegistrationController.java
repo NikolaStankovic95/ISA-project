@@ -52,7 +52,7 @@ public class RegistrationController {
 	
 	/**
 	 * Aktivacija korisničkog naloga
-	 * @param email Korisnikov email
+	 * @param id Korisnikov email
 	 * @return stranica na koju se redirektuje
 	 */
 	
