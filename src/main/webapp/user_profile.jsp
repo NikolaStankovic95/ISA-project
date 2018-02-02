@@ -11,6 +11,9 @@
 </head>
 <body>
 
+	<c:if test="${empty loggedUser }">
+	<c:redirect url="/Login.html"/>
+	</c:if>
 	<input type="text" disabled id="name" value="${ user.name }">  <br>
 	<input type="text" disabled id="surname" value="${ user.surname }"><br>
 	
@@ -23,9 +26,20 @@
   		<div id="friendRequest"></div>
   	</c:if>
   	<c:if test="${loggedUser.email==user.email }">
+  	<label>Lista prijatelja</label>
   		<ul id="friendList">
 		</ul>
+	<label>Lista zahteva</label>
+  	
 		<ul id="friendRequestList">
+		</ul>
+	<input type="text" name="name" id="searchName" placeholder="Name">
+	<input type="text" name="surname" id="searchSurname" placeholder="Surname">
+	<input type="button" id="searchUsers" value="Search">
+	
+	<label>List korisnika</label>
+	
+		<ul id="users">
 		</ul>
   	</c:if>
  	

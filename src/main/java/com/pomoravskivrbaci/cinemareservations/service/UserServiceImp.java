@@ -3,7 +3,10 @@ package com.pomoravskivrbaci.cinemareservations.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
@@ -81,4 +84,26 @@ public class UserServiceImp implements UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findFriendRequests(id, accepted);
 	}
+
+
+
+	@Override
+	public List<User> findAllUsersExceptLogged(Long id) {
+		// TODO Auto-generated method stub
+		return userRepository.findAllUsersExceptLogged(id);
+	}
+
+
+
+	@Override
+	public Page<User> findUsers(String name, String surname, Pageable pageable) {
+		// TODO Auto-generated method stub
+		
+		
+		return userRepository.findByNameContainingAndSurnameContainingAllIgnoringCase(name, surname, pageable);
+	}
+
+
+
+	
 }

@@ -13,7 +13,7 @@ window.onload=function(){
 			})
 		}
 		})
-			$.ajax({
+		$.ajax({
 		url:'../findUserFriendRequests',
 		type:"GET",
 		contentType :'application/json',
@@ -26,9 +26,33 @@ window.onload=function(){
 			})
 		}
 		})
+		getUsers();
 		checkFriendRequest();
 }
 
+function getUsers(){
+	$.ajax({
+		url:'../findUserNotFriendWith',
+		type:"GET",
+		contentType :'application/json',
+		dataType :'json',
+		async:false,
+		success:function(data){
+			var list=$("#users").empty();
+			$.each(data,function(index,user){
+				drawUsers(index,user);
+			})
+		}
+	})
+}
+
+function drawUsers(index,user){
+	var list=$("#users");
+	list.append("<li><a id=\"link"+index+"\" href='../user/"+user.id+"\'>"+user.name+" "+user.surname
+			+"</a>&nbsp&nbsp<input type=\"button\" onclick=\"addUser(\'"+user.id+"\')\" value=\"Send request\">");
+	
+	
+}
 function checkFriendRequest(){
 	$.ajax({
 		url:'../checkFriendRequest',
@@ -68,13 +92,33 @@ function drawFriendsRequestList(index,data){
 		list.append("<li><a id=\"link"+index+"\" href='../user/"+data.friend.id+"\'>"+data.friend.name+" "+data.friend.surname+"</a>");
 		if(data.accepted==false ){
 			list.append("&nbsp<input type=\"button\" onclick=\"addFriend(\'"+data.friend.email+"\')\" value=\"Accept request\"></li>")
-	
+			list.append("&nbsp<input type=\"button\" onclick=\"rejectRequest(\'"+data.friend.email+"\')\" value=\"Reject request\"></li>")
+
 		}else{
-			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Reuest sent\"></li>")
+			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Delete friend\"></li>")
 
 		}
 	}
 }
+
+function rejectRequest(email){
+	$.ajax({
+		url:'../rejectRequest',
+		type:'POST',
+		contentType :'application/json',
+		dataType :'json',
+		data:email,
+		success:function(data){
+			var list=$("#friendRequestList").empty();
+			$.each(data,function(index,friend){
+				drawFriendsRequestList(index,friend);
+			})
+		}
+		
+	})
+	checkFriendRequest();
+}
+
 
 function deleteFriend(email){
 	$.ajax({
@@ -94,7 +138,21 @@ function deleteFriend(email){
 	checkFriendRequest();
 }
 
-
+function addUser(id){
+	$.ajax({
+		url:'../sendFriendRequest/'+id,
+		contentType : 'application/json',
+		dataType : 'json',
+		type:'POST',
+		async:false,
+		success:function(data){
+			if(data!=null){
+				alert("Request has been sent");
+			}else
+				alert("You already sent friend request")
+		}
+	})
+}
 function addFriend(email){
 	$.ajax({
 		url:'../addFriend',
@@ -103,6 +161,9 @@ function addFriend(email){
 		dataType :'json',
 		data:email,
 		success:function(data){
+			var list=$("#friendRequestList").empty();
+			var list=$("#friendList").empty();
+			
 			$.each(data,function(index,friend){
 				drawFriendsList(index,friend);
 			})
@@ -119,11 +180,30 @@ $(document).on('click',"#addFriend",function(e){
 		contentType : 'application/json',
 		dataType : 'json',
 		type:'POST',
+		async:false,
 		success:function(data){
 			if(data!=null){
 				alert("Request has been sent");
 			}else
 				alert("Reqeust has not been sent")
 		}
-	})	
+	})
+	getUsers();
+	$("#friendRequest").empty();
+	$("#friendRequest").append("<input type=\"button\" disabled  value=\"Request sent\">") 
+})
+
+$(document).on('click',"#searchUsers",function(e){
+	var name=$("#searchName").val();
+	var surname=$("#searchSurname").val();
+	$.ajax({
+		url:'../searchUser/'+name+"/"+surname,
+		contentType : 'application/json',
+		dataType : 'json',
+		type:'GET',
+		async:false,
+		success:function(data){
+			alert(data);
+		}
+	})
 })

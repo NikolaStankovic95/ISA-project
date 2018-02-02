@@ -2,6 +2,8 @@ package com.pomoravskivrbaci.cinemareservations.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -27,14 +29,21 @@ public interface userRepository extends PagingAndSortingRepository<User,Long> {
 	@Query("select r from User r where r.id = ?1")
     User findUserById(Long id);
 	
+	@Query("select r from User r where r.id != ?1")
+    List<User> findAllUsersExceptLogged(Long id);
+	
 	@Modifying
 	@Transactional
 	@Query("update User u set u.activated = ?1 where u.id = ?2")
 	int setFixedActivatedFor(boolean activated,Long id);
 	
-	@Query("Select  f.user as user FROM User AS u LEFT JOIN u.friendships AS f WHERE f.friend = ?1 and f.accepted=?2")
+	@Query("Select  f FROM User AS u LEFT JOIN u.friendships AS f WHERE f.friend = ?1 and f.accepted=?2")
 	List<Friendship> findFriends(User id,boolean accepted);
 	
 	@Query("Select  f FROM User AS u LEFT JOIN u.friendships AS f WHERE f.user = ?1 and f.accepted=?2")
 	List<Friendship> findFriendRequests(User id,boolean accepted);
+	
+	Page<User> findByNameContainingAndSurnameContainingAllIgnoringCase(String name,
+			String surname, Pageable pageable);
+	
 }
