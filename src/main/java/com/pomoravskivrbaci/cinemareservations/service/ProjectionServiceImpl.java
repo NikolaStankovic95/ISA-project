@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pomoravskivrbaci.cinemareservations.model.Hall;
+import com.pomoravskivrbaci.cinemareservations.model.Period;
 import com.pomoravskivrbaci.cinemareservations.model.Projection;
 import com.pomoravskivrbaci.cinemareservations.repository.ProjectionRepository;
 
@@ -30,6 +31,12 @@ public class ProjectionServiceImpl implements ProjectionService{
 	public void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, double rating, Double price) {
 		projectionRepository.setProjectionInfoById(id, name, actors, genre, description, directorName, rating, price);
 	}
+	@Override
+	public Projection findByPeriods(Period period) {
+		// TODO Auto-generated method stub
+		return projectionRepository.findByPeriods(period);
+	}
+
 
 
 }

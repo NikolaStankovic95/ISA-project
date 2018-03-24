@@ -19,7 +19,7 @@
     <label>Projekcija</label>
     <select id="projections" name="id"></select><br>
      <label>Datum</label>
-    <input type="Date" name=""><br>
+    <input type="Date" id="calendar"><br>
     <label>Termin</label>
     <select id="term"></select><br>
    	 <label>Sala</label>
@@ -36,7 +36,7 @@
     <div id="div">
       
     </div>
-      <input type="button" value="Next"  onclick="next(4)">
+      <input type="button" value="Next" id="Next3"  onclick="next(4)">
     <input type="button" value="Back" onclick="back(2)">
 
   
@@ -44,11 +44,14 @@
 
 <div id="reservation4" style="display: none;">
 
-  <input type="label" value="Pozovi prijatelje">
-  <select></select><br>
-  <input type="label" value="Pozvani prijatelji">
-  <select  size="5"></select>
+  <label >Pozovi prijatelje</label>
+  <select id="userFriends"></select>
+  <input type="button" id="invite" value="Invite"><br>
+  <label >Pozvani prijatelji</label>
+  <select id="invitedFriends" size="5"></select>
+  <input type="button" value="Remove" id="removeFromList">
     <input type="button" value="Back" onclick="back(3)">
+    <input type="button" id="submit" value="Submit">
 </div>
 <script>
 

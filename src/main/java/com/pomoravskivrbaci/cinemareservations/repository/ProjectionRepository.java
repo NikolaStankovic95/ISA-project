@@ -2,6 +2,7 @@ package com.pomoravskivrbaci.cinemareservations.repository;
 
 import java.util.List;
 
+import com.pomoravskivrbaci.cinemareservations.model.Period;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -22,5 +23,7 @@ public interface ProjectionRepository extends PagingAndSortingRepository<Project
 	@Transactional
 	@Query("update Projection p set p.name = ?2, p.actors = ?3, p.genre = ?4, p.description = ?5, p.directorName = ?6, p.rating = ?7, p.price = ?8 where p.id = ?1")
 	void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, double rating, Double price);
-	
+
+	public Projection findByPeriods(Period period);
+
 }

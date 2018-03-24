@@ -64,6 +64,24 @@ public class Projection implements Serializable{
 	@OneToMany(mappedBy="projection")
 	protected List<Period> periods;
 	
+	@JsonIgnore
+	public List<Period> getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(List<Period> periods) {
+		this.periods = periods;
+	}
+
+	@JsonIgnore
+	public List<Hall> getHalls() {
+		return halls;
+	}
+
+	public void setHalls(List<Hall> halls) {
+		this.halls = halls;
+	}
+
 	@ManyToMany
 	@JoinTable(name="projection_hall", joinColumns=@JoinColumn(name="projection_id"),
 			inverseJoinColumns=@JoinColumn(name="hall_id"))
