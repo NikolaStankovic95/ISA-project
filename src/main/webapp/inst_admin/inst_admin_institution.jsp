@@ -5,9 +5,24 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="application/javascript">
-            function chooseInstitution() {
-                var institutionId = $("#institutionSelect").val();
-                window.location.href = "/inst_admin/institution/" + institutionId;
+            function editInstitution() {
+                var name = $("#nameInput").val().trim();
+                var address = $("#addressInput").val().trim();
+                var description = $("#descriptionInput").val().trim();
+                $.ajax({
+                    method: 'PATCH',
+                    url: '/institution/${ institution.id }',
+                    contentType : 'application/json',
+                    data: JSON.stringify({ name: name, address: address, description: description }),
+                    success: function(data) {
+                        console.log(data);
+                        alert("Uspesno apdejtovano.");
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        alert("Neuspesno.");
+                    }
+                });
             }
         </script>
 
@@ -18,19 +33,20 @@
         <table>
             <tr>
                 <td>Ime: </td>
-                <td><input type="text" value="${ institution.name }"></td>
+                <td><input id="nameInput" type="text" value="${ institution.name }"></td>
             </tr>
             <tr>
                 <td>Opis: </td>
-                <td><input type="text" value="${ institution.description }"></td>
+                <td><input id="descriptionInput" type="text" value="${ institution.description }"></td>
             </tr>
             <tr>
                 <td>Adresa: </td>
-                <td><input type="text" value="${ institution.address }"></td>
+                <td><input id="addressInput" type="text" value="${ institution.address }"></td>
             </tr>
         </table>
-        <input type="button" value="Sacuvaj">
-        <h4>Repertoar:</h4>
+        <input type="button" value="Sacuvaj" onclick="editInstitution()">
+        <h4>Repertoar:</h4></a>
+        <a href="/inst_admin/repertoire/${ institution.repertoire.id }"><p>${ institution.repertoire.name }</p></a>
     </body>
 
 </html>

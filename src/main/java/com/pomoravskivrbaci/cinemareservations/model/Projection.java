@@ -24,7 +24,27 @@ public class Projection implements Serializable{
 
 	@Column(name="name")
 	protected String name;
-	
+
+	@Column(name="actors")
+	protected String actors;
+
+	@Column(name="genre")
+	protected String genre;
+
+	@Column(name="director_name")
+	protected String directorName;
+
+	@Column(name="image_link")
+	protected String imageLink;
+
+	@Column(name="rating")
+	protected Double rating;
+
+	@Column(name="description")
+	protected String description;
+
+	@Column(name="price")
+	protected Double price;
 	
 	public String getName() {
 		return name;
@@ -61,12 +81,64 @@ public class Projection implements Serializable{
 		
 	}
 
-	
 	@JsonIgnore
 	public List<Repertoire> getRepertoires() {
 		return repertoires;
 	}
 
-	
-	
+	public String getActors() {
+		return actors;
+	}
+
+	public void setActors(String actors) {
+		this.actors = actors;
+	}
+
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	public String getDirectorName() {
+		return directorName;
+	}
+
+	public void setDirectorName(String directorName) {
+		this.directorName = directorName;
+	}
+
+	public String getImageLink() {
+		return imageLink;
+	}
+
+	public void setImageLink(String imageLink) {
+		this.imageLink = imageLink;
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
 }

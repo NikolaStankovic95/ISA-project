@@ -1,14 +1,14 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
-import com.pomoravskivrbaci.cinemareservations.model.Institution;
-import com.pomoravskivrbaci.cinemareservations.model.User;
-import com.pomoravskivrbaci.cinemareservations.model.UserRole;
+import com.pomoravskivrbaci.cinemareservations.model.*;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
+import com.pomoravskivrbaci.cinemareservations.service.ProjectionService;
+import com.pomoravskivrbaci.cinemareservations.service.RepertoireService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -18,6 +18,10 @@ import java.util.List;
 public class InstitutionAdminController {
     @Autowired
     InstitutionService institutionService;
+    @Autowired
+    RepertoireService repertoireService;
+    @Autowired
+    ProjectionService projectionService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private String chooseInstitution(HttpServletRequest request){
@@ -37,4 +41,19 @@ public class InstitutionAdminController {
         request.setAttribute("institution", institution);
         return("forward:/inst_admin/inst_admin_institution.jsp");
     }
+
+    @RequestMapping(value = "/repertoire/{id}", method = RequestMethod.GET)
+    private String getRepertoireInfo(@PathVariable("id")Long id, HttpServletRequest request) {
+        Repertoire repertoire = repertoireService.findById(id);
+        request.setAttribute("repertoire", repertoire);
+        return("forward:/inst_admin/inst_admin_repertoire.jsp");
+    }
+
+    @RequestMapping(value = "/projection/{id}", method = RequestMethod.GET)
+    private String getProjectionInfo(@PathVariable("id")Long id, HttpServletRequest request) {
+        Projection projection = projectionService.findById(id);
+        request.setAttribute("projection", projection);
+        return("forward:/inst_admin/inst_admin_projection.jsp");
+    }
+
 }

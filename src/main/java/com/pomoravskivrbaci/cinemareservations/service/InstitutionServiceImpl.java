@@ -39,6 +39,11 @@ public class InstitutionServiceImpl implements InstitutionService {
 	}
 
 	@Override
+	public void setInstitutionInfoById(Long id, String name, String address, String description) {
+		institutionRepositroy.setInstitutionInfoById(id, name, address, description);
+	}
+
+	@Override
 	public Repertoire findByRepertoire(Long id) {
 		// TODO Auto-generated method stub
 		return null;
