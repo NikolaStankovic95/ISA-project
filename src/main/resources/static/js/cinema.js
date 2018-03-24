@@ -1,5 +1,13 @@
 var repertoireID;
+var institution;
+var hall;
+var projection;
+var seats=[];
+var period;
 window.onload=function(){
+	var date=new Date();
+	document.getElementById('calendar').value = date.toISOString().slice(0,10);
+
 	$.ajax({
 		url:"reservationController/getCinemas",
 		type:"GET",
@@ -7,10 +15,10 @@ window.onload=function(){
 		dataType : 'json',
 		success:function(data){
 			$.each(data,function(index,cinema){
-				$("#nameOfCinema").append("<option value=\'"+index+"\'>"+cinema.name+"</option>");
+				$("#nameOfCinema").append("<option value=\'"+cinema.id+"\'>"+cinema.name+"</option>");
 			});
 			$.each(data,function(index,cinema){
-				$("#nameOfCinema1").append("<option value=\'"+index+"\'>"+cinema.name+"</option>");
+				$("#nameOfCinema1").append("<option value=\'"+cinema.id+"\'>"+cinema.name+"</option>");
 			});
 			
 		}
@@ -21,16 +29,30 @@ window.onload=function(){
 	
 
 }
-function getCinemaProjections(){
-
+function getLoggedUser(){
+	var userL;
 	$.ajax({
-		url:"reservationController/getProjections/"+$("#repertoireID").val(),
+		url:'userController/loggedUser',
+		type:'GET',
+		async:false,
+		contentType : 'application/json',
+		dataType : 'json',
+		success:function(data){
+			userL=data;
+		}
+	})
+	return userL;
+}
+function getCinemaProjections(){
+	$("#projections").empty();
+	$.ajax({
+		url:"reservationController/getProjections/"+$("#repertoireID").val()+"/"+$("#calendar").val(),
 		type:"GET",
 		contentType : 'application/json',
 		dataType : 'json',
 		async:false,
 		success:function(data){
-			$("#projections").empty();
+			
 			$.each(data,function(index,projection){
 				
 				$("#projections").append("<option value=\'"+projection.id+"\'>"+projection.name+"</option>");
@@ -42,32 +64,35 @@ function getCinemaProjections(){
 }
 
 function getProjectionHalls(){
-	$.ajax({
-		url:"reservationController/getProjectionHalls/"+$('#projections option:selected').val(),
-		type:"GET",
-		async:false,
-		contentType : 'application/json',
-		dataType : 'json',
-		success:function(data){
-			$("#projectionHalls").empty();
-			$("#projectionHalls2").empty();
+	$("#projectionHalls").empty();
+	$("#projectionHalls2").empty();
+	if($('#projections option:selected').val()!=undefined){
+		$.ajax({
+			url:"reservationController/getProjectionHalls/"+$('#projections option:selected').val(),
+			type:"GET",
+			async:false,
+			contentType : 'application/json',
+			dataType : 'json',
+			success:function(data){
+				
+				
+				$.each(data,function(index,hall){
+					
+					$("#projectionHalls").append("<option value=\'"+hall.id+"\'>"+hall.name+"</option>");
+					
+				})
+				$.each(data,function(index,hall){
+					alert(hall)
+					$("#projectionHalls2").append("<option value=\'"+hall.id+"\'>"+hall.name+"</option>");
+					
+				})
 			
-			$.each(data,function(index,hall){
-				
-				$("#projectionHalls").append("<option value=\'"+hall.id+"\'>"+hall.name+"</option>");
-				
-			})
-			$.each(data,function(index,hall){
-				alert(hall)
-				$("#projectionHalls2").append("<option value=\'"+hall.id+"\'>"+hall.name+"</option>");
-				
-			})
-		
+			}
+		})
 		}
-	})
 }
 function drawHallSeats(data){
-	var div=$('#div');
+	var div=$('#div').empty();
 	var brmesta=data.length;
 	var rbm=0;
 	var redova=Math.ceil(brmesta/5);
@@ -76,12 +101,12 @@ function drawHallSeats(data){
 	
 	for(var i=0;i<redova;i++){
 	  for(var j=0;j<brkolona;j++){
-	   var zauzeto=data[rbm].free;
-	    if(zauzeto==false){
-	      div.append('<input type=\'checkbox\'>');
+	   var slobodno=data[rbm].free;
+	    if(slobodno==true){
+	      div.append('<input  type=\'checkbox\' value=\''+data[rbm].id+'\'>');
 	     }else {
 
-	      div.append("<input type=\'checkbox\' checked  {checkStat == 1 ? disabled : }>");
+	      div.append("<input  type=\'checkbox\' value=\'"+data[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
 	  
 	      }
 	    rbm++;
@@ -96,26 +121,39 @@ function drawHallSeats(data){
 	}
 
 }
+function convertTime(time){
+	var date = new Date(time);
+	// Hours part from the timestamp
+	var hours = date.getHours();
+	// Minutes part from the timestamp
+	var minutes = "0" + date.getMinutes();
+
+	var formattedTime = hours + ':' + minutes.substr(-2) ;
+	return formattedTime;
+}
 function getProjectionPeriods(){
-	alert($('#projections option:selected').val())
-	$.ajax({
-		url:"reservationController/getProjectionsPeriod/"+$('#projections option:selected').val(),
-		type:"GET",
-		async:false,
-		contentType : 'application/json',
-		dataType : 'json',
-		success:function(data){
+	$("#term").empty();
+	if($('#projections option:selected').val()!=undefined){
+
 		
-			$("#term").empty();
+		$.ajax({
+			url:"reservationController/getProjectionsPeriod/"+$('#projections option:selected').val(),
+			type:"GET",
+			async:false,
+			contentType : 'application/json',
+			dataType : 'json',
+			success:function(data){
 			
-			$.each(data,function(index,period){
 				
-				$("#term").append("<option value=\'"+period.id+"\'>"+period.date+"</option>");
-				
-			})
-		
-		}
-	})
+				$.each(data,function(index,period){
+					
+					$("#term").append("<option value=\'"+period.id+"\'>"+convertTime(period.date)+"</option>");
+					
+				})
+			
+			}
+		})
+	}
 }
 $(document).on('click',"#Next1",function(e){
 	
@@ -129,19 +167,51 @@ $(document).on('click',"#Next1",function(e){
 		contentType : 'application/json',
 		dataType : 'json',
 		success:function(data){
-			
+			institution=data;
 			$("#repertoireID").val(data.repertoire.id);
-			$("#nameOfCinema ").val(data.id-1);
-			$("#nameOfCinema1 ").val(data.id-1);
+			$("#nameOfCinema ").val(data.id);
+			$("#nameOfCinema1 ").val(data.id);
 			
 		}
 	})
 	getCinemaProjections();
-	getProjectionHalls();
 	getProjectionPeriods();
+	getProjectionHalls();
+
 		
 })
+$(document).on('change',"#calendar",function(e){
+	getCinemaProjections();
+	getProjectionHalls();
+	getProjectionPeriods();
+	
+})
+$(document).on('click',"#invite",function(e){
+	var selectedSeats=$("input:checkbox[type=checkbox]:checked").length;
+	var numberOfInvited=$("#invitedFriends option").length;
+	if(numberOfInvited<selectedSeats-1){
+		var id=$("#userFriends option:selected").val();
+		var text=$("#userFriends option:selected").text();
+		if(id!="" && text!=""){
+			$("#invitedFriends").append('<option value=\''+id+'\'>'+text+'</option>')
+			$('#userFriends').find('option:selected').remove().end();
+		}
+	}else{
+		alert("You must select more seats!")
+	}
 
+})
+$(document).on('click',"#removeFromList",function(e){
+	var id=$("#invitedFriends option:selected").val();
+	var text=$("#invitedFriends option:selected").text();
+	if(id!="" && text!=""){
+		$("#userFriends").append('<option value=\''+id+'\'>'+text+'</option>')
+		$('#invitedFriends').find('option:selected').remove().end();
+	}
+})
+$(document).on('change',"#projectionHalls2",function(e){
+	getSeats($('#projectionHalls2 option:selected').val())
+})
 $(document).on('change',"#projections",function(e){
 
 	//getCinemaProjections();
@@ -168,18 +238,203 @@ $(document).on('change',"#nameOfCinema",function(e){
 	getProjectionPeriods();
 	
 })
-$(document).on('click',"#Next2",function(e){
+function findInvitedUsers(index){
+	var user;
+	var invited=$("#invitedFriends option");
+	alert("Covek "+invited[index-1].value)
 	
-		$.ajax({
-		url:'reservationController/getHallSeats/'+$('#projectionHalls2 option:selected').val(),
+	$.ajax({
+		url:'userController/userID/'+invited[index-1].value,
 		type:'GET',
+		contentType : 'application/json',
+		dataType : 'json',
+		async:false,
+		success:function(data){
+			user=data;
+		}
+	})
+	return user;
+}
+
+$(document).on('click',"#submit",function(e){
+	var checkList=[];
+	$("input:checkbox[type=checkbox]:checked").each(function(){
+		
+		if($(this).prop('disabled')==false){
+			checkList.push($(this).val());
+		}
+	});
+	
+	if(checkList.length!=0){
+		reserveSeats(checkList);
+		
+		console.log("SEDISTA"+seats);
+		getSelectedPeriod();
+		getHallById();
+		getProjectionById();
+		u=getLoggedUser();
+		var data=JSON.stringify({
+				"institution":institution,
+				"hall":hall,
+				"seats":seats[0],
+				"projection":projection,
+				"period":period,
+				"owner":u
+				
+		})
+		
+		callReservation(data,"false");
+	}			
+	if(seats.length>1){
+		$.each(seats,function(index,seat){
+			if( index === 0 )
+		        return true;
+			var data=JSON.stringify({
+				"institution":institution,
+				"hall":hall,
+				"seats":seats[index],
+				"projection":projection,
+				"period":period,
+				"owner":findInvitedUsers(index)
+			
+				
+		})
+		callReservation(data,"true");
+		
+		})
+	}
+})
+function callReservation(data,invite){
+	
+	$.ajax({
+		url:'reservationController/makeReservation/'+invite,
+		data:data,
+		type:'POST',
+		contentType : 'application/json',
+		dataType : 'json',
+		async:false,
+		success:function(data){
+			console.log(data);
+		}
+	})
+	
+}
+function getSeats(data){
+	
+	var data=JSON.stringify({
+		"instID":$('#nameOfCinema option:selected').val(),
+		"hallID":data,
+		"periodID":$('#term option:selected').val(),
+		"projectionID":$('#projections option:selected').val()
+		
+})
+	$.ajax({
+		url:'reservationController/getHallSeats',
+		data:data.toString(),
+		type:'POST',
 		async:false,
 		contentType : 'application/json',
 		dataType : 'json',
 		success:function(data){
-			
-				drawHallSeats(data);
+			drawHallSeats(data);
+		}
+})
+}
+$(document).on('click',"#Next3",function(e){
+	$("#userFriends").empty();
+	$.ajax({
+		url:'userController/findUserFriends',
+		type:"GET",
+		success:function(data){
+			var invited=$("#invitedFriends option");
+			var selectedSeats=$("input:checkbox[type=checkbox]:checked").length;
+			if(invited.length!=0 && selectedSeats<=invited.length){
+				invited[length].remove()
+			}
+			var invited=$("#invitedFriends option");
+			if(invited.length!=0){
+				$.each(data,function(index,friendship){
+					$.each(invited,function(index,f){
+						if(friendship.friend.id!=f.value){
+							$("#userFriends").append("<option value=\'"+friendship.friend.id+"\'>"+friendship.friend.name+" "+friendship.friend.surname+"</option>")
+							
+						}
+					})
+				})
+			}else{
+				$.each(data,function(index,friendship){
+					$("#userFriends").append("<option value=\'"+friendship.friend.id+"\'>"+friendship.friend.name+" "+friendship.friend.surname+"</option>")
+					
+					
+				})
+			}
 		}
 	})
-		
 })
+
+$(document).on('click',"#Next2",function(e){
+	$("#projectionHalls2").val($('#projectionHalls option:selected').val())
+	getSeats($('#projectionHalls option:selected').val());
+})
+function getCinemaRepertorie(){
+	$.ajax({
+		url:'reservatinoController/getCinemaRepertoire'+$('#nameOfCinema option:selected').val(),
+		type:'GET',
+		success:function(data){
+			$.each(data,function(index,repertoire){
+				
+			})
+		}
+	})
+}
+function getHallById(){
+	$.ajax({
+		url:'reservationController/findHallById/'+$('#projectionHalls option:selected').val(),
+		type:'GET',
+		contentType:'application/json',
+		dataType:'json',
+		async:false,
+		success:function(data){
+			hall=data;
+		}
+	})
+}
+function reserveSeats(data){
+	
+	$.ajax({
+		url:'reservationController/getReservedSeats/'+data.toString()+'/'+$('#projectionHalls option:selected').val(),
+		type:'GET',
+		contentType:'application/json',
+		dataType:'json',
+		async:false,
+		success:function(data){
+			seats=data;
+			console.log(seats);
+		}
+	})
+}
+function getProjectionById(){
+	alert($('#projections option:selected').val())
+	$.ajax({
+		url:'reservationController/findProjectionById/'+$('#projections option:selected').val(),
+		type:'GET',
+		contentType:'application/json',
+		dataType:'json',
+		async:false,
+		success:function(data){
+			projection=data;
+		}
+	})
+}
+function getSelectedPeriod(){
+	$.ajax({
+		url:'reservationController/getSelectedPeriod/'+$('#term option:selected').val(),
+		type:'GET',
+		contentType:'application/json',
+		dataType:'json',
+		async:false,
+		success:function(data){
+			period=data;
+		}
+	})
+}

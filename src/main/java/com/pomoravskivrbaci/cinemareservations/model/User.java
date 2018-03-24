@@ -81,6 +81,27 @@ public class User implements Serializable {
 	@Column(nullable=false)
 	protected UserRole role;
 	
+	@OneToMany(mappedBy="owner")
+	protected List<Reservation> reservations;
+	public User(Long id, List<Friendship> friendships, List<Friendship> requests, String email, String password,
+			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
+			List<Reservation> reservations, String number) {
+		super();
+		this.id = id;
+		this.friendships = friendships;
+		this.requests = requests;
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.city = city;
+		this.activated = activated;
+		this.firstlogin = firstlogin;
+		this.role = role;
+		this.reservations = reservations;
+		this.number = number;
+	}
+
 	public UserRole getRole() {
 		return role;
 	}
@@ -90,22 +111,7 @@ public class User implements Serializable {
 	}
 
 
-	public User(Long id, List<Friendship> friendships, String email, String password,
-			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
-			String number) {
-		super();
-		this.id = id;
-		this.friendships = friendships;
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.surname = surname;
-		this.city = city;
-		this.activated = activated;
-		this.firstlogin = firstlogin;
-		this.role = role;
-		this.number = number;
-	}
+	
 
 	public boolean isActivated() {
 		return activated;

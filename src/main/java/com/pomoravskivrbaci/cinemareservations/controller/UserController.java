@@ -37,10 +37,26 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping("/user/{email}")
-	private String findUserByEmail(HttpServletRequest request,@PathVariable("email") String email){
+	
+	@RequestMapping("/loggedUser")
+	private ResponseEntity<User> findLoggedUser(HttpServletRequest request){
+		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
+		System.out.println(loggedUser.getEmail());
+		return new ResponseEntity<User>(loggedUser,HttpStatus.OK);
+	}
+	
+	@RequestMapping("/userID/{id}")
+	private ResponseEntity<User> findUserByID(HttpServletRequest request,@PathVariable("id") Long id){
+		System.out.println(id);
+		User userProfile=userService.findUserById(id);
+		return new ResponseEntity<User>(userProfile,HttpStatus.OK);
 		
-		User userProfile=userService.findUserById(Long.parseLong(email));
+	}
+	
+	@RequestMapping("/user/{id}")
+	private String findUserByEmail(HttpServletRequest request,@PathVariable("id") Long id){
+		
+		User userProfile=userService.findUserById(id);
 		request.setAttribute("user", userProfile);
 		return "forward:/user_profile.jsp";
 		
@@ -75,7 +91,7 @@ public class UserController {
 	@RequestMapping(value="/findUserFriends")
 	public ResponseEntity<List<Friendship>> findUserFriends(HttpServletRequest request){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
-		List<Friendship> userFriends=userService.findFriends(loggedUser,true);
+		List<Friendship> userFriends=userService.findFriendRequests(loggedUser,true);
 		request.setAttribute("friends", userFriends);
 		return new ResponseEntity<List<Friendship>>(userFriends,HttpStatus.OK);
 		

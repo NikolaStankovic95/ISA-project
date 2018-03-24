@@ -18,5 +18,10 @@ public class PeriodServiceImpl implements PeriodService {
 		// TODO Auto-generated method stub
 		return periodRepository.findByProjectionId(id);
 	}
+	@Override
+	public Period findById(Long id) {
+		// TODO Auto-generated method stub
+		return periodRepository.findById(id);
+	}
 	
 }

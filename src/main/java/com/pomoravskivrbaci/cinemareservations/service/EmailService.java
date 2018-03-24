@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.pomoravskivrbaci.cinemareservations.model.Reservation;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 
 
@@ -20,6 +21,21 @@ public class EmailService {
 	@Autowired
 	private Environment env;
 
+	
+	@Async
+	public void inviteFriend(User user,User friend,Reservation reservation) throws MailException,InterruptedException{
+		Thread.sleep(10000);
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(user.getEmail());
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Sistem bioskopa/pozorišta");
+		mail.setText("Vas prijatelj "+friend.getName()+" "+friend.getSurname()+" Vas poziva na projekciju "+reservation.getProjection().getName()
+				+" kliknite na sledeći link i odgovorite mu da li dolazite");
+		
+		javaMailSender.send(mail);
+
+	}
+	
 	@Async
 	public void sendNotificaitionAsync(User user) throws MailException, InterruptedException {
 
