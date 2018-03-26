@@ -30,7 +30,7 @@ public class EmailService {
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sistem bioskopa/pozorišta");
 		mail.setText("Vas prijatelj "+friend.getName()+" "+friend.getSurname()+" Vas poziva na projekciju "+reservation.getProjection().getName()
-				+" kliknite na sledeći link i odgovorite mu da li dolazite");
+				+" kliknite na sledeći link http://localhost:9000/invitationController/invitation/"+reservation.getId()+" i odgovorite mu da li dolazite");
 		
 		javaMailSender.send(mail);
 
