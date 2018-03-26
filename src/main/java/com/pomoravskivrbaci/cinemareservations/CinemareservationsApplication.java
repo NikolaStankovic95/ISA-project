@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages={
 "com.pomoravskivrbaci.cinemareservations"})
+
+
 public class CinemareservationsApplication {
 
 	public static void main(String[] args) {
