@@ -17,4 +17,6 @@ public interface InstitutionService {
 	Institution findById(Long id);
 
 	List<Institution> findAll();
+
+	void setInstitutionInfoById(Long id, String name, String address, String description);
 }

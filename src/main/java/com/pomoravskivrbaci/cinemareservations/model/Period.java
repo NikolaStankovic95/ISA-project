@@ -3,7 +3,6 @@ package com.pomoravskivrbaci.cinemareservations.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +23,9 @@ public class Period implements Serializable{
 
 	@Column(name="date",unique=true,nullable=false)
 	protected Date date;
+
+	@Column(name="date_end", nullable=false)
+	protected Date dateEnd;
 	
 	@ManyToMany
 	@JoinTable(name="period_hall", joinColumns=@JoinColumn(name="period_id"),
@@ -47,10 +49,11 @@ public class Period implements Serializable{
 	public Period (){}
 
 	
-	public Period(List<Hall> halls, Date date) {
+	public Period(List<Hall> halls, Date date, Date dateEnd) {
 		super();
 		this.halls = halls;
 		this.date = date;
+		this.dateEnd = dateEnd;
 	}
 
 

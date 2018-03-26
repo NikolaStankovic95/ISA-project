@@ -15,21 +15,28 @@ public class ProjectionServiceImpl implements ProjectionService{
 
 	@Autowired
 	private ProjectionRepository projectionRepository;
+
+	@Override
+	public Projection findById(Long id) {
+		return projectionRepository.findById(id);
+	}
+
 	@Override
 	public List<Projection> findByRepertoires_id(Long id) {
 		// TODO Auto-generated method stub
 		return projectionRepository.findByRepertoires_id(id);
+	}
+
+	@Override
+	public void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, double rating, Double price) {
+		projectionRepository.setProjectionInfoById(id, name, actors, genre, description, directorName, rating, price);
 	}
 	@Override
 	public Projection findByPeriods(Period period) {
 		// TODO Auto-generated method stub
 		return projectionRepository.findByPeriods(period);
 	}
-	@Override
-	public Projection findById(Long id) {
-		// TODO Auto-generated method stub
-		return projectionRepository.findOne(id);
-	}
-	
+
+
 
 }
