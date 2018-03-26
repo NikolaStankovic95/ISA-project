@@ -49,6 +49,9 @@ public class Hall implements Serializable {
 	
 	@ManyToMany(mappedBy="halls")
 	protected List<Projection> projections;
+
+	@OneToMany(mappedBy="hall")
+	protected List<HallSegment> hallSegments;
 	
 	
 	public Hall(String name, Institution institution) {
@@ -73,5 +76,7 @@ public class Hall implements Serializable {
 		this.institution = institution;
 	}
 
-	
+	public List<HallSegment> getHallSegments() {
+		return hallSegments;
+	}
 }

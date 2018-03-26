@@ -27,9 +27,9 @@ public class Seat implements Serializable{
 	@ManyToOne
 	protected Hall hall;
 
+	@ManyToOne
+	protected HallSegment hallSegment;
 
-	
-	
 	@Column(name="free")
 	protected boolean free;
 	
