@@ -23,11 +23,6 @@ window.onload=function(){
 			
 		}
 	})
-	
-	
-		
-	
-
 }
 function getLoggedUser(){
 	var userL;
@@ -187,7 +182,13 @@ $(document).on('change',"#calendar",function(e){
 	
 })
 $(document).on('click',"#invite",function(e){
-	var selectedSeats=$("input:checkbox[type=checkbox]:checked").length;
+	var selectedSeats=0;
+	$("input:checkbox[type=checkbox]:checked").each(function(){
+		
+		if($(this).prop('disabled')==false){
+			selectedSeats++;
+		}
+	});
 	var numberOfInvited=$("#invitedFriends option").length;
 	if(numberOfInvited<selectedSeats-1){
 		var id=$("#userFriends option:selected").val();
@@ -347,7 +348,13 @@ $(document).on('click',"#Next3",function(e){
 		type:"GET",
 		success:function(data){
 			var invited=$("#invitedFriends option");
-			var selectedSeats=$("input:checkbox[type=checkbox]:checked").length;
+			var selectedSeats=0;
+			$("input:checkbox[type=checkbox]:checked").each(function(){
+				
+				if($(this).prop('disabled')==false){
+					selectedSeats++;
+				}
+			});
 			if(invited.length!=0 && selectedSeats<=invited.length){
 				invited[length].remove()
 			}

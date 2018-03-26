@@ -27,6 +27,24 @@
 		</ul>
 		<ul id="friendRequestList">
 		</ul>
+		<p> History</p><br>
+		<ul id="visitedCinemaProjections">
+		<c:forEach items="${loggedUser.reservations}" var="reservation">
+			<c:if test="${reservation.institution.type=='CINEMA'}">
+			<li><a>${reservation.projection.name}</a></li>
+			</c:if>
+		</c:forEach>
+		</ul>
+		<ul id="notFriends">
+		<c:forEach items="${notFriends}" var="addFriend">
+			<li><div id='${addFriend.id}'>
+			${addFriend.name} ${addFriend.surname}
+			<input type="button"  value="Send request"  onclick="sendFriendRequest('${addFriend.id}')">
+			</div>
+			</li>
+		</c:forEach>
+		
+		</ul>
   	</c:if>
  	
 	

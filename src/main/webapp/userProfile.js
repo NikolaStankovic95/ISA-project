@@ -13,7 +13,12 @@ window.onload=function(){
 			})
 		}
 		})
-			$.ajax({
+		findUserFriendRequests()
+		notFriends()
+		checkFriendRequest();
+}
+function findUserFriendRequests(){
+	$.ajax({
 		url:'../findUserFriendRequests',
 		type:"GET",
 		contentType :'application/json',
@@ -26,9 +31,7 @@ window.onload=function(){
 			})
 		}
 		})
-		checkFriendRequest();
 }
-
 function checkFriendRequest(){
 	$.ajax({
 		url:'../checkFriendRequest',
@@ -46,6 +49,21 @@ function checkFriendRequest(){
 			else if(data.accepted==false)
 					$("#friendRequest").append("<input type=\"button\" disabled  value=\"Request sent\">") 
 			
+		}
+	})
+}
+function notFriends(){
+	$.ajax({
+		url:'../notFriends',
+		type:'GET',
+		async:false,
+		success:function(data){
+			$("#notFriends").empty();
+			$.each(data,function(index,friend){
+				$("#notFriends").append("<li>" +
+						"<div id=\'friend.id\'>"+friend.name+" "+friend.surname+
+						"<input type=\'button\'  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></div></li>");
+			})
 		}
 	})
 }
@@ -83,14 +101,18 @@ function deleteFriend(email){
 		contentType :'application/json',
 		dataType :'json',
 		data:email,
+		async:false,
 		success:function(data){
 			var list=$("#friendList").empty();
 			$.each(data,function(index,friend){
 				drawFriendsList(index,friend);
 			})
+			
+		findUserFriendRequests()
 		}
 		
 	})
+	notFriends();
 	checkFriendRequest();
 }
 
@@ -102,14 +124,39 @@ function addFriend(email){
 		contentType :'application/json',
 		dataType :'json',
 		data:email,
+		async:false,
 		success:function(data){
+			var list=$("#friendList").empty();
 			$.each(data,function(index,friend){
 				drawFriendsList(index,friend);
 			})
+			
+		findUserFriendRequests()
 		}
 		
 	})
+	notFriends();
+
 	checkFriendRequest();
+}
+function sendFriendRequest(id){
+
+	$.ajax({
+		url:'../sendFriendRequest/'+id,
+		contentType : 'application/json',
+		dataType : 'json',
+		type:'POST',
+		async:false,
+		success:function(data){
+			if(data!=null){
+				alert("Request has been sent");
+				$("#"+id+"").remove();
+			}else
+				alert("Reqeust has not been sent")
+		}
+	})
+	notFriends();
+	
 }
 $(document).on('click',"#addFriend",function(e){
 	var id=$("#userId").val();
@@ -126,4 +173,6 @@ $(document).on('click',"#addFriend",function(e){
 				alert("Reqeust has not been sent")
 		}
 	})	
+	notFriends();
+
 })

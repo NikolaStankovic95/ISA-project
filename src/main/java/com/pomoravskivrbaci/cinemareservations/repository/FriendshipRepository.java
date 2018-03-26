@@ -17,4 +17,5 @@ public interface FriendshipRepository extends PagingAndSortingRepository<Friends
 	@Transactional
 	@Query("delete from Friendship f where f.id = ?1")
 	void deleteById(Long id);
+	
 }

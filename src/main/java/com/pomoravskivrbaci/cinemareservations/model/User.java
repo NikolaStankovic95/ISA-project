@@ -81,8 +81,17 @@ public class User implements Serializable {
 	@Column(nullable=false)
 	protected UserRole role;
 	
-	@OneToMany(mappedBy="owner")
+	@OneToMany(mappedBy="owner",cascade={ALL},fetch=FetchType.LAZY)
 	protected List<Reservation> reservations;
+	@JsonIgnore
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
 	public User(Long id, List<Friendship> friendships, List<Friendship> requests, String email, String password,
 			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
 			List<Reservation> reservations, String number) {

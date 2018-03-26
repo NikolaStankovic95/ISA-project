@@ -214,7 +214,9 @@ public class ReservationController {
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
 		if(invite.equals("true")){
 			try {
+				
 				emailService.inviteFriend(reservation.getOwner(), loggedUser, reservation);
+				reservation.setOwner(null);
 			} catch (MailException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
