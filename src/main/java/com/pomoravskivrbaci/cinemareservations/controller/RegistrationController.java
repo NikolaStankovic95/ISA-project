@@ -3,6 +3,7 @@ package com.pomoravskivrbaci.cinemareservations.controller;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
@@ -93,5 +95,36 @@ public class RegistrationController {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<User>(addedUser, HttpStatus.OK);
+	}
+	@RequestMapping(value = "/changePass", method = RequestMethod.POST)
+	private String chagePass(
+			@RequestParam(value = "oldPass", required = true) String oldPass,
+			@RequestParam(value = "newPass", required = true) String newPass,
+			@RequestParam(value = "newPassRepeat", required = true) String newPassRepeat,
+			HttpSession session) {
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		System.out.println("Pogodio");
+		if (loggedUser.getPassword().equals(oldPass)) {
+			loggedUser.setFirstlogin(false);
+			userService.setPasswordFor(newPass, loggedUser.getId());
+			loggedUser = userService.findUserById(loggedUser.getId());
+			session.setAttribute("loggedUser",loggedUser );
+		}
+		return "forward : Cinema.html";
+	}
+	
+	@RequestMapping(value = "/getLoggedUser", method = RequestMethod.GET)
+	private ResponseEntity<User> getLoggedUser(HttpSession session){
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/changeUser", method = RequestMethod.POST)
+	private ResponseEntity<User> changeUser(@RequestBody User user,HttpSession session){
+		User loggedUser = (User) session.getAttribute("loggedUser");
+		userService.updateUser(loggedUser.getId(),user.getEmail(),user.getCity(),user.getName(),user.getSurname(),user.getNumber());
+		loggedUser = userService.findUserById(loggedUser.getId());
+		session.setAttribute("loggedUser",loggedUser );
+		return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
 	}
 }

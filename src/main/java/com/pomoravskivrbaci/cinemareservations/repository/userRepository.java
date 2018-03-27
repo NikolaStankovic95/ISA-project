@@ -32,6 +32,21 @@ public interface userRepository extends PagingAndSortingRepository<User,Long> {
 	@Query("update User u set u.activated = ?1 where u.id = ?2")
 	int setFixedActivatedFor(boolean activated,Long id);
 	
+	@Modifying
+	@Transactional
+	@Query("update User u set u.password = ?1, u.firstlogin = false where u.id = ?2")
+	int setPasswordFor(String pass,Long id);
+
+	
+	
+	User save(User user);
+	
+	@Modifying
+	@Transactional
+	@Query("update User u set u.email = ?2, u.city = ?3, u.name = ?4, u.surname= ?5, u.number = ?6 where u.id = ?1")
+	int updateUser(Long id, String email, String city, String name,
+			String surname, String number);
+
 	@Query("Select  f as user FROM User AS u LEFT JOIN u.friendships AS f WHERE f.friend = ?1 and f.accepted=?2")
 	List<Friendship> findFriends(User id,boolean accepted);
 	

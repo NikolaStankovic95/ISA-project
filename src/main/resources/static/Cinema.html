@@ -1,59 +1,48 @@
 <!DOCTYPE html>
 <html>
-<script type="text/javascript" src="jquery.min.js"></script> 
+<script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript" src="js/cinema.js"></script>
 <body>
-<div id="reservation1" >
+	<div id="reservation1">
 
-    <label>Naziv bioskopa</label>
-    <select id="nameOfCinema1"></select>
-    <input type="button" value="Next" id="Next1" onclick="next(2)">
-    <input type="hidden" id="repertoireID" >
-    
-</div>
+		<label>Naziv bioskopa</label> <select id="nameOfCinema1"></select> <input
+			type="button" value="Next" id="Next1" onclick="next(2)"> <input
+			type="hidden" id="repertoireID">
 
-<div id="reservation2" style="display: none;">
-	<label id="repertoire"></label>
-    <label>Naziv bioskopa</label>
-    <select id="nameOfCinema"> </select><br>
-    <label>Projekcija</label>
-    <select id="projections" name="id"></select><br>
-     <label>Datum</label>
-    <input type="Date" id="calendar"><br>
-    <label>Termin</label>
-    <select id="term"></select><br>
-   	 <label>Sala</label>
-     <select id="projectionHalls"></select><br>
-    <input type="button" value="Next" id="Next2" onclick="next(3)">
-    <input type="button" value="Back" onclick="back(1)">
+	</div>
 
-</div>
+	<div id="reservation2" style="display: none;">
+		<label id="repertoire"></label> <label>Naziv bioskopa</label> <select
+			id="nameOfCinema">
+		</select><br> <label>Projekcija</label> <select id="projections" name="id"></select><br>
+		<label>Datum</label> <input type="Date" id="calendar"><br>
+		<label>Termin</label> <select id="term"></select><br> <label>Sala</label>
+		<select id="projectionHalls"></select><br> <input type="button"
+			value="Next" id="Next2" onclick="next(3)"> <input
+			type="button" value="Back" onclick="back(1)">
 
-<div id="reservation3" style="display: none">
+	</div>
 
-    <label>Sala</label>
-    <select id="projectionHalls2"></select><br>
-    <div id="div">
-      
-    </div>
-      <input type="button" value="Next" id="Next3"  onclick="next(4)">
-    <input type="button" value="Back" onclick="back(2)">
+	<div id="reservation3" style="display: none">
 
-  
-</div>
+		<label>Sala</label> <select id="projectionHalls2"></select><br>
+		<div id="div"></div>
+		<input type="button" value="Next" id="Next3" onclick="next(4)">
+		<input type="button" value="Back" onclick="back(2)">
 
-<div id="reservation4" style="display: none;">
 
-  <label >Pozovi prijatelje</label>
-  <select id="userFriends"></select>
-  <input type="button" id="invite" value="Invite"><br>
-  <label >Pozvani prijatelji</label>
-  <select id="invitedFriends" size="5"></select>
-  <input type="button" value="Remove" id="removeFromList">
-    <input type="button" value="Back" onclick="back(3)">
-    <input type="button" id="submit" value="Submit">
-</div>
-<script>
+	</div>
+
+	<div id="reservation4" style="display: none;">
+
+		<label>Pozovi prijatelje</label> <select id="userFriends"></select> <input
+			type="button" id="invite" value="Invite"><br> <label>Pozvani
+			prijatelji</label> <select id="invitedFriends" size="5"></select> <input
+			type="button" value="Remove" id="removeFromList"> <input
+			type="button" value="Back" onclick="back(3)"> <input
+			type="button" id="submit" value="Submit">
+	</div>
+	<script>
 
 function next(rbrDIV) {
    document.getElementById("reservation"+(rbrDIV-1)).style.display = "none";

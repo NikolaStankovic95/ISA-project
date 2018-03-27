@@ -81,4 +81,18 @@ public class UserServiceImp implements UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findFriendRequests(id, accepted);
 	}
+	
+	@Override
+	public int setPasswordFor(String pass, Long id) {
+		// TODO Auto-generated method stub
+		return  userRepository.setPasswordFor(pass, id);
+	}
+
+
+	@Override
+	public int updateUser(Long id, String email, String city, String name,
+			String surname, String number) {
+		// TODO Auto-generated method stub
+		return userRepository.updateUser(id,email,city,name,surname,number);
+	}
 }

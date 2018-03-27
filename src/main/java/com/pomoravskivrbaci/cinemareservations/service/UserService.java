@@ -20,10 +20,16 @@ public interface UserService {
 	User createUser(User user);
 	
 	User update(User u,Long id);
+	int setPasswordFor(String pass,Long id);
+
+	int updateUser(Long id, String email, String city, String name,
+			String surname, String number);
+
 	int setFixedActivatedFor(boolean activated,Long id);
 	
 	List<Friendship> findFriends(User id,boolean accepted);
 	
 
 	List<Friendship> findFriendRequests(User id,boolean accepted);
+	
 }
