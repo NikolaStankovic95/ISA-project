@@ -1,7 +1,6 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -10,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 
 
@@ -36,12 +36,39 @@ public class Ad implements Serializable  {
 	@Column(nullable = false)
 	protected AdStatus adStatus;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	protected Date expirationDate;
 	/*
 	@Column(nullable = true)
 	protected byte[] image;
 	*/
+	
+	@Column(nullable = false)
+	protected AdType adType;
+	
+	@Column(nullable = false)
+	protected int quantity;
+	
+	@OneToOne
+	protected User publisher;
+	public User getPublisher() {
+		return publisher;
+	}
+	public void setPublisher(User publisher) {
+		this.publisher = publisher;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public AdType getAdType() {
+		return adType;
+	}
+	public void setAdType(AdType adType) {
+		this.adType = adType;
+	}
 	public Date getExpirationDate() {
 		return expirationDate;
 	}

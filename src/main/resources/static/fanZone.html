@@ -1,16 +1,42 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="jquery.min.js"> </script>	
-<script type="text/javascript" src="js/fanZone.js"> </script>
-	<title>FanZone</title>
+<script type="text/javascript" src="jquery.min.js">
+	
+</script>
+<script type="text/javascript" src="js/fanZone.js">
+	
+</script>
+<title>FanZone</title>
 </head>
 <body>
 
-	<h1 id="name"></h1>
-	<div>
-	<p>Oglasi<p>
+	<div class="tab">
+		<button class="tablinks" id="shop">Official Shop</button>
+		<button class="tablinks" id="adshop">Ads</button>
+
 	</div>
-	<div id="ads"></div>
+	<h1 id="name"></h1>
+	<!-- Tab content -->
+	<div id="officialShop" class="tabcontent">
+
+		<div>
+			<p>Ads<p>
+		</div>
+		<button id = "addAd">Add ad</button>
+		<div id="OfficialAds"></div>
+	</div>
+
+	<div id="Ads" class="tabcontent" style="display: none">
+		<div>
+			<p>Ads<p>
+		</div>
+		<button id = "addAdun">Add ad</button>
+		<div id="UnofficialAds"></div>
+
+	</div>
+
+
 </body>
 </html>
