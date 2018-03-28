@@ -50,4 +50,23 @@ public class AdServiceImp implements AdService {
 		
 	}
 
+	@Override
+	public List<Ad> getOfficalAds(long l) {
+		FanZone fz = fanZoneRepository.findById(1L);
+		return adRepository.getOfficialAds(fz);
+	}
+
+	@Override
+	public List<Ad> getUnofficalAds(long l) {
+		FanZone fz = fanZoneRepository.findById(1L);
+		return adRepository.getUnofficialAds(fz);
+	}
+
+	@Override
+	@Transactional
+	public void updateQuantity(int i, Long id) {
+		adRepository.updateQuantity(i,id);
+		
+	}
+
 }

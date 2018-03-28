@@ -12,4 +12,8 @@ public interface AdService {
 	Ad createAd(Ad ad);
 	Ad findById(Long id);
 	void update(AdStatus status,Long id);
+	List<Ad> getOfficalAds(long l);
+	List<Ad> getUnofficalAds(long l);
+	void updateQuantity(int i, Long id);
+	
 }
