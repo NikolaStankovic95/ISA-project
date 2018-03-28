@@ -13,6 +13,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Hall implements Serializable {
 
@@ -32,8 +34,6 @@ public class Hall implements Serializable {
 	@Column(name="name",nullable=false)
 	protected String name;
 	
-	@OneToMany(mappedBy="hall")
-	protected List<Seat> seats;
 	
 	@ManyToOne
 	@JoinColumn(name="institution")
@@ -76,6 +76,7 @@ public class Hall implements Serializable {
 		this.institution = institution;
 	}
 
+	@JsonIgnore
 	public List<HallSegment> getHallSegments() {
 		return hallSegments;
 	}

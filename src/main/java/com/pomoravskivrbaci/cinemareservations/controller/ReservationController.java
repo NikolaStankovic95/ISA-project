@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pomoravskivrbaci.cinemareservations.model.Hall;
+import com.pomoravskivrbaci.cinemareservations.model.HallSegment;
 import com.pomoravskivrbaci.cinemareservations.model.Institution;
 import com.pomoravskivrbaci.cinemareservations.model.InstitutionType;
 import com.pomoravskivrbaci.cinemareservations.model.Period;
@@ -28,6 +29,7 @@ import com.pomoravskivrbaci.cinemareservations.model.Reservation;
 import com.pomoravskivrbaci.cinemareservations.model.Seat;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.service.EmailService;
+import com.pomoravskivrbaci.cinemareservations.service.HallSegmentService;
 import com.pomoravskivrbaci.cinemareservations.service.HallService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 import com.pomoravskivrbaci.cinemareservations.service.PeriodService;
@@ -42,6 +44,7 @@ public class ReservationController {
 
 	@Autowired
 	private InstitutionService institutionService;
+	
 	
 	@Autowired
 	private ReservationService reservationService;
@@ -58,6 +61,9 @@ public class ReservationController {
 	
 	@Autowired
 	private HallService hallService;
+	
+	@Autowired
+	private HallSegmentService hallSegmentService;
 	
 	@RequestMapping("/getCinemas")
 	private @ResponseBody List<Institution> findCinemas(){
@@ -166,25 +172,26 @@ public class ReservationController {
 	@RequestMapping(value="/getHallSeats",	method=RequestMethod.POST,	
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	private @ResponseBody List<Seat> getHallSeats(@RequestBody Object object){
+	private @ResponseBody List<HallSegment> getHallSeats(@RequestBody Object object){
 		String [] IDs=object.toString().substring(1,object.toString().length()-1).split(",");
 		List<Reservation> allReservations=reservationService.findByInstitutionIdAndHallIdAndPeriodIdAndProjectionId(
 				Long.parseLong(IDs[0].split("=")[1]), Long.parseLong(IDs[1].split("=")[1]), Long.parseLong(IDs[2].split("=")[1]),Long.parseLong(IDs[3].split("=")[1]));
-		List<Seat> hallSeats=seatService.findByHallId(Long.parseLong(IDs[1].split("=")[1]));
+		List<HallSegment> hallSegments=hallSegmentService.findHallSegmentByHallId(Long.parseLong(IDs[1].split("=")[1]));
 		for(Reservation reservation:allReservations){
-			for(Seat seat:hallSeats){
+			for(HallSegment segment:hallSegments){
+				for(Seat seat:segment.getSeats()){
 					if(seat.getRegNumber().equals(reservation.getSeat().getRegNumber())){
 						seat.setFree(false);
 					}
-				
+				}
 			}
 		}
-		return hallSeats;
+		return hallSegments;
 	}
 	
 	@RequestMapping(value="/getReservedSeats/{seats}/{id}")
 	private ResponseEntity<List<Seat>> getReservedSeats(@PathVariable("seats") String seats,@PathVariable ("id") Long id){
-		List<Seat> hallSeats=seatService.findByHallId(id);
+		List<HallSegment> hallSegments=hallSegmentService.findHallSegmentByHallId(id);
 		List<Seat> seatForReservation=new ArrayList<Seat>();
 		List<Seat> allSeats=new ArrayList<Seat>();
 		
@@ -192,10 +199,12 @@ public class ReservationController {
 		for(int i=0;i<seatsID.length;i++){
 			allSeats.add(seatService.findById(Long.parseLong(seatsID[i])));
 		}
-		for(Seat seat:hallSeats){
-			for(Seat reservationSeat:allSeats){
-				if(seat.getRegNumber().equals(reservationSeat.getRegNumber())){
-					seatForReservation.add(seat);
+		for(HallSegment segment:hallSegments){
+			for(Seat seat:segment.getSeats()){
+				for(Seat reservationSeat:allSeats){
+					if(seat.getRegNumber().equals(reservationSeat.getRegNumber())){
+						seatForReservation.add(seat);
+					}
 				}
 			}
 		}
@@ -207,16 +216,19 @@ public class ReservationController {
 		Period period=periodService.findById(id);
 		return new ResponseEntity<Period>(period,HttpStatus.OK);
 	}
-	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.POST,
+	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.PATCH,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	private String makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
+		reservationService.save(reservation);
+		
 		if(invite.equals("true")){
 			try {
-				
 				emailService.inviteFriend(reservation.getOwner(), loggedUser, reservation);
 				reservation.setOwner(null);
+				reservationService.save(reservation);
+				
 			} catch (MailException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -225,7 +237,6 @@ public class ReservationController {
 				e.printStackTrace();
 			}
 		}
-		reservationService.save(reservation);
 		return "forward:/user_profile.jsp";
 	}
 	

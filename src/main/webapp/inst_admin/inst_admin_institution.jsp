@@ -1,10 +1,11 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script type="application/javascript">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="application/javascript">
             function editInstitution() {
                 var name = $("#nameInput").val().trim();
                 var address = $("#addressInput").val().trim();
@@ -26,27 +27,31 @@
             }
         </script>
 
-    </head>
+</head>
 
-    <body>
-        <h4>Osnovne informacije:</h4>
-        <table>
-            <tr>
-                <td>Ime: </td>
-                <td><input id="nameInput" type="text" value="${ institution.name }"></td>
-            </tr>
-            <tr>
-                <td>Opis: </td>
-                <td><input id="descriptionInput" type="text" value="${ institution.description }"></td>
-            </tr>
-            <tr>
-                <td>Adresa: </td>
-                <td><input id="addressInput" type="text" value="${ institution.address }"></td>
-            </tr>
-        </table>
-        <input type="button" value="Sacuvaj" onclick="editInstitution()">
-        <h4>Repertoar:</h4></a>
-        <a href="/inst_admin/repertoire/${ institution.repertoire.id }"><p>${ institution.repertoire.name }</p></a>
-    </body>
+<body>
+	<h4>Osnovne informacije:</h4>
+	<table>
+		<tr>
+			<td>Ime:</td>
+			<td><input id="nameInput" type="text"
+				value="${ institution.name }"></td>
+		</tr>
+		<tr>
+			<td>Opis:</td>
+			<td><input id="descriptionInput" type="text"
+				value="${ institution.description }"></td>
+		</tr>
+		<tr>
+			<td>Adresa:</td>
+			<td><input id="addressInput" type="text"
+				value="${ institution.address }"></td>
+		</tr>
+	</table>
+	<input type="button" value="Sacuvaj" onclick="editInstitution()">
+	<h4>Repertoar:</h4>
+	</a>
+	<a href="/inst_admin/repertoire/${ institution.repertoire.id }"><p>${ institution.repertoire.name }</p></a>
+</body>
 
 </html>

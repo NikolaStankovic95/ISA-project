@@ -1,5 +1,87 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<style>
+		.check{
+			width: 1.3em;
+    height: 1.3em;
+    background-color: green;
+    border-radius: 35px 35px 0px 0px;
+    border: 1px solid #ddd;
+    -webkit-appearance: none;
+    margin:5px 5px 5px 5px;
+    outline: none;
+    cursor: pointer;
+		}
+		.check:checked {
+    background-color: yellow;
+		}
+		.check:disabled{
+		   background-color: red;
+		
+		}
+		
+		.rotatedLeft {
+		 	position: relative;
+		 	 width: 200px;
+   			 max-height: 200px;
+   			 top:35px;
+   			 left:50px;
+   			 border-radius:25%;
+   			 padding:10px 10px 10px 10px;
+		    -webkit-transform: rotate(-45deg);  /* Chrome, Safari 3.1+ */
+		    -moz-transform: rotate(-45deg);  /* Firefox 3.5-15 */
+		    -ms-transform: rotate(-45deg);  /* IE 9 */
+		    -o-transform: rotate(-45deg);  /* Opera 10.50-12.00 */
+		    transform: rotate(-45deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
+		    border:2px solid red;   
+		}
+		.rotatedRight {
+		 	position: relative;
+		 	 width: 200px;
+   			max-height: 200px;
+   			 top:-80px;
+   			 left:500px;
+   			  border-radius:25%;
+   			   padding:10px 10px 10px 10px;
+		    
+		    -webkit-transform: rotate(45deg);  /* Chrome, Safari 3.1+ */
+		    -moz-transform: rotate(45deg);  /* Firefox 3.5-15 */
+		    -ms-transform: rotate(45deg);  /* IE 9 */
+		    -o-transform: rotate(45deg);  /* Opera 10.50-12.00 */
+		    transform: rotate(45deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
+		    border:2px solid red;   
+		}
+	.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    border-radius:35px 35px 0px 0px ;
+    background-color: red;
+}
+	</style>
+</head>
 <script type="text/javascript" src="jquery.min.js"></script> 
 <script type="text/javascript" src="js/cinema.js"></script>
 <body>
@@ -33,9 +115,11 @@
 
     <label>Sala</label>
     <select id="projectionHalls2"></select><br>
-    <div id="div">
-      
-    </div>
+      <div class="rotatedLeft"></div>
+      <div class="rotatedRight"></div>
+      <div class="VIP"></div>
+      <div class="Parter"></div>
+      <br><br><br><br>
       <input type="button" value="Next" id="Next3"  onclick="next(4)">
     <input type="button" value="Back" onclick="back(2)">
 

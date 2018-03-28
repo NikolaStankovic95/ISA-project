@@ -81,4 +81,39 @@ public class UserServiceImp implements UserService {
 		// TODO Auto-generated method stub
 		return userRepository.findFriendRequests(id, accepted);
 	}
+
+
+
+	@Override
+	public List<User> findUserByNameAndSurnameIgnorableCaseContaining(String name, String surname) {
+		// TODO Auto-generated method stub
+		return userRepository.findUserByNameAndSurnameIgnoreCaseContaining(name, surname);
+	}
+
+
+
+	@Override
+	public List<User> findUserByNameIgnorableCaseContaining(String name) {
+		// TODO Auto-generated method stub
+		return userRepository.findUserByNameIgnoreCaseContaining(name);
+	}
+	
+
+
+	@Override
+	public List<User> findUserBySurnameIgnorableCaseContaining(String surname) {
+		// TODO Auto-generated method stub
+		return userRepository.findUserBySurnameIgnoreCaseContaining(surname);
+	}
+	@Override
+	public int updateUser(Long id, String email, String city, String name,
+			String surname, String number) {
+		// TODO Auto-generated method stub
+		return userRepository.updateUser(id,email,city,name,surname,number);
+	}
+	@Override
+	public int setPasswordFor(String pass, Long id) {
+		// TODO Auto-generated method stub
+		return  userRepository.setPasswordFor(pass, id);
+	}
 }

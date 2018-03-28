@@ -24,9 +24,7 @@ public class Seat implements Serializable{
 	@Column(name="regNumber")
 	protected String regNumber;
 	
-	@ManyToOne
-	protected Hall hall;
-
+	
 	@ManyToOne
 	protected HallSegment hallSegment;
 
@@ -62,11 +60,4 @@ public class Seat implements Serializable{
 		this.regNumber = regNumber;
 	}
 
-	public Hall getHall() {
-		return hall;
-	}
-
-	public void setHall(Hall hall) {
-		this.hall = hall;
-	}
 }

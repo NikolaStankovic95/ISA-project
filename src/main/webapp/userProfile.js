@@ -58,11 +58,12 @@ function notFriends(){
 		type:'GET',
 		async:false,
 		success:function(data){
-			$("#notFriends").empty();
+			$("tr:not('.header')").remove();
+			
 			$.each(data,function(index,friend){
-				$("#notFriends").append("<li>" +
-						"<div id=\'friend.id\'>"+friend.name+" "+friend.surname+
-						"<input type=\'button\'  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></div></li>");
+				$("#notFriends").append(
+						"<tr id=\'friend.id\'><td>"+friend.name+"</td><td> "+friend.surname+
+						"</td><td><input type=\'button\'  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></td></tr>");
 			})
 		}
 	})
@@ -175,4 +176,29 @@ $(document).on('click',"#addFriend",function(e){
 	})	
 	notFriends();
 
+})
+$(document).on('click',"#reset",function(e){
+	notFriends()
+})
+$(document).on('click',"#search",function(e){
+	var user=JSON.stringify({
+		"name":$("#nameSearch").val(),
+		"surname":$("#surnameSearch").val(),
+	})
+	$.ajax({
+		url:"../../userController/searchUser",
+		type:"POST",
+		data:user,
+		contentType:'application/json',
+		dataType:'json',
+		success:function(data){
+			
+			$("tr:not('.header')").remove();
+			$.each(data,function(index,friend){
+				$("#notFriends").append(
+						"<tr id=\'friend.id\'><td>"+friend.name+"</td><td> "+friend.surname+
+						"</td><td><input type=\'button\'  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></td></tr>");
+			})
+		}
+	})
 })

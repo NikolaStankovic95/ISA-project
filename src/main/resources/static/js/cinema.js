@@ -87,34 +87,49 @@ function getProjectionHalls(){
 		}
 }
 function drawHallSeats(data){
-	var div=$('#div').empty();
-	var brmesta=data.length;
-	var rbm=0;
-	var redova=Math.ceil(brmesta/5);
-	console.log(redova);
-	var brkolona=5;
 	
-	for(var i=0;i<redova;i++){
-	  for(var j=0;j<brkolona;j++){
-	   var slobodno=data[rbm].free;
-	    if(slobodno==true){
-	      div.append('<input  type=\'checkbox\' value=\''+data[rbm].id+'\'>');
-	     }else {
-
-	      div.append("<input  type=\'checkbox\' value=\'"+data[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
-	  
-	      }
-	    rbm++;
-	  }
-	  
-	    brmesta=brmesta-5;
-	  if(brmesta<5){
-	    brkolona=brmesta;
-	  }
-
-	  div.append("<br>");
-	}
-
+    for(i=0;i<data.length;i++){
+    	if(data[i].type=="LEFT_BALCONY"){
+    		var div=$('.rotatedLeft').empty();
+    		  
+    		var rbm=0
+    		div.append("<h3>Left balcony</h3>")  
+    		for(r=0;r<data[i].numberOfRows;r++){
+    				for(k=0;k<data[i].numberOfColumns;k++){
+    					var sediste=data[i].seats[rbm]
+		    			if(data[i].seats[rbm].free==false){
+		    				div.append('<input class=\'check\'  type=\'checkbox\' value=\''+data[i].seats[rbm].id+'\'>');
+		    				rbm++
+		    			}else{
+		    				div.append("<input class=\'check\' type=\'checkbox\' value=\'"+data[i].seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
+		    				rbm++
+		    			}
+		    		}
+    				div.append("<br>")
+		    	}
+    		
+    		
+    	}else if(data[i].type=="RIGHT_BALCONY"){
+    		var div=$('.rotatedRight').empty();
+    		  
+    		var rbm=0
+    		div.append("<h3>Right balcony</h3>")  
+    		for(r=0;r<data[i].numberOfRows;r++){
+    				for(k=0;k<data[i].numberOfColumns;k++){
+		    			if(data[i].seats[rbm].free==false){
+		    				div.append('<input class=\'check\'  type=\'checkbox\' value=\''+data[i].seats[rbm].id+'\'>');
+		    				rbm++
+		    			}else{
+		    				div.append("<input class=\'check\' type=\'checkbox\' value=\'"+data[i].seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
+		    				rbm++
+		    			}
+		    		}
+    				div.append("<br>")
+		    	}
+    		
+    		
+    	}
+    }
 }
 function convertTime(time){
 	var date = new Date(time);
@@ -310,7 +325,7 @@ function callReservation(data,invite){
 	$.ajax({
 		url:'reservationController/makeReservation/'+invite,
 		data:data,
-		type:'POST',
+		type:'PATCH',
 		contentType : 'application/json',
 		dataType : 'json',
 		async:false,

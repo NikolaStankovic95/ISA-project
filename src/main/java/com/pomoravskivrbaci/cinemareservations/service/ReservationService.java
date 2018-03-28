@@ -13,4 +13,6 @@ public interface ReservationService {
 	Reservation findById(Long id);
 	void update(User u, Long id);
 	void delete(Long id);
+	
+	List<Reservation> findByOwnerId(Long id);
 }

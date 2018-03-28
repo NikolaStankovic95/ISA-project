@@ -6,6 +6,5 @@ import com.pomoravskivrbaci.cinemareservations.model.Seat;
 
 public interface SeatService {
 
-	List<Seat> findByHallId(Long id);
 	Seat findById(Long id);
 }

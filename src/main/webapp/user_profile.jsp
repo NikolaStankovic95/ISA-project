@@ -35,16 +35,27 @@
 			</c:if>
 		</c:forEach>
 		</ul>
-		<ul id="notFriends">
+			<input type="text" id="nameSearch" placeholder="Type name">
+			<input type="text" id="surnameSearch" placeholder="Type surname">
+			<input type="button" id="search" value="Search">
+			<input type="button" id="reset" value="Reset">
+			
+		<table border=1 id="notFriends">
+		<tr class="header">
+			<th >Name</th>
+			<th >Surname</th>
+			</tr>
 		<c:forEach items="${notFriends}" var="addFriend">
-			<li><div id='${addFriend.id}'>
-			${addFriend.name} ${addFriend.surname}
-			<input type="button"  value="Send request"  onclick="sendFriendRequest('${addFriend.id}')">
-			</div>
-			</li>
+			<tr id='${addFriend.id}'>
+			
+			<td>${addFriend.name}</td>
+			<td> ${addFriend.surname}</td>
+			<td><input type="button"  value="Send request"  onclick="sendFriendRequest('${addFriend.id}')"></td>
+			</tr>
+			
 		</c:forEach>
 		
-		</ul>
+		</table>
   	</c:if>
  	
 	

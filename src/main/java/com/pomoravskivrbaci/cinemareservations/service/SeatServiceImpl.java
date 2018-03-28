@@ -14,11 +14,7 @@ public class SeatServiceImpl implements SeatService {
 	@Autowired
 	private SeatRepository seatRepository;
 	
-	@Override
-	public List<Seat> findByHallId(Long id) {
-		// TODO Auto-generated method stub
-		return seatRepository.findByHallId(id);
-	}
+	
 
 	@Override
 	public Seat findById(Long id) {
