@@ -43,7 +43,7 @@
 				</c:if>
 			</c:forEach>
 		</ul>
-<<<<<<< HEAD
+
 			<input type="text" id="nameSearch" placeholder="Type name">
 			<input type="text" id="surnameSearch" placeholder="Type surname">
 			<input type="button" id="search" value="Search">
@@ -67,29 +67,5 @@
 		</table>
   	</c:if>
  	
-	
-		
-	
-   
-    
-=======
-		<ul id="notFriends">
-			<c:forEach items="${notFriends}" var="addFriend">
-				<li><div id='${addFriend.id}'>
-						${addFriend.name} ${addFriend.surname} <input type="button"
-							value="Send request"
-							onclick="sendFriendRequest('${addFriend.id}')">
-					</div></li>
-			</c:forEach>
-
-		</ul>
-	</c:if>
-
-
-
-
-
-
->>>>>>> branch 'master' of https://github.com/jova1111/ISA-project
 </body>
 </html>
