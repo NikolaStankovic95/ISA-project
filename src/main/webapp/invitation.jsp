@@ -16,9 +16,10 @@
 
 	<c:if test="${loggedUser.email==user.email}">
 
-	</c:if>
-	<p>Your friend ${friend.name} ${friend.surname} invited you on this
+
+	<p>Your friend ${reservation.owner.name} ${reservation.owner.surname} invited you on this
 		event:</p>
+	<c:if test="${ not empty reservation }" >
 	<table border="1">
 		<tr>
 			<td>Institution</td>
@@ -44,13 +45,15 @@
 
 		</tr>
 	</table>
-	<br>
-	<form action="../../invitationController/accept/${reservation.id}">
-		<input type="submit" value="Accept" id="accept">
-	</form>
-	<form action="../../invitationController/reject/${reservation.id}">
-		<input type="submit" value="Reject" id="reject">
-	</form>
-
+	
+		<br>
+		<form action="../../invitationController/accept/${reservation.id}">
+			<input type="submit" value="Accept" id="accept">
+		</form>
+		<form action="../../invitationController/reject/${reservation.id}">
+			<input type="submit" value="Reject" id="reject">
+		</form>
+	</c:if>
+	</c:if>
 </body>
 </html>

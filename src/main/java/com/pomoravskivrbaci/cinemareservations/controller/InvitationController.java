@@ -25,15 +25,19 @@ public class InvitationController {
 	private String invitiation(@PathVariable ("id") Long id,HttpServletRequest request){
 		User user=(User) request.getSession().getAttribute("loggedUser");
 		Reservation reservation=reservationService.findById(id);
-		request.setAttribute("reservation",reservation);
-		
-		request.setAttribute("user", user);
+		if(user.getId()==reservation.getInvited().getId() && reservation.isAccepted()==false){
+			
+			request.setAttribute("reservation",reservation);
+			
+			request.setAttribute("user", user);
+		}
 		return "forward:/invitation.jsp";
 	}
 	@RequestMapping(value="/accept/{id}",method=RequestMethod.GET)
 	private String accept(HttpServletRequest request,@PathVariable ("id") Long id){
 		User user=(User) request.getSession().getAttribute("loggedUser");
 		Reservation reservation=reservationService.findById(id);
+		reservation.setAccepted(true);
 		reservation.setOwner(user);
 		reservationService.update(user,reservation.getId());
 		return "redirect:/userController/user/"+user.getId();

@@ -20,13 +20,35 @@
 		   background-color: red;
 		
 		}
-		
-		.rotatedLeft {
-		 	position: relative;
+			.VIP {
+			 display:none;
+		 	 position: relative;
 		 	 width: 200px;
    			 max-height: 200px;
-   			 top:35px;
-   			 left:50px;
+   			 top:10px;
+   			 left:350px;
+   			 border-radius:25%;
+   			 padding:10px 10px 10px 10px;
+		 	 border:2px solid red;   
+		}
+		.parter {
+			 display:none;
+		   	 position: relative;
+		 	 max-width: 400px;
+   			 max-height: 500px;
+   			 top:150px;
+   			 left:250px;
+   			 border-radius:25%;
+   			 padding:10px 10px 10px 10px;
+		 	 border:2px solid red;   
+		}
+		.rotatedLeft {
+		 	 display:none;
+		  	 position: absolute;
+		 	 width: 200px;
+   			 max-height: 200px;
+   			 top:50px;
+   			 left:100px;
    			 border-radius:25%;
    			 padding:10px 10px 10px 10px;
 		    -webkit-transform: rotate(-45deg);  /* Chrome, Safari 3.1+ */
@@ -37,11 +59,12 @@
 		    border:2px solid red;   
 		}
 		.rotatedRight {
-		 	position: relative;
+			display:none;
+		 	position: absolute;
 		 	 width: 200px;
-   			max-height: 200px;
-   			 top:-80px;
-   			 left:500px;
+   		    max-height: 200px;
+   			 top:50px;
+   			 left:600px;
    			  border-radius:25%;
    			   padding:10px 10px 10px 10px;
 		    
@@ -110,7 +133,7 @@
       <div class="rotatedLeft"></div>
       <div class="rotatedRight"></div>
       <div class="VIP"></div>
-      <div class="Parter"></div>
+      <div class="parter"></div>
       <br><br><br><br>
       <input type="button" value="Next" id="Next3"  onclick="next(4)">
     <input type="button" value="Back" onclick="back(2)">

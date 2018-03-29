@@ -39,7 +39,7 @@ import com.pomoravskivrbaci.cinemareservations.service.SeatService;
 
 
 @Controller
-@RequestMapping("/reservationController")
+@RequestMapping("/reservation")
 public class ReservationController {
 
 	@Autowired
@@ -202,7 +202,7 @@ public class ReservationController {
 		for(HallSegment segment:hallSegments){
 			for(Seat seat:segment.getSeats()){
 				for(Seat reservationSeat:allSeats){
-					if(seat.getRegNumber().equals(reservationSeat.getRegNumber())){
+					if(seat.getId().equals(reservationSeat.getId())){
 						seatForReservation.add(seat);
 					}
 				}
@@ -221,23 +221,25 @@ public class ReservationController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	private String makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
-		reservationService.save(reservation);
+	
 		
 		if(invite.equals("true")){
 			try {
-				emailService.inviteFriend(reservation.getOwner(), loggedUser, reservation);
-				reservation.setOwner(null);
 				reservationService.save(reservation);
 				
-			} catch (MailException e) {
+				emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
+				
+				
+			} catch (MailException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
+		}else{
+			reservation.setAccepted(true);
+		
+			reservationService.save(reservation);
 		}
-		return "forward:/user_profile.jsp";
+		return "";
 	}
 	
 	

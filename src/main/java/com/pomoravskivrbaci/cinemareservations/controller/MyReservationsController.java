@@ -1,9 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -47,15 +45,17 @@ public class MyReservationsController {
 		Date now = new Date();
 		Timestamp stamp = new Timestamp(reservation.getPeriod().getDate().getTime());
 		Date date = new Date(stamp.getTime());
-		long diffInMillies =Math.abs(now .getTime() - date.getTime());
-		long diffInDays=Math.abs(now.getDate()-date.getDate());
+		long diffInMillies =(date .getTime() - now.getTime());
+		long diffInDays=(date.getDate()-now.getDate());
 	    long diffDays = TimeUnit.DAYS.convert(diffInDays, TimeUnit.DAYS);
 	    long diffMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	    long diffHours = TimeUnit.HOURS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	    
-		if(diffDays==0 && diffMinutes>30)
-			reservationService.delete(id);
-	
+	    	if(diffDays>=0 && diffMinutes>30)
+				reservationService.delete(id);
+	    	else{
+	    		return new ResponseEntity<List<Reservation>>(new ArrayList<Reservation>(),HttpStatus.OK);
+	    	}
 		
 		return new ResponseEntity<List<Reservation>>(reservationService.findByOwnerId(user.getId()),HttpStatus.OK);
 	}
