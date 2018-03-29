@@ -9,4 +9,5 @@ public interface HallService {
 	List<Hall> findByInstitutionId(Long id);
 	Hall findById(Long id);
 	List<Hall> findByProjection_id(Long id);
+	Hall saveOrUpdate(Hall hall);
 }

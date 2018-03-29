@@ -23,6 +23,12 @@ public class HallServiceImpl implements HallService{
 		// TODO Auto-generated method stub
 		return hallRepository.findByProjections_id(id);
 	}
+
+	@Override
+	public Hall saveOrUpdate(Hall hall) {
+		return hallRepository.save(hall);
+	}
+
 	@Override
 	public Hall findById(Long id) {
 		// TODO Auto-generated method stub

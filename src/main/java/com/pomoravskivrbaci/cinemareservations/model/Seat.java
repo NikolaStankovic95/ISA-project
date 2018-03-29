@@ -46,6 +46,10 @@ public class Seat implements Serializable{
 		super();
 	}
 
+	public Seat(boolean free) {
+		this.free = free;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -68,5 +72,9 @@ public class Seat implements Serializable{
 
 	public void setHall(Hall hall) {
 		this.hall = hall;
+	}
+
+	public void setHallSegment(HallSegment hallSegment) {
+		this.hallSegment = hallSegment;
 	}
 }

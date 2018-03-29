@@ -1,12 +1,15 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import org.hibernate.Session;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class HallSegment {
 
-    public static enum Type {
+    public enum Type {
         VIP, LEFT_BALCONY, RIGHT_BALCONY, PARTER
     }
 
@@ -29,8 +32,8 @@ public class HallSegment {
     @ManyToOne
     protected Hall hall;
 
-    @OneToMany(mappedBy = "hallSegment")
-    protected List<Seat> seats;
+    @OneToMany(mappedBy = "hallSegment", cascade = {CascadeType.ALL, CascadeType.REFRESH, CascadeType.PERSIST})
+    protected List<Seat> seats = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -79,5 +82,17 @@ public class HallSegment {
 
     public List<Seat> getSeats() {
         return seats;
+    }
+
+    public void addSeat(Seat seat) {
+        seats.add(seat);
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
+
+    public void setHall(Hall hall) {
+        this.hall = hall;
     }
 }

@@ -3,15 +3,7 @@ package com.pomoravskivrbaci.cinemareservations.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 public class Hall implements Serializable {
@@ -50,7 +42,7 @@ public class Hall implements Serializable {
 	@ManyToMany(mappedBy="halls")
 	protected List<Projection> projections;
 
-	@OneToMany(mappedBy="hall")
+	@OneToMany(mappedBy="hall", cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
 	protected List<HallSegment> hallSegments;
 	
 	
@@ -78,5 +70,16 @@ public class Hall implements Serializable {
 
 	public List<HallSegment> getHallSegments() {
 		return hallSegments;
+	}
+
+	public void setHallSegments(List<HallSegment> hallSegments) {
+		this.hallSegments = hallSegments;
+	}
+
+	public HallSegment getHallSegmentByType(HallSegment.Type type) {
+		return hallSegments.stream()
+				.filter(e -> e.getType().equals(type))
+				.findFirst()
+				.orElse(null);
 	}
 }

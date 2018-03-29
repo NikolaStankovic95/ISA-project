@@ -44,9 +44,16 @@ public class InstitutionServiceImpl implements InstitutionService {
 	}
 
 	@Override
+	public Institution saveOrUpdate(Institution institution) {
+		return institutionRepositroy.save(institution);
+	}
+
+	@Override
 	public Repertoire findByRepertoire(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

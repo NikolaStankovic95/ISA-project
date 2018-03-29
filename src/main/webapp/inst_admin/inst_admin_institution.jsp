@@ -45,8 +45,15 @@
             </tr>
         </table>
         <input type="button" value="Sacuvaj" onclick="editInstitution()">
-        <h4>Repertoar:</h4></a>
+        <h4>Repertoar:</h4>
         <a href="/inst_admin/repertoire/${ institution.repertoire.id }"><p>${ institution.repertoire.name }</p></a>
+        <h4>Sale:</h4>
+        <ul>
+            <c:forEach var="hall" items="${ institution.halls }">
+                <li><a href="/inst_admin/hall/${ hall.id }">${ hall.name }</a></li>
+            </c:forEach>
+        </ul>
+        <a href="/inst_admin/institution/${ institution.id }/create_hall">Dodaj salu</a>
     </body>
 
 </html>

@@ -1,6 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
 import com.pomoravskivrbaci.cinemareservations.model.*;
+import com.pomoravskivrbaci.cinemareservations.service.HallService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 import com.pomoravskivrbaci.cinemareservations.service.ProjectionService;
 import com.pomoravskivrbaci.cinemareservations.service.RepertoireService;
@@ -22,6 +23,8 @@ public class InstitutionAdminController {
     RepertoireService repertoireService;
     @Autowired
     ProjectionService projectionService;
+    @Autowired
+    HallService hallService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private String chooseInstitution(HttpServletRequest request){
@@ -54,6 +57,20 @@ public class InstitutionAdminController {
         Projection projection = projectionService.findById(id);
         request.setAttribute("projection", projection);
         return("forward:/inst_admin/inst_admin_projection.jsp");
+    }
+
+    @RequestMapping(value = "/hall/{id}", method = RequestMethod.GET)
+    private String getHallInfo(@PathVariable("id")Long id, HttpServletRequest request) {
+        Hall hall = hallService.findById(id);
+        request.setAttribute("hall", hall);
+        return("forward:/inst_admin/inst_admin_hall.jsp");
+    }
+
+    @RequestMapping(value = "/institution/{id}/create_hall")
+    private String createHallPage(@PathVariable("id")Long id, HttpServletRequest request) {
+        Institution institution = institutionService.findById(id);
+        request.setAttribute("institution", institution);
+        return("forward:/inst_admin/create_hall.jsp");
     }
 
 }
