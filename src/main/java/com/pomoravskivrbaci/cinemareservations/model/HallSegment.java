@@ -1,5 +1,6 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Session;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class HallSegment {
     @Column(name="is_closed")
     protected boolean isClosed;
 
+    @JsonIgnore
     @ManyToOne
     protected Hall hall;
 
