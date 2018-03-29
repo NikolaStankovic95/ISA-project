@@ -35,7 +35,7 @@ public class HallController {
         newHall.getHallSegments().forEach((hallSegment -> {
             int numberOfSeats = hallSegment.getNumberOfRows() * hallSegment.getNumberOfColumns();
             for(int i = 0; i < numberOfSeats; i++) {
-                Seat seat = new Seat(true);
+                Seat seat = new Seat();
                 seat.setHallSegment(hallSegment);
                 hallSegment.addSeat(seat);
                 hallSegment.setHall(newHall);

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -242,5 +243,54 @@ public class UserController {
 		} else
 			return null;
 	}
+		
+	@RequestMapping(value="/searchUser",method=RequestMethod.POST,
+			consumes=MediaType.APPLICATION_JSON_VALUE)
+	private ResponseEntity<List<User>> searchUsers(@RequestBody User user,HttpServletRequest request){
+		User logged = (User) request.getSession().getAttribute("loggedUser");
 
+		User userProfile = userService.findUserById(logged.getId());
+		List<User> users = userService.findAll();
+		users.remove(userProfile);
+		List<Friendship> sentRequests = userService.findFriends(userProfile, false);
+		for (Friendship i : sentRequests) {
+			users.remove(i.getUser());
+		}
+		List<User> notFriends = loggedUserFriends(userProfile, users);
+		List<User> getFriends=new ArrayList<User>();
+		if(user.getName()==""){
+			List<User> founded=userService.findUserBySurnameIgnorableCaseContaining(user.getSurname());
+			for(User u:notFriends){
+				for(User item:founded){
+					if(u.getId()==item.getId()){
+						getFriends.add(item);
+					}
+				}
+			}
+			return new ResponseEntity<List<User>>(getFriends,HttpStatus.OK);
+		}
+		else if(user.getSurname()==""){
+			List<User> founded=userService.findUserByNameIgnorableCaseContaining(user.getName());
+			for(User u:notFriends){
+				for(User item:founded){
+					if(u.getId()==item.getId()){
+						getFriends.add(item);
+					}
+				}
+			}
+			return new ResponseEntity<List<User>>(getFriends,HttpStatus.OK);
+		}
+		else{
+			List<User> founded=userService.findUserByNameAndSurnameIgnorableCaseContaining(user.getName(), user.getSurname());
+			for(User u:notFriends){
+				for(User item:founded){
+					if(u.getId()==item.getId()){
+						getFriends.add(item);
+					}
+				}
+			}
+			return new ResponseEntity<List<User>>(getFriends,HttpStatus.OK);
+		
+		}
+	}
 }

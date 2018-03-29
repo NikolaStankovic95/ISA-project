@@ -9,7 +9,7 @@ window.onload=function(){
 	document.getElementById('calendar').value = date.toISOString().slice(0,10);
 
 	$.ajax({
-		url:"reservationController/getCinemas",
+		url:"reservation/getCinemas",
 		type:"GET",
 		contentType : 'application/json',
 		dataType : 'json',
@@ -41,7 +41,7 @@ function getLoggedUser(){
 function getCinemaProjections(){
 	$("#projections").empty();
 	$.ajax({
-		url:"reservationController/getProjections/"+$("#repertoireID").val()+"/"+$("#calendar").val(),
+		url:"reservation/getProjections/"+$("#repertoireID").val()+"/"+$("#calendar").val(),
 		type:"GET",
 		contentType : 'application/json',
 		dataType : 'json',
@@ -63,7 +63,7 @@ function getProjectionHalls(){
 	$("#projectionHalls2").empty();
 	if($('#projections option:selected').val()!=undefined){
 		$.ajax({
-			url:"reservationController/getProjectionHalls/"+$('#projections option:selected').val(),
+			url:"reservation/getProjectionHalls/"+$('#projections option:selected').val(),
 			type:"GET",
 			async:false,
 			contentType : 'application/json',
@@ -87,34 +87,48 @@ function getProjectionHalls(){
 		}
 }
 function drawHallSeats(data){
-	var div=$('#div').empty();
-	var brmesta=data.length;
-	var rbm=0;
-	var redova=Math.ceil(brmesta/5);
-	console.log(redova);
-	var brkolona=5;
 	
-	for(var i=0;i<redova;i++){
-	  for(var j=0;j<brkolona;j++){
-	   var slobodno=data[rbm].free;
-	    if(slobodno==true){
-	      div.append('<input  type=\'checkbox\' value=\''+data[rbm].id+'\'>');
-	     }else {
-
-	      div.append("<input  type=\'checkbox\' value=\'"+data[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
-	  
-	      }
-	    rbm++;
-	  }
-	  
-	    brmesta=brmesta-5;
-	  if(brmesta<5){
-	    brkolona=brmesta;
-	  }
-
-	  div.append("<br>");
-	}
-
+    for(i=0;i<data.length;i++){
+    	if(data[i].type=="LEFT_BALCONY"){
+    		var div=$('.rotatedLeft').empty();
+    		div.css('display','block');
+    		div.append("<h3>Left balcony</h3>") 
+    		setSeats(div,data[i]);
+    		
+    		
+    	}else if(data[i].type=="RIGHT_BALCONY"){
+    		var div=$('.rotatedRight').empty();
+    		div.append("<h3>Right balcony</h3>")  
+    	 	setSeats(div,data[i]);
+    		div.css('display','block');
+    		
+    	}else if(data[i].type=="VIP"){
+    		var div=$('.VIP').empty();
+    		div.append("<h3>VIP</h3>")  
+    	 	setSeats(div,data[i]);
+    		div.css('display','block');
+    	}else if(data[i].type=="PARTER"){
+    		var div=$('.parter').empty();
+    		div.append("<h3>Parter</h3>")  
+    	 	setSeats(div,data[i]);
+    		div.css('display','block');
+    	}
+    }
+}
+function setSeats(div,segment){
+	var rbm=0
+	for(r=0;r<segment.numberOfRows;r++){
+			for(k=0;k<segment.numberOfColumns;k++){
+    			if(segment.seats[rbm].free==true){
+    				div.append('<input class=\'check\'  type=\'checkbox\' value=\''+segment.seats[rbm].id+'\'>');
+    				rbm++
+    			}else{
+    				div.append("<input class=\'check\' type=\'checkbox\' value=\'"+segment.seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
+    				rbm++
+    			}
+    		}
+			div.append("<br>")
+    	}
 }
 function convertTime(time){
 	var date = new Date(time);
@@ -132,7 +146,7 @@ function getProjectionPeriods(){
 
 		
 		$.ajax({
-			url:"reservationController/getProjectionsPeriod/"+$('#projections option:selected').val(),
+			url:"reservation/getProjectionsPeriod/"+$('#projections option:selected').val(),
 			type:"GET",
 			async:false,
 			contentType : 'application/json',
@@ -156,7 +170,7 @@ $(document).on('click',"#Next1",function(e){
 	
 	alert($("#nameOfCinema1").find('option:selected').text());
 	$.ajax({
-		url:'reservationController/getCinemaByName/'+$('#nameOfCinema1 option:selected').text(),
+		url:'reservation/getCinemaByName/'+$('#nameOfCinema1 option:selected').text(),
 		type:'GET',
 		async:false,
 		contentType : 'application/json',
@@ -223,7 +237,7 @@ $(document).on('change',"#projections",function(e){
 
 $(document).on('change',"#nameOfCinema",function(e){
 	$.ajax({
-		url:'reservationController/getCinemaByName/'+$('#nameOfCinema option:selected').text(),
+		url:'reservation/getCinemaByName/'+$('#nameOfCinema option:selected').text(),
 		type:'GET',
 		async:false,
 		contentType : 'application/json',
@@ -239,6 +253,7 @@ $(document).on('change',"#nameOfCinema",function(e){
 	getProjectionPeriods();
 	
 })
+
 function findInvitedUsers(index){
 	var user;
 	var invited=$("#invitedFriends option");
@@ -265,7 +280,7 @@ $(document).on('click',"#submit",function(e){
 			checkList.push($(this).val());
 		}
 	});
-	
+	var invited=$("#invitedFriends option").length;
 	if(checkList.length!=0){
 		reserveSeats(checkList);
 		
@@ -274,29 +289,57 @@ $(document).on('click',"#submit",function(e){
 		getHallById();
 		getProjectionById();
 		u=getLoggedUser();
-		var data=JSON.stringify({
-				"institution":institution,
-				"hall":hall,
-				"seats":seats[0],
-				"projection":projection,
-				"period":period,
-				"owner":u
+		if(invited!=0){
+			if(invited!=1)
+				invited=invited-1
 				
-		})
-		
-		callReservation(data,"false");
+		for(i=0;i<invited;i++){
+			var data=JSON.stringify({
+					"institution":institution,
+					"hall":hall,
+					"seats":seats[i],
+					"projection":projection,
+					"period":period,
+					"owner":u
+					
+			})
+			
+			callReservation(data,"false");
+		}
+		}else{
+			for(i=0;i<seats.length;i++){
+				var data=JSON.stringify({
+						"institution":institution,
+						"hall":hall,
+						"seats":seats[i],
+						"projection":projection,
+						"period":period,
+						"owner":u
+						
+				})
+				
+				callReservation(data,"false");
+		}
+		}
 	}			
-	if(seats.length>1){
+	if(invited>0){
+		var invited=$("#invitedFriends option").length;
 		$.each(seats,function(index,seat){
-			if( index === 0 )
-		        return true;
+			if(invited==1){
+				if( index < invited )
+			        return true;
+			}else
+				if( index < invited-1 )
+			        return true;
+			
 			var data=JSON.stringify({
 				"institution":institution,
 				"hall":hall,
 				"seats":seats[index],
 				"projection":projection,
 				"period":period,
-				"owner":findInvitedUsers(index)
+				"owner":u,
+				"invited":findInvitedUsers(index)
 			
 				
 		})
@@ -308,9 +351,9 @@ $(document).on('click',"#submit",function(e){
 function callReservation(data,invite){
 	
 	$.ajax({
-		url:'reservationController/makeReservation/'+invite,
+		url:'reservation/makeReservation/'+invite,
 		data:data,
-		type:'POST',
+		type:'PATCH',
 		contentType : 'application/json',
 		dataType : 'json',
 		async:false,
@@ -330,7 +373,7 @@ function getSeats(data){
 		
 })
 	$.ajax({
-		url:'reservationController/getHallSeats',
+		url:'reservation/getHallSeats',
 		data:data.toString(),
 		type:'POST',
 		async:false,
@@ -385,7 +428,7 @@ $(document).on('click',"#Next2",function(e){
 })
 function getCinemaRepertorie(){
 	$.ajax({
-		url:'reservatinoController/getCinemaRepertoire'+$('#nameOfCinema option:selected').val(),
+		url:'reservation/getCinemaRepertoire'+$('#nameOfCinema option:selected').val(),
 		type:'GET',
 		success:function(data){
 			$.each(data,function(index,repertoire){
@@ -396,7 +439,7 @@ function getCinemaRepertorie(){
 }
 function getHallById(){
 	$.ajax({
-		url:'reservationController/findHallById/'+$('#projectionHalls option:selected').val(),
+		url:'reservation/findHallById/'+$('#projectionHalls option:selected').val(),
 		type:'GET',
 		contentType:'application/json',
 		dataType:'json',
@@ -409,7 +452,7 @@ function getHallById(){
 function reserveSeats(data){
 	
 	$.ajax({
-		url:'reservationController/getReservedSeats/'+data.toString()+'/'+$('#projectionHalls option:selected').val(),
+		url:'reservation/getReservedSeats/'+data.toString()+'/'+$('#projectionHalls option:selected').val(),
 		type:'GET',
 		contentType:'application/json',
 		dataType:'json',
@@ -423,7 +466,7 @@ function reserveSeats(data){
 function getProjectionById(){
 	alert($('#projections option:selected').val())
 	$.ajax({
-		url:'reservationController/findProjectionById/'+$('#projections option:selected').val(),
+		url:'reservation/findProjectionById/'+$('#projections option:selected').val(),
 		type:'GET',
 		contentType:'application/json',
 		dataType:'json',
@@ -435,7 +478,7 @@ function getProjectionById(){
 }
 function getSelectedPeriod(){
 	$.ajax({
-		url:'reservationController/getSelectedPeriod/'+$('#term option:selected').val(),
+		url:'reservation/getSelectedPeriod/'+$('#term option:selected').val(),
 		type:'GET',
 		contentType:'application/json',
 		dataType:'json',

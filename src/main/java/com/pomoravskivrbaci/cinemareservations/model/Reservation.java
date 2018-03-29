@@ -43,6 +43,23 @@ public class Reservation {
 	@ManyToOne
 	protected User owner;
 	
+	@OneToOne
+	protected User invited;
+	
+	protected boolean accepted;
+	
+	public User getInvited() {
+		return invited;
+	}
+	public void setInvited(User invited) {
+		this.invited = invited;
+	}
+	public boolean isAccepted() {
+		return accepted;
+	}
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
 	public Reservation(Long id, Projection projection, Hall hall, Seat seats, Period period, Institution institution,
 			User owner) {
 		super();

@@ -52,4 +52,10 @@ public class ReservationServiceImpl implements ReservationService{
 		 reservationRepository.delete(id);
 	}
 
+	@Override
+	public List<Reservation> findByOwnerId(Long id) {
+		// TODO Auto-generated method stub
+		return reservationRepository.findByOwnerId(id);
+	}
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Hall implements Serializable {
 
@@ -24,8 +26,6 @@ public class Hall implements Serializable {
 	@Column(name="name",nullable=false)
 	protected String name;
 	
-	@OneToMany(mappedBy="hall")
-	protected List<Seat> seats;
 	
 	@ManyToOne
 	@JoinColumn(name="institution")

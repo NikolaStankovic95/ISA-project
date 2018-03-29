@@ -19,4 +19,6 @@ public interface ReservationRepository extends PagingAndSortingRepository<Reserv
 	@Transactional
 	@Query("Update Reservation r set r.owner=?1 where r.id=?2")
 	void update(User u,Long id);
+	
+	List<Reservation> findByOwnerId(Long id);
 } 

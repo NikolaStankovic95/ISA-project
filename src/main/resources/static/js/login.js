@@ -26,3 +26,6 @@ $(document).on('click','#login',function(e){
 		}
 	})
 })
+$(document).on('click','#register',function(e){
+	window.top.location="Registration.html";
+})

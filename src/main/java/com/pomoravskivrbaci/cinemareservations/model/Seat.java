@@ -24,13 +24,11 @@ public class Seat implements Serializable{
 	@Column(name="regNumber")
 	protected String regNumber;
 	
-	@ManyToOne
-	protected Hall hall;
 
 	@ManyToOne
 	protected HallSegment hallSegment;
 
-	@Column(name="free")
+
 	protected boolean free;
 	
 	
@@ -44,10 +42,6 @@ public class Seat implements Serializable{
 
 	public Seat() {
 		super();
-	}
-
-	public Seat(boolean free) {
-		this.free = free;
 	}
 
 	public Long getId() {
@@ -66,13 +60,6 @@ public class Seat implements Serializable{
 		this.regNumber = regNumber;
 	}
 
-	public Hall getHall() {
-		return hall;
-	}
-
-	public void setHall(Hall hall) {
-		this.hall = hall;
-	}
 
 	public void setHallSegment(HallSegment hallSegment) {
 		this.hallSegment = hallSegment;
