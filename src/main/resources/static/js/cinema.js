@@ -488,3 +488,21 @@ function getSelectedPeriod(){
 		}
 	})
 }
+function combo() {
+	$("#nameOfCinema1 option").each(function(){
+		if($(this).text().includes($("#search").val())){
+			console.log($(this).val())
+			$(this).prop("selected","selected");
+		}
+	})
+	
+}
+function combo2() {
+	$("#nameOfCinema option").each(function(){
+		if($(this).text().includes($("#search2").val())){
+			console.log($(this).val())
+			$(this).prop("selected","selected");
+		}
+	})
+	
+}

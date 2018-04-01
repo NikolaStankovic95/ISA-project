@@ -109,14 +109,16 @@
 <script type="text/javascript" src="js/cinema.js"></script>
 <body>
 	<div id="reservation1">
-
-		<label>Naziv bioskopa</label> <select id="nameOfCinema1"></select> <input
+<input type="text" id="search" placeholder="Search institution" onkeypress="combo()" /><br>
+		<label>Naziv bioskopa</label> <select  id="nameOfCinema1" ></select> <input
 			type="button" value="Next" id="Next1" onclick="next(2)"> <input
 			type="hidden" id="repertoireID">
 
 	</div>
 
 	<div id="reservation2" style="display: none;">
+		<input type="text" id="search2" placeholder="Search institution" onkeypress="combo2()" />
+		<br>
 		<label id="repertoire"></label> <label>Naziv bioskopa</label> <select
 			id="nameOfCinema">
 		</select><br> <label>Projekcija</label> <select id="projections" name="id"></select><br>

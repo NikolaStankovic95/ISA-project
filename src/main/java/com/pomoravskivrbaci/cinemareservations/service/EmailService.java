@@ -1,5 +1,10 @@
 package com.pomoravskivrbaci.cinemareservations.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -52,6 +57,25 @@ public class EmailService {
 		javaMailSender.send(mail);
 
 		System.out.println("Email poslat!");
+	}
+	@Async
+	public void notifyOwner(User owner, Reservation reservation) {
+		// TODO Auto-generated method stub
+	     LocalTime time = LocalDateTime.ofInstant(reservation.getPeriod().getDate().toInstant(), ZoneId.systemDefault()).toLocalTime();
+	     LocalDate date = reservation.getPeriod().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	     System.out.println("Slanje emaila...");
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(owner.getEmail());
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Sistem bioskopa/pozorišta");
+		mail.setText("Uspešno ste rezervisali "+reservation.getSeats().getRegNumber()+" mesto za projekciju "+reservation.getProjection().getName()
+				+" u "+reservation.getInstitution().getName()+" na dan "+" "+date+" "+time+ " u sali "+
+				reservation.getHall().getName());
+		
+		javaMailSender.send(mail);
+
+		System.out.println("Email poslat!");
+	
 	}
 
 

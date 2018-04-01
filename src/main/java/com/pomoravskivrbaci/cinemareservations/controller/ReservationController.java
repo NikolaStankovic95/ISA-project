@@ -236,7 +236,7 @@ public class ReservationController {
 			} 
 		}else{
 			reservation.setAccepted(true);
-		
+			emailService.notifyOwner(reservation.getOwner(),reservation);
 			reservationService.save(reservation);
 		}
 		return "";
