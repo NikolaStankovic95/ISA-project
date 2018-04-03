@@ -12,8 +12,8 @@
 	</c:if>
 	<hr>
 	<div>
-		<a href="reservationController/cinemas">Bioskopi</a> <a
-			href="reservationController/theatres">Pozorista</a>
+		<a href="reservation/cinemas">Bioskopi</a> <a
+			href="reservation/theatres">Pozorista</a>
 	</div>
 </body>
 

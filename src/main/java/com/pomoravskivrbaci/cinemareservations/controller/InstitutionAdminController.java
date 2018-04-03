@@ -26,7 +26,7 @@ public class InstitutionAdminController {
     @Autowired
     HallService hallService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     private String chooseInstitution(HttpServletRequest request){
         /*User loggedUser = (User)request.getSession().getAttribute("loggedUser");
         if(loggedUser == null || loggedUser.getRole() != UserRole.INSTADMIN){
@@ -45,11 +45,20 @@ public class InstitutionAdminController {
         return("forward:/inst_admin/inst_admin_institution.jsp");
     }
 
-    @RequestMapping(value = "/repertoire/{id}", method = RequestMethod.GET)
-    private String getRepertoireInfo(@PathVariable("id")Long id, HttpServletRequest request) {
-        Repertoire repertoire = repertoireService.findById(id);
+    @RequestMapping(value = "/institution/{inst_id}/repertoire/{rep_id}", method = RequestMethod.GET)
+    private String getRepertoireInfo(@PathVariable("inst_id")Long instId, @PathVariable("rep_id")Long repId, HttpServletRequest request) {
+        Institution institution = institutionService.findById(instId);
+        Repertoire repertoire = repertoireService.findById(repId);
         request.setAttribute("repertoire", repertoire);
+        request.setAttribute("institution", institution);
         return("forward:/inst_admin/inst_admin_repertoire.jsp");
+    }
+
+    @RequestMapping(value = "/institution/{id}/create_repertoire")
+    private String createRepertoirePage(@PathVariable("id")Long id, HttpServletRequest request) {
+        Institution institution = institutionService.findById(id);
+        request.setAttribute("institution", institution);
+        return("forward:/inst_admin/create_repertoire.jsp");
     }
 
     @RequestMapping(value = "/projection/{id}", method = RequestMethod.GET)
@@ -71,6 +80,15 @@ public class InstitutionAdminController {
         Institution institution = institutionService.findById(id);
         request.setAttribute("institution", institution);
         return("forward:/inst_admin/create_hall.jsp");
+    }
+
+    @RequestMapping(value = "/institution/{inst_id}/repertoire/{rep_id}/create_projection")
+    private String createProjectionPage(@PathVariable("inst_id")Long instId, @PathVariable("rep_id")Long repId, HttpServletRequest request) {
+        Institution institution = institutionService.findById(instId);
+        Repertoire repertoire = repertoireService.findById(repId);
+        request.setAttribute("institution", institution);
+        request.setAttribute("repertoire", repertoire);
+        return("forward:/inst_admin/create_projection.jsp");
     }
 
 }

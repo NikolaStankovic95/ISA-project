@@ -1,6 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,7 +42,7 @@ public class Repertoire implements Serializable{
 	}
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "repertoire")
-	protected List<Institution> institutions;
+	protected List<Institution> institutions = new ArrayList<>();
 	
 	public Long getId() {
 		return id;
@@ -74,5 +75,9 @@ public class Repertoire implements Serializable{
 	protected List<Projection> projections;
 	
 	public Repertoire (){}
-	
+
+	public void addInstitution(Institution institution) {
+		institutions.add(institution);
+	}
+
 }

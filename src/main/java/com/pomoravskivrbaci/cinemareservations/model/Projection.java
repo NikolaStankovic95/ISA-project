@@ -63,6 +63,9 @@ public class Projection implements Serializable{
 	
 	@OneToMany(mappedBy="projection")
 	protected List<Period> periods;
+
+	@OneToMany(mappedBy="projection")
+	protected List<ProjectionSegment> projectionSegments;
 	
 	@JsonIgnore
 	public List<Period> getPeriods() {

@@ -8,4 +8,6 @@ public interface RepertoireService {
 
     void setRepertoireInfoById(Long id, String name);
 
+    Repertoire saveOrUpdate(Repertoire repertoire);
+
 }
