@@ -104,9 +104,36 @@
     background-color: red;
 }
 	</style>
-</head>
-<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript"
+	src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js">
+	
+</script>
+<!-- Koristi stomp biblioteku da se pretplati na brokerov /topic/message endpoint -->
+<script type="text/javascript"
+	src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript" src="js/cinema.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var vip = $(".parter");
+			var socket = new SockJS('/nekiEndpoint');
+			var stompClient = Stomp.over(socket);
+			stompClient.connect({}, function(frame) {
+				stompClient.subscribe("/topic/reservation", function(data) {
+					var message = data.body;
+					$('input[type=checkbox]').each(function () {
+						if($(this).val()==message){
+							$(this).prop('disabled','disabled')
+							$(this).prop('checked','checked')
+							
+						}
+				});
+				});
+		});
+		})
+	</script>
+</head>
 <body>
 	<div id="reservation1">
 <input type="text" id="search" placeholder="Search institution" onkeypress="combo()" /><br>

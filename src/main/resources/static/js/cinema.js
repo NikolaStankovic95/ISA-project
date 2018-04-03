@@ -353,7 +353,7 @@ function callReservation(data,invite){
 	$.ajax({
 		url:'reservation/makeReservation/'+invite,
 		data:data,
-		type:'PATCH',
+		type:'POST',
 		contentType : 'application/json',
 		dataType : 'json',
 		async:false,
@@ -361,7 +361,17 @@ function callReservation(data,invite){
 			console.log(data);
 		}
 	})
-	
+	$.ajax({
+		url:'reservation/send/reservation',
+		type:'POST',
+		data:data,
+		contentType : 'application/json',
+		dataType : 'json',
+		async:false,
+		success:function(data){
+			
+		}
+	})
 }
 function getSeats(data){
 	
