@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pomoravskivrbaci.cinemareservations.messaging.Producer;
 import com.pomoravskivrbaci.cinemareservations.model.Hall;
 import com.pomoravskivrbaci.cinemareservations.model.HallSegment;
 import com.pomoravskivrbaci.cinemareservations.model.Institution;
@@ -45,6 +46,8 @@ public class ReservationController {
 	@Autowired
 	private InstitutionService institutionService;
 	
+	@Autowired
+	Producer producer;
 	
 	@Autowired
 	private ReservationService reservationService;
@@ -216,7 +219,7 @@ public class ReservationController {
 		Period period=periodService.findById(id);
 		return new ResponseEntity<Period>(period,HttpStatus.OK);
 	}
-	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.PATCH,
+	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	private String makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
@@ -229,7 +232,6 @@ public class ReservationController {
 				
 				emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
 				
-				
 			} catch (MailException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -241,6 +243,14 @@ public class ReservationController {
 		}
 		return "";
 	}
+	@RequestMapping(value="/send/{topic}",method=RequestMethod.POST,
+			consumes=MediaType.APPLICATION_JSON_VALUE,
+			produces=MediaType.APPLICATION_JSON_VALUE)
+	public void  sender(@PathVariable String topic, @RequestBody Reservation reservation){
+		producer.sendMessageTo(topic,reservation.getSeats().getId());
+		System.out.println("Pogodio");
+	}
+	
 	
 	
 }
