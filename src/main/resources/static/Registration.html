@@ -3,28 +3,42 @@
 <head>
 <script type="text/javascript" src="jquery.min.js"> </script>
 <script type="text/javascript" src="js/registration.js"> </script>
-
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/registration.css">
+	
 <title>Registration</title>
 </head>
 <body>
 
-	<div>
-		<input type="text" id="email" placeholder="Email Address" name=""><br>
+	<div class="regDiv">
+	  <div class="content">
+	  	<table>
+		<tr >
+			<td >Email address:</td>
+			<td><input type="text" id="email" ></td>
+		 </tr>
 
-		<input type="password" id="password" placeholder="Password" name=""><br>
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" id="password" ></td>
+		</tr>
+	
+		<tr><td>Repeat password:</td><td><input type="password" id="checkpassword"></td></tr> 
+		<tr><td>First name:</td><td><input	type="text" id="firstname" ></td></tr>
 
-		<input type="password" id="checkpassword"
-			placeholder="Repeat Password" name=""><br> <input
-			type="text" id="firstname" placeholder="First name"><br>
+		<tr><td>Last name:</td><td><input type="text" id="lastname" ></td></tr>
 
-		<input type="text" id="lastname" placeholder="Last name"><br>
+		<tr><td>City:</td><td><input type="text" id="city" ></td></tr>
 
-		<input type="text" id="city" placeholder="City" name=""><br>
-
-		<input type="text" id="phone" placeholder="Phone number" name=""><br>
+		<tr><td>Phone number:</td><td><input type="text" id="phone" ></td></tr>
 
 
-		<input type="button" id="register" value="Register"><br>
+		<tr>
+			<td colspan="2" align="center"><input type="button" id="register" class="btn btn-primary" value="Register"></td>
+			</tr>
+		</table>
+		</div>
 	</div>
 
 </body>

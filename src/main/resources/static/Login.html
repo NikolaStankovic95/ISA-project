@@ -3,17 +3,21 @@
 <head>
 <script type="text/javascript" src="jquery.min.js"> </script>
 <script type="text/javascript" src="js/login.js"> </script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/login.css">
+	
 <title>Login</title>
 </head>
 <body>
 
-	<div>
-		<label >Username: </label> <input type="text"
-			id="email"><br> <label>Password</label>
-		<input type="text" id="password"><br> <input
-			type="button" id="login" value="Login"> <input type="button"
-			id="register" value="Registration"><br>
-
+	<div class="logDiv">
+		<div class="content">
+			<label >Username:</label> <input type="text" id="email"><br> 
+			<label>Password:</label> <input type="password" id="password"><br>
+			 <input	type="button" class="btn btn-primary" id="login" value="Login"> 
+			 <input type="button" class="btn btn-primary" id="register" value="Registration"><br>
+			</div>
 	</div>
 </body>
 </html>

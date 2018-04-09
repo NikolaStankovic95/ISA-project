@@ -87,8 +87,15 @@ function getProjectionHalls(){
 		}
 }
 function drawHallSeats(data){
-	
-    for(i=0;i<data.length;i++){
+	$('.rotatedLeft').empty();
+	$('.rotatedLeft').css('display','none');
+	$('.rotatedRight').empty();
+	$('.rotatedRight').css('display','none')
+	$('.VIP').empty();
+	$('.VIP').css('display','none')
+	$('.parter').empty();
+	$('.parter').css('display','none')
+	for(i=0;i<data.length;i++){
     	if(data[i].type=="LEFT_BALCONY"){
     		var div=$('.rotatedLeft').empty();
     		div.css('display','block');
