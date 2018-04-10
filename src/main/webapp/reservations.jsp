@@ -6,12 +6,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script type="text/javascript" src="${pageContext.request.contextPath}/jquery.min.js"> </script>	
 <script type="text/javascript" src="${pageContext.request.contextPath}/reservations.js"> </script>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservations.css">
+		
 
 </head>
 <body>
 
-	<table id="table" border=1>
+	<table id="table" style="width:50%;" class="table table-hover" border=1>
+		<tr class="header">
+				<th>Institution</th>
+				<th>Hall</th>
+				<th>Projection</th>
+				<th>Date & Time</th>
+				<th>Seat number</th>
+			
+			</tr>
+		
 	<c:forEach items="${reservations}" var="reservation">
 		<c:if test="${loggedUser.email==reservation.owner.email}">
 			<tr>

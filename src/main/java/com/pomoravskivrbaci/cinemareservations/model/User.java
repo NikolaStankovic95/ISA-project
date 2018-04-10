@@ -92,13 +92,10 @@ public class User implements Serializable {
 		this.reservations = reservations;
 	}
 
-	public User(Long id, List<Friendship> friendships, List<Friendship> requests, String email, String password,
+	public User(String email, String password,
 			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
-			List<Reservation> reservations, String number) {
+			String number) {
 		super();
-		this.id = id;
-		this.friendships = friendships;
-		this.requests = requests;
 		this.email = email;
 		this.password = password;
 		this.name = name;
@@ -107,7 +104,6 @@ public class User implements Serializable {
 		this.activated = activated;
 		this.firstlogin = firstlogin;
 		this.role = role;
-		this.reservations = reservations;
 		this.number = number;
 	}
 

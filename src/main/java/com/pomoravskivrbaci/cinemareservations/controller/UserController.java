@@ -76,6 +76,7 @@ public class UserController {
 	@RequestMapping(value="/notFriends",method=RequestMethod.GET)
 	private ResponseEntity<List<User>> notFriends(HttpServletRequest request) {
 		User loggedUser = (User) request.getSession().getAttribute("loggedUser");
+		if(loggedUser!=null){
 		loggedUser = userService.findUserById(loggedUser.getId());
 		List<User> users = userService.findAll();
 		users.remove(loggedUser);
@@ -87,6 +88,9 @@ public class UserController {
 		request.getSession().setAttribute("loggedUser", loggedUser);
 		return new ResponseEntity<List<User>>(notFriends, HttpStatus.OK);
 
+		}
+		return null;
+		
 	}
 
 	private List<User> loggedUserFriends(User userProfile, List<User> users) {

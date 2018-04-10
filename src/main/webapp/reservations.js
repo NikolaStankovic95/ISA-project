@@ -29,7 +29,7 @@ $(document).on('click','.delete',function(e){
 			type:"DELETE",
 			success:function(data){
 				if(data.length!=0){
-					$("#table").empty();
+					$("tr:not('.header')").remove();
 					
 					$.each(data,function(index,reservation){
 						

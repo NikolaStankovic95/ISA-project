@@ -1,117 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<style>
-		.check{
-			width: 1.3em;
-    height: 1.3em;
-    background-color: green;
-    border-radius: 35px 35px 0px 0px;
-    border: 1px solid #ddd;
-    -webkit-appearance: none;
-    margin:5px 5px 5px 5px;
-    outline: none;
-    cursor: pointer;
-		}
-		.check:checked {
-    background-color: yellow;
-		}
-		.check:disabled{
-		   background-color: red;
+	<link href="js/toastr.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="css/cinema.css">
+	<script type="text/javascript" src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js">
 		
-		}
-			.VIP {
-			 display:none;
-		 	 position: relative;
-		 	 width: 200px;
-   			 max-height: 200px;
-   			 top:10px;
-   			 left:350px;
-   			 border-radius:25%;
-   			 padding:10px 10px 10px 10px;
-		 	 border:2px solid red;   
-		}
-		.parter {
-			 display:none;
-		   	 position: relative;
-		 	 max-width: 400px;
-   			 max-height: 500px;
-   			 top:150px;
-   			 left:250px;
-   			 border-radius:25%;
-   			 padding:10px 10px 10px 10px;
-		 	 border:2px solid red;   
-		}
-		.rotatedLeft {
-		 	 display:none;
-		  	 position: absolute;
-		 	 width: 200px;
-   			 max-height: 200px;
-   			 top:50px;
-   			 left:100px;
-   			 border-radius:25%;
-   			 padding:10px 10px 10px 10px;
-		    -webkit-transform: rotate(-45deg);  /* Chrome, Safari 3.1+ */
-		    -moz-transform: rotate(-45deg);  /* Firefox 3.5-15 */
-		    -ms-transform: rotate(-45deg);  /* IE 9 */
-		    -o-transform: rotate(-45deg);  /* Opera 10.50-12.00 */
-		    transform: rotate(-45deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
-		    border:2px solid red;   
-		}
-		.rotatedRight {
-			display:none;
-		 	position: absolute;
-		 	 width: 200px;
-   		    max-height: 200px;
-   			 top:50px;
-   			 left:600px;
-   			  border-radius:25%;
-   			   padding:10px 10px 10px 10px;
-		    
-		    -webkit-transform: rotate(45deg);  /* Chrome, Safari 3.1+ */
-		    -moz-transform: rotate(45deg);  /* Firefox 3.5-15 */
-		    -ms-transform: rotate(45deg);  /* IE 9 */
-		    -o-transform: rotate(45deg);  /* Opera 10.50-12.00 */
-		    transform: rotate(45deg);  /* Firefox 16+, IE 10+, Opera 12.10+ */
-		    border:2px solid red;   
-		}
-	.container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    border-radius:35px 35px 0px 0px ;
-    background-color: red;
-}
-	</style>
-	<script type="text/javascript"
-	src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js">
+	</script>
 	
-</script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	
 <!-- Koristi stomp biblioteku da se pretplati na brokerov /topic/message endpoint -->
 <script type="text/javascript"
 	src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 	<script type="text/javascript" src="jquery.min.js"></script>
+	<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 <script type="text/javascript" src="js/cinema.js"></script>
 	
 	<script type="text/javascript">
@@ -136,9 +44,9 @@
 </head>
 <body>
 	<div id="reservation1">
-<input type="text" id="search" placeholder="Search institution" onkeypress="combo()" /><br>
-		<label>Naziv bioskopa</label> <select  id="nameOfCinema1" ></select> <input
-			type="button" value="Next" id="Next1" onclick="next(2)"> <input
+<input type="text" id="search" class="search" placeholder="Search institution" onkeypress="combo()" /><br>
+		<label>Naziv </label> <select class="form-control" id="nameOfCinema1" ></select> <input
+			type="button" class="btn btn-primary" value="Next" id="Next1" onclick="next(2)"> <input
 			type="hidden" id="repertoireID">
 
 	</div>
@@ -146,37 +54,37 @@
 	<div id="reservation2" style="display: none;">
 		<input type="text" id="search2" placeholder="Search institution" onkeypress="combo2()" />
 		<br>
-		<label id="repertoire"></label> <label>Naziv bioskopa</label> <select
+		<label id="repertoire"></label> <label>Naziv bioskopa</label> <select class="form-control"
 			id="nameOfCinema">
-		</select><br> <label>Projekcija</label> <select id="projections" name="id"></select><br>
-		<label>Datum</label> <input type="Date" id="calendar"><br>
-		<label>Termin</label> <select id="term"></select><br> <label>Sala</label>
-		<select id="projectionHalls"></select><br> <input type="button"
-			value="Next" id="Next2" onclick="next(3)"> <input
-			type="button" value="Back" onclick="back(1)">
+		</select><br> <label>Projekcija</label> <select class="form-control" id="projections" name="id"></select><br>
+		<label>Datum</label><br> <input type="Date" id="calendar"><br>
+		<label>Termin</label> <select class="form-control" id="term"></select><br> <label>Sala</label>
+		<select class="form-control" id="projectionHalls"></select><br> <input type="button"
+			value="Next" id="Next2" class="btn btn-primary" onclick="next(3)"> <input
+			type="button" value="Back" class="btn btn-primary" onclick="back(1)">
 
 	</div>
 	<div id="reservation3" style="display:none">
-    <label>Sala</label>
-    <select id="projectionHalls2"></select><br>
-      <div class="rotatedLeft"></div>
-      <div class="rotatedRight"></div>
-      <div class="VIP"></div>
-      <div class="parter"></div>
+    <label class="hall3">Sala</label>
+    <select class="form-control hall3" id="projectionHalls2"></select><br>
+      <div class="rotatedLeft hall3"></div>
+      <div class="rotatedRight hall3"></div>
+      <div class="VIP hall3"></div>
+      <div class="parter hall3"></div>
       <br><br><br><br>
-      <input type="button" value="Next" id="Next3"  onclick="next(4)">
-    <input type="button" value="Back" onclick="back(2)">
+      <input type="button" value="Next" class="btn btn-primary" id="Next3"  onclick="next(4)">
+    <input type="button" value="Back" class="btn btn-primary" onclick="back(2)">
     </div>
 	
 
 	<div id="reservation4" style="display: none;">
 
-		<label>Pozovi prijatelje</label> <select id="userFriends"></select> <input
-			type="button" id="invite" value="Invite"><br> <label>Pozvani
-			prijatelji</label> <select id="invitedFriends" size="5"></select> <input
-			type="button" value="Remove" id="removeFromList"> <input
-			type="button" value="Back" onclick="back(3)"> <input
-			type="button" id="submit" value="Submit">
+		<label>Pozovi prijatelje</label> <select class="form-control" id="userFriends"></select> <input
+			type="button" id="invite" class="btn btn-info" value="Invite"><br> <label>Pozvani
+			prijatelji</label> <select class="form-control" id="invitedFriends" size="5"></select> <input
+			type="button" value="Remove" class="btn btn-danger" id="removeFromList"><br><br><br>&nbsp&nbsp&nbsp <input
+			type="button" value="Back" class="btn btn-primary" onclick="back(3)"> <input
+			type="button" id="submit" class=" btn btn-success"value="Submit">
 	</div>
 	<script>
 
