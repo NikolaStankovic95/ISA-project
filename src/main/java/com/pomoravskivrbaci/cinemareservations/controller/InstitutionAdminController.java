@@ -1,10 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
 import com.pomoravskivrbaci.cinemareservations.model.*;
-import com.pomoravskivrbaci.cinemareservations.service.HallService;
-import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
-import com.pomoravskivrbaci.cinemareservations.service.ProjectionService;
-import com.pomoravskivrbaci.cinemareservations.service.RepertoireService;
+import com.pomoravskivrbaci.cinemareservations.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +22,8 @@ public class InstitutionAdminController {
     ProjectionService projectionService;
     @Autowired
     HallService hallService;
+    @Autowired
+    ReservationService reservationService;
 
     @RequestMapping(method = RequestMethod.GET)
     private String chooseInstitution(HttpServletRequest request){

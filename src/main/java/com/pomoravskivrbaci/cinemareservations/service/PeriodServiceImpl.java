@@ -23,5 +23,11 @@ public class PeriodServiceImpl implements PeriodService {
 		// TODO Auto-generated method stub
 		return periodRepository.findById(id);
 	}
-	
+
+	@Override
+	public Period saveOrUpdate(Period period) {
+		return periodRepository.save(period);
+	}
+
+
 }

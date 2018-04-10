@@ -1,19 +1,13 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Projection implements Serializable{
@@ -58,16 +52,14 @@ public class Projection implements Serializable{
 		this.repertoires = repertoires;
 	}
 
-	@ManyToMany(mappedBy="projections")
-	protected List<Repertoire> repertoires;
-	
+	@ManyToMany(mappedBy="projections", cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
+	protected List<Repertoire> repertoires = new ArrayList<>();
+
+	@JsonIgnoreProperties("projection")
 	@OneToMany(mappedBy="projection")
 	protected List<Period> periods;
-
-	@OneToMany(mappedBy="projection")
-	protected List<ProjectionSegment> projectionSegments;
 	
-	@JsonIgnore
+
 	public List<Period> getPeriods() {
 		return periods;
 	}
@@ -76,7 +68,7 @@ public class Projection implements Serializable{
 		this.periods = periods;
 	}
 
-	@JsonIgnore
+
 	public List<Hall> getHalls() {
 		return halls;
 	}
@@ -88,6 +80,7 @@ public class Projection implements Serializable{
 	@ManyToMany
 	@JoinTable(name="projection_hall", joinColumns=@JoinColumn(name="projection_id"),
 			inverseJoinColumns=@JoinColumn(name="hall_id"))
+	@JsonIgnoreProperties("projections")
 	protected List<Hall> halls;
 	
 	public Long getId() {
@@ -161,5 +154,9 @@ public class Projection implements Serializable{
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public void addRepertoire(Repertoire repertoire) {
+		repertoires.add(repertoire);
 	}
 }

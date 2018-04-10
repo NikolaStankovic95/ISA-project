@@ -4,16 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -69,10 +60,10 @@ public class Repertoire implements Serializable{
 		this.projections = projections;
 	}
 
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(name="repertoire_projection", joinColumns=@JoinColumn(name="repertoire_id"),
 	inverseJoinColumns=@JoinColumn(name="projection_id"))
-	protected List<Projection> projections;
+	protected List<Projection> projections = new ArrayList<>();
 	
 	public Repertoire (){}
 
@@ -80,4 +71,7 @@ public class Repertoire implements Serializable{
 		institutions.add(institution);
 	}
 
+	public void addProjection(Projection projection) {
+		projections.add(projection);
+	}
 }

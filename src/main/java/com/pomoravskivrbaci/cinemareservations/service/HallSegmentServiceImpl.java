@@ -20,4 +20,9 @@ public class HallSegmentServiceImpl implements HallSegmentService{
 		return hallSegmentRepository.findByHallId(id);
 	}
 
+	@Override
+	public HallSegment saveOrUpdate(HallSegment hallSegment) {
+		return hallSegmentRepository.save(hallSegment);
+	}
+
 }

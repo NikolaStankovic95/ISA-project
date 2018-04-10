@@ -119,5 +119,11 @@ public class Institution implements Serializable{
 	public void setType(InstitutionType type) {
 		this.type = type;
 	}
-	
+
+	public Hall getHallById(Long id) {
+		return halls.stream()
+				.filter(hall -> hall.id == id)
+				.findFirst()
+				.orElse(null);
+	}
 }

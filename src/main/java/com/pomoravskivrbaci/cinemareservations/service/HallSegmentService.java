@@ -7,4 +7,6 @@ import com.pomoravskivrbaci.cinemareservations.model.HallSegment;
 public interface HallSegmentService {
 
 	List<HallSegment> findHallSegmentByHallId(Long id);
+
+	HallSegment saveOrUpdate(HallSegment hallSegment);
 }

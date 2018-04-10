@@ -28,7 +28,7 @@ public class HallSegment {
     protected int numberOfColumns;
 
     @Column(name="is_closed")
-    protected boolean isClosed;
+    protected boolean closed;
 
     @JsonIgnore
     @ManyToOne
@@ -71,11 +71,11 @@ public class HallSegment {
     }
 
     public boolean isClosed() {
-        return isClosed;
+        return closed;
     }
 
     public void setClosed(boolean closed) {
-        isClosed = closed;
+        this.closed = closed;
     }
 
     public Hall getHall() {

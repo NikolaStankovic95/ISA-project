@@ -37,6 +37,10 @@ public class ProjectionServiceImpl implements ProjectionService{
 		return projectionRepository.findByPeriods(period);
 	}
 
+	@Override
+	public Projection saveOrUpdate(Projection projection) {
+		return projectionRepository.save(projection);
+	}
 
 
 }

@@ -22,10 +22,10 @@
         function initListeners() {
             $("[type = checkbox]").change(function() {
                 if(this.checked) {
-                    $("#segment" + this.value).css("display", "");
+                    $("#segment" + this.value).removeClass("invisible");
                 }
                 else {
-                    $("#segment" + this.value).css("display", "none");
+                    $("#segment" + this.value).addClass("invisible");
                 }
             });
 
@@ -154,12 +154,12 @@
     </div>
 
     <div class="segments">
-        <div class="segment" id="segment1"><p>Levi balkon</p></div>
+        <div class="segment invisible" id="segment1"><p>Levi balkon</p></div>
         <div class="middle-hall">
-            <div class="segment" id="segment0"><p>VIP</p></div>
-            <div class="segment" id="segment3"><p>Parter</p></div>
+            <div class="segment invisible" id="segment0"><p>VIP</p></div>
+            <div class="segment invisible" id="segment3"><p>Parter</p></div>
         </div>
-        <div class="segment" id="segment2"><p>Desni balkon</p></div>
+        <div class="segment invisible" id="segment2"><p>Desni balkon</p></div>
     </div>
 
     <table>
@@ -176,11 +176,6 @@
         <tr>
             <td>Broj kolona:</td>
             <td><input id="numberOfColumnsFormInput" type="text"></td>
-        </tr>
-
-        <tr>
-            <td>Zatvoren:</td>
-            <td><input id="isClosedFormInput" type="checkbox"></td>
         </tr>
 
     </table>

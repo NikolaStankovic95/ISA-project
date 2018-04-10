@@ -64,4 +64,8 @@ public class Seat implements Serializable{
 	public void setHallSegment(HallSegment hallSegment) {
 		this.hallSegment = hallSegment;
 	}
+
+	public HallSegment getHallSegment() {
+		return hallSegment;
+	}
 }

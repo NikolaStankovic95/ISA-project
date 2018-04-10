@@ -8,4 +8,6 @@ public interface PeriodService {
 
 	List<Period> findByProjectionId(Long id);
 	Period findById(Long id);
+	Period saveOrUpdate(Period period);
+
 }

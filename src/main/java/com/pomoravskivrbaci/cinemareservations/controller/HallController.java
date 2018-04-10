@@ -1,9 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
-import com.pomoravskivrbaci.cinemareservations.model.Hall;
-import com.pomoravskivrbaci.cinemareservations.model.HallSegment;
-import com.pomoravskivrbaci.cinemareservations.model.Institution;
-import com.pomoravskivrbaci.cinemareservations.model.Seat;
+import com.pomoravskivrbaci.cinemareservations.model.*;
+import com.pomoravskivrbaci.cinemareservations.service.HallSegmentService;
 import com.pomoravskivrbaci.cinemareservations.service.HallService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,9 @@ public class HallController {
     @Autowired
     private InstitutionService institutionService;
 
+    @Autowired
+    private HallSegmentService hallSegmentService;
+
     @RequestMapping(value = "institution/{institution_id}/hall", method = RequestMethod.POST)
     private ResponseEntity create(@PathVariable("institution_id")Long instId, @RequestBody Hall newHall) {
         Institution institution = institutionService.findById(instId);
@@ -51,8 +52,29 @@ public class HallController {
     @RequestMapping(value = "/hall/{id}", method = RequestMethod.PATCH)
     private ResponseEntity editProjectionInfo(@PathVariable("id")Long id, @RequestBody Hall newHall) {
         Hall hall = hallService.findById(id);
+        newHall.getHallSegments().forEach(hallSegment -> {
+            hallSegment.setHall(hall);
+            hallSegmentService.saveOrUpdate(hallSegment);
+        });
         hall.setName(newHall.getName());
         hallService.saveOrUpdate(hall);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/hall/{id}", method = RequestMethod.GET)
+    private ResponseEntity<Hall> getHallById(@PathVariable("id")Long id) {
+        return new ResponseEntity<>(hallService.findById(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/hall/{id}/free_periods", method = RequestMethod.GET)
+    private ResponseEntity<List<Period>> getFreePeriods(@PathVariable("id")Long id) {
+        Hall hall = hallService.findById(id);
+        List<Period> freePeriods = new ArrayList<>();
+        for (Period period : hall.getPeriods()) {
+            if (period.getProjection() == null) {
+                freePeriods.add(period);
+            }
+        }
+        return new ResponseEntity<>(freePeriods, HttpStatus.OK);
     }
 }

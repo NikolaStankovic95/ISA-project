@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Hall implements Serializable {
@@ -34,14 +36,17 @@ public class Hall implements Serializable {
 	public Hall() {
 		super();
 	}
-	
 
-	@ManyToMany(mappedBy="halls")
+
+	@JsonIgnoreProperties("halls")
+	@ManyToMany(mappedBy="halls", cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
 	protected List<Period> periods;
-	
+
+	@JsonIgnoreProperties("halls")
 	@ManyToMany(mappedBy="halls")
 	protected List<Projection> projections;
 
+	@JsonIgnore
 	@OneToMany(mappedBy="hall", cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
 	protected List<HallSegment> hallSegments;
 	
@@ -81,5 +86,17 @@ public class Hall implements Serializable {
 				.filter(e -> e.getType().equals(type))
 				.findFirst()
 				.orElse(null);
+	}
+
+	public List<Period> getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(List<Period> periods) {
+		this.periods = periods;
+	}
+
+	public void addPeriod(Period period) {
+		periods.add(period);
 	}
 }
