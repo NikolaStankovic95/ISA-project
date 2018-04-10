@@ -42,12 +42,12 @@ function checkFriendRequest(){
 		async:false,
 		success:function(data){
 			$("#friendRequest").empty();
-			if(data.friend==null)
-				$("#friendRequest").append("<input type=\"button\" id=\"addFriend\" value=\"Send request\">") 
+			if(data.user==null)
+				$("#friendRequest").append("<input type=\"button\" class=\"btn btn-info\" id=\"addFriend\" value=\"Send request\">") 
 			else if(data.accepted==true)
-				$("#friendRequest").append("<input type=\"button\" id=\"removeFriend\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\"  value=\"Remove friend\">") 
+				$("#friendRequest").append("<input type=\"button\" class=\"btn btn-danger\" id=\"removeFriend\" onclick=\"deleteFriend(\'"+data.user.email+"\')\"  value=\"Remove friend\">") 
 			else if(data.accepted==false)
-					$("#friendRequest").append("<input type=\"button\" disabled  value=\"Request sent\">") 
+					$("#friendRequest").append("<input type=\"button\" disabled class=\"btn btn-secondary\" value=\"Request sent\">") 
 			
 		}
 	})
@@ -63,7 +63,7 @@ function notFriends(){
 			$.each(data,function(index,friend){
 				$("#notFriends").append(
 						"<tr id=\'friend.id\'><td>"+friend.name+"</td><td> "+friend.surname+
-						"</td><td><input type=\'button\'  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></td></tr>");
+						"</td><td><input type=\'button\' class=\"btn btn-info\"  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></td></tr>");
 			})
 		}
 	})
@@ -71,12 +71,12 @@ function notFriends(){
 function drawFriendsList(index,data){
 	var list=$("#friendList");
 	if(list!=null){
-		list.append("<li><a id=\"link"+index+"\" href='../user/"+data.friend.id+"\'>"+data.friend.name+" "+data.friend.surname+"</a>");
+		list.append("<li><a id=\"linkF"+index+"\" href='../user/"+data.friend.id+"\'>"+data.friend.name+" "+data.friend.surname+"</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp");
 		if(data.accepted==false ){
-			list.append("&nbsp<input type=\"button\" onclick=\"addFriend(\'"+data.friend.email+"\')\" value=\"Accept request\"></li>")
+			$("#linkF"+index).after("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=\"button\" class=\"btn btn-success\" onclick=\"addFriend(\'"+data.friend.email+"\')\" value=\"Accept request\"></li>")
 	
 		}else{
-			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Delete friend\"></li>")
+			$("#linkF"+index).after("&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=\"button\" class=\"btn btn-danger\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Delete friend\"></li>")
 
 		}
 	}
@@ -84,12 +84,12 @@ function drawFriendsList(index,data){
 function drawFriendsRequestList(index,data){
 	var list=$("#friendRequestList");
 	if(list!=null){
-		list.append("<li><a id=\"link"+index+"\" href='../user/"+data.friend.id+"\'>"+data.friend.name+" "+data.friend.surname+"</a>");
+		list.append("<li><a id=\"linkR"+index+"\" href='../user/"+data.friend.id+"\'>"+data.friend.name+" "+data.friend.surname+"</a>");
 		if(data.accepted==false ){
-			list.append("&nbsp<input type=\"button\" onclick=\"addFriend(\'"+data.friend.email+"\')\" value=\"Accept request\"></li>")
+			$("#linkR"+index).after("&nbsp<input type=\"button\" class=\"btn btn-success\" onclick=\"addFriend(\'"+data.friend.email+"\')\" value=\"Accept request\"></li>")
 	
 		}else{
-			list.append("&nbsp<input type=\"button\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Reuest sent\"></li>")
+			$("#linkR"+index).after("&nbsp<input type=\"button\" class=\"btn btn-danger\" onclick=\"deleteFriend(\'"+data.friend.email+"\')\" value=\"Reuest sent\"></li>")
 
 		}
 	}
@@ -197,7 +197,7 @@ $(document).on('click',"#search",function(e){
 			$.each(data,function(index,friend){
 				$("#notFriends").append(
 						"<tr id=\'friend.id\'><td>"+friend.name+"</td><td> "+friend.surname+
-						"</td><td><input type=\'button\'  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></td></tr>");
+						"</td><td><input type=\'button\' class=\"btn btn-info\"  value=\'Send request\'onclick=\"sendFriendRequest(\'"+friend.id+"\')\"></td></tr>");
 			})
 		}
 	})

@@ -40,7 +40,11 @@ $(document).on('click','.delete',function(e){
 								"<td>"+reservation.seats.regNumber+"</td>" +
 								"<td><a class=\"delete\" href='/myReservations/delete/"+reservation.id+"\'>Decline</a></td></tr>");
 					})
-				}else{
+				}else if(data.length==0){
+					$("tr:not('.header')").remove();
+					
+				}
+				else{
 					alert("You can decline your reservation only 30 minutes before projection starts!")
 				}
 			}

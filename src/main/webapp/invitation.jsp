@@ -9,18 +9,24 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/invitation.js"> </script>
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/invitation.css">
 
 </head>
 <body>
 
 
 	<c:if test="${loggedUser.email==user.email}">
+			<c:if test="${empty reservation }">
+		 <h1>You already accept this invitaion.</h1>
+		</c:if>
 
-
+	
+	<c:if test="${ not empty reservation }" >
 	<p>Your friend ${reservation.owner.name} ${reservation.owner.surname} invited you on this
 		event:</p>
-	<c:if test="${ not empty reservation }" >
-	<table border="1">
+	<table border="1" style="width:50%;" class="table table-hover">
 		<tr>
 			<td>Institution</td>
 			<td>${reservation.institution.name}</td>
@@ -48,12 +54,13 @@
 	
 		<br>
 		<form action="../../invitationController/accept/${reservation.id}">
-			<input type="submit" value="Accept" id="accept">
+			<input type="submit" class="btn btn-success" value="Accept" id="accept">
 		</form>
 		<form action="../../invitationController/reject/${reservation.id}">
-			<input type="submit" value="Reject" id="reject">
+			<input type="submit" class="btn btn-danger" value="Reject" id="reject">
 		</form>
 	</c:if>
+	
 	</c:if>
 </body>
 </html>

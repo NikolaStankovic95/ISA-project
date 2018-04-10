@@ -297,4 +297,10 @@ public class UserController {
 		
 		}
 	}
+	@RequestMapping("/logout")
+	public String logout(HttpServletRequest request){
+		request.getSession().invalidate();
+		request.setAttribute("loggedUser", null);
+		return "redirect:/Login.html";
+	}
 }

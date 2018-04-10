@@ -37,6 +37,7 @@ public class MyReservationsController {
 	@RequestMapping("/")
 	private String getMyReservations(HttpServletRequest request){
 		User user=(User) request.getSession().getAttribute("loggedUser");
+		if(user!=null){
 		List<Reservation> reservations=reservationService.findByOwnerId(user.getId());
 		List<Reservation> myReservations=new ArrayList<Reservation>();
 		Date date=new Date();
@@ -46,6 +47,7 @@ public class MyReservationsController {
 			}
 		}
 		request.getSession().setAttribute("reservations", myReservations);
+		}
 		return "forward:/reservations.jsp";
 	}
 	@RequestMapping("/delete/{id}")

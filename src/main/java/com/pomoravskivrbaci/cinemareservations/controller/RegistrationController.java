@@ -1,11 +1,14 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,18 +41,29 @@ public class RegistrationController {
 	}
 	
 	@RequestMapping(value="/login")
-	private ResponseEntity<User> login(@RequestBody User user,HttpServletRequest request){
+	private ResponseEntity<Object> login(@RequestBody User user,HttpServletRequest request) throws URISyntaxException{
     User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
+    URI uri = null;
 		if(loggedUser!=null){
-		
+			 
 			if(loggedUser.isActivated()){
+				 uri=new URI("/userController/user/"+loggedUser.getId());
+				
+				 HttpHeaders httpHeaders = new HttpHeaders();
+				
+				httpHeaders.setLocation(uri);
 				request.getSession().setAttribute("loggedUser", loggedUser);
-				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+				return new ResponseEntity<>(uri, HttpStatus.OK);
 			}
-			else 
-				return null;
-		}else 
-			return null;
+			else {
+				 uri=new URI("/Login.html");
+				return  new ResponseEntity<>(uri, HttpStatus.OK);
+				}
+		}else {
+			
+			 uri=new URI("/Login.html");
+			return  new ResponseEntity<>(uri, HttpStatus.OK);
+		}
 	}
 	
 	/**
