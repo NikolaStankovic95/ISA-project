@@ -17,10 +17,11 @@ $(document).on('click','#login',function(e){
 			if(data!="/Login.html"){
 				window.top.location=data;
 				
-			}else{
+			}
+		},
+		error:function(data){
 				alert("You inserted wrong email or password");
 				
-			}
 			
 		}
 	})

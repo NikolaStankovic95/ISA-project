@@ -227,7 +227,7 @@ public class ReservationController {
 	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	private String makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
+	private ResponseEntity<Object>  makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
 	
 		
@@ -236,7 +236,7 @@ public class ReservationController {
 				reservationService.save(reservation);
 				
 				emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
-				
+				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (MailException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -245,8 +245,9 @@ public class ReservationController {
 			reservation.setAccepted(true);
 			emailService.notifyOwner(reservation.getOwner(),reservation);
 			reservationService.save(reservation);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		return "";
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	@RequestMapping(value="/send/{topic}",method=RequestMethod.POST,
 			consumes=MediaType.APPLICATION_JSON_VALUE,

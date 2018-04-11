@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,12 +59,12 @@ public class RegistrationController {
 			}
 			else {
 				 uri=new URI("/Login.html");
-				return  new ResponseEntity<>(uri, HttpStatus.OK);
+				return  new ResponseEntity<>(uri, HttpStatus.BAD_REQUEST);
 				}
 		}else {
 			
 			 uri=new URI("/Login.html");
-			return  new ResponseEntity<>(uri, HttpStatus.OK);
+			return  new ResponseEntity<>(uri, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -90,9 +92,17 @@ public class RegistrationController {
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	private ResponseEntity<User> registrateUser(
-			@RequestBody User user){
-		
+	private ResponseEntity<Object> registrateUser(
+			@Validated @RequestBody User user,Errors errors){
+		if (errors.hasErrors()) {
+			return new ResponseEntity<>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+		}
+		for(User item:userService.findAll()){
+			if(item.getEmail().equals(user.getEmail())){
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				
+			}
+		}
 		user.setRole(UserRole.USER);
 		user.setActivated(false);
 		user.setFirstlogin(false);
@@ -108,7 +118,7 @@ public class RegistrationController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<User>(addedUser, HttpStatus.OK);
+		return new ResponseEntity<>(addedUser, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/changePass", method = RequestMethod.POST)
 	private String chagePass(

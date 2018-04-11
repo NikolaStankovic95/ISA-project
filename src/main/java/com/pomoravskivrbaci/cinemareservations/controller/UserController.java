@@ -132,7 +132,7 @@ public class UserController {
 	 * 
 	 * return new ResponseEntity<User>(u, HttpStatus.OK); }
 	 */
-
+	
 	@RequestMapping(value = "/checkFriendRequest")
 	public ResponseEntity<Friendship> checkFriendRequest(HttpServletRequest request, @RequestBody String userProfile) {
 		User loggedUser = (User) request.getSession().getAttribute("loggedUser");
@@ -166,6 +166,7 @@ public class UserController {
 	@RequestMapping(value = "/deleteFriend")
 	public ResponseEntity<List<Friendship>> deleteFriend(HttpServletRequest request, @RequestBody String email) {
 		User user = (User) request.getSession().getAttribute("loggedUser");
+		user=userService.findUserByEmail(user.getEmail());
 		User friend = (User) userService.findUserByEmail(email);
 		Friendship userFriendship = friendshipService.findByUserAndFriend(user, friend);
 		Friendship friendFriendship = friendshipService.findByUserAndFriend(friend, user);

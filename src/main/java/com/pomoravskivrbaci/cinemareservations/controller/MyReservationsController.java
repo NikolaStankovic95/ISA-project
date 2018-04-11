@@ -42,7 +42,7 @@ public class MyReservationsController {
 		List<Reservation> myReservations=new ArrayList<Reservation>();
 		Date date=new Date();
 		for(Reservation item:reservations){
-			if(!date.after(item.getPeriod().getDate())){
+			if(!date.after(item.getPeriod().getDate()) && item.isAccepted()==true){
 				myReservations.add(item);
 			}
 		}

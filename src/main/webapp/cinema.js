@@ -351,6 +351,9 @@ function callReservation(data,invite){
 		async:false,
 		success:function(data){
 			console.log(data);
+		},
+		error:function(data){
+			alert("You can not make this reservation.Check your seats");
 		}
 	})
 	$.ajax({
