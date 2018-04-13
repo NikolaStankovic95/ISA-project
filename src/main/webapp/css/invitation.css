@@ -17,3 +17,16 @@ h1 {
 	text-align: center;
 	text-transform: uppercase;
 }
+.navbar-default .navbar-nav>li>a:hover{
+
+	color: red;
+
+}
+.navbar-default .navbar-nav>li>a{
+
+	color: white;
+
+}
+.navbar-default{
+	background-color: #0079bb;
+}

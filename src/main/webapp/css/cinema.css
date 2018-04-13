@@ -127,3 +127,16 @@
 	position:relative;
 	left:-400px;
 }
+.navbar-default .navbar-nav>li>a:hover{
+
+	color: red;
+
+}
+.navbar-default .navbar-nav>li>a{
+
+	color: white;
+
+}
+.navbar-default{
+	background-color: #0079bb;
+}

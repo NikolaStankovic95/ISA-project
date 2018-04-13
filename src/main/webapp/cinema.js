@@ -62,7 +62,6 @@ function getProjectionHalls(){
 					
 				})
 				$.each(data,function(index,hall){
-					alert(hall)
 					$("#projectionHalls2").append("<option value=\'"+hall.id+"\'>"+hall.name+"</option>");
 					
 				})
@@ -160,7 +159,6 @@ $(document).on('click',"#Next1",function(e){
 	
 	var repertoireID=$("#repertoireID");
 	
-	alert($("#nameOfCinema1").find('option:selected').text());
 	$.ajax({
 		url:'../reservation/getCinemaByName/'+$('#nameOfCinema1 option:selected').text(),
 		type:'GET',
@@ -204,7 +202,12 @@ $(document).on('click',"#invite",function(e){
 			$('#userFriends').find('option:selected').remove().end();
 		}
 	}else{
-		alert("You must select more seats!")
+		toastr.options = {
+				  "closeButton": true,
+				  "timeOut": "0",
+				  "extendedTimeOut": "0",
+		}
+		toastr.warning("You must select more seats!");
 	}
 
 })
@@ -249,7 +252,7 @@ $(document).on('change',"#nameOfCinema",function(e){
 function findInvitedUsers(index){
 	var user;
 	var invited=$("#invitedFriends option");
-	alert("Covek "+invited[index-1].value)
+	
 	
 	$.ajax({
 		url:'../userController/userID/'+invited[index-1].value,
@@ -313,6 +316,14 @@ $(document).on('click',"#submit",function(e){
 				callReservation(data,"false");
 		}
 		}
+	}else{
+		toastr.options = {
+				  "closeButton": true,
+				  "timeOut": "0",
+				  "extendedTimeOut": "0",
+		}
+		toastr.error("You must select seat for reservation");
+
 	}			
 	if(invited>0){
 		var invited=$("#invitedFriends option").length;
@@ -350,10 +361,16 @@ function callReservation(data,invite){
 		dataType : 'json',
 		async:false,
 		success:function(data){
-			console.log(data);
+			toastr.success("Reservation successfully made");
 		},
 		error:function(data){
-			alert("You can not make this reservation.Check your seats");
+			toastr.options = {
+					  "closeButton": true,
+					  "timeOut": "0",
+					  "extendedTimeOut": "0",
+			}
+			toastr.error("You can not make this reservation.Check your seats");
+	
 		}
 	})
 	$.ajax({
@@ -469,7 +486,7 @@ function reserveSeats(data){
 	})
 }
 function getProjectionById(){
-	alert($('#projections option:selected').val())
+	
 	$.ajax({
 		url:'../reservation/findProjectionById/'+$('#projections option:selected').val(),
 		type:'GET',

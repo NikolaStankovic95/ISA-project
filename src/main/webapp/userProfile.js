@@ -150,10 +150,10 @@ function sendFriendRequest(id){
 		async:false,
 		success:function(data){
 			if(data!=null){
-				alert("Request has been sent");
+				toastr.success("Request has been sent");
 				$("#"+id+"").remove();
 			}else
-				alert("Reqeust has not been sent")
+				toastr.error("Reqeust has not been sent")
 		}
 	})
 	notFriends();
@@ -169,13 +169,13 @@ $(document).on('click',"#addFriend",function(e){
 		type:'POST',
 		success:function(data){
 			if(data!=null){
-				alert("Request has been sent");
+				toastr.success("Request has been sent");
 			}else
-				alert("Reqeust has not been sent")
+				toastr.error("Reqeust has not been sent")
 		}
 	})	
 	notFriends();
-
+	checkFriendRequest();
 })
 $(document).on('click',"#reset",function(e){
 	notFriends()

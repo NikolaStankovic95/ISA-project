@@ -5,14 +5,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script type="text/javascript" src="${pageContext.request.contextPath}/jquery.min.js"> </script>	
+<script type="text/javascript"	src="${pageContext.request.contextPath}/toastr.min.js"> </script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/reservations.js"> </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservations.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/toastr.min.css">
 		
 
 </head>
 <body>
+	<c:if test="${empty loggedUser }">
+		<c:redirect url="/Login.html"/>
+	</c:if>
 	<nav id="navigation" class="navbar navbar-default">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -56,6 +61,7 @@
 						<li><a href="../../Login.html" id="Login">Log in</a></li>
 					</c:if>
 					<c:if test="${not empty loggedUser}">
+						<li><a href="../updateUser.jsp">Update account</a></li>
 						<li><a href="../userController/logout">Log out</a></li>
 					</c:if>
 					

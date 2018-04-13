@@ -55,6 +55,7 @@ public class MyReservationsController {
 		User user=(User) request.getSession().getAttribute("loggedUser");
 		
 		Reservation reservation=reservationService.findById(id);
+		List<Reservation> reservations=(List<Reservation>) request.getSession().getAttribute("reservations");
 		Date now = new Date();
 		Timestamp stamp = new Timestamp(reservation.getPeriod().getDate().getTime());
 		Date date = new Date(stamp.getTime());
@@ -66,13 +67,15 @@ public class MyReservationsController {
 	    
 	    	if(diffDays>=0 && diffMinutes>30){
 	    		producer.sendMessageTo("reservation",reservation.getSeats().getId());
-	    		
+	    		System.out.println(reservations.size());
+	    		reservations.removeIf(item->item.getId().equals(reservation.getId()));
 				reservationService.delete(id);
+				System.out.println(reservations.size());
 	    	}
 	    	else{
-	    		return new ResponseEntity<List<Reservation>>(new ArrayList<Reservation>(),HttpStatus.OK);
+	    		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.BAD_REQUEST);
 	    	}
 		
-		return new ResponseEntity<List<Reservation>>(reservationService.findByOwnerId(user.getId()),HttpStatus.OK);
+		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.OK);
 	}
 }

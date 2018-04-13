@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -8,14 +9,18 @@
 	src="${pageContext.request.contextPath}/jquery.min.js"> </script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/userProfile.js"> </script>
+<script type="text/javascript"	src="${pageContext.request.contextPath}/toastr.min.js"> </script>
+	
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userProfile.css">
-
+<link rel="stylesheet" href="${pageContext.request.contextPath}/toastr.min.css">
+	
 
 </head>
 <body>
-	<nav id="navigation" class="navbar navbar-default">
+	
+	<nav style="background-color:#337ab7;color:white !important;" id="navigation" class="navbar navbar-default">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div id="navigation" class="navbar-header">
@@ -55,8 +60,11 @@
 				<ul class="nav navbar-nav navbar-right">
 					<c:if test="${empty loggedUser}">
 						<li><a href="../../Login.html" id="Login">Log in</a></li>
+						<li><a href="../../Registration.html" id="Login">Registration</a></li>
+			
 					</c:if>
 					<c:if test="${not empty loggedUser}">
+						<li><a href="../../updateUser.jsp">Update account</a></li>
 						<li><a href="../logout">Log out</a></li>
 					</c:if>
 					
@@ -82,9 +90,12 @@
 		<div class="history">
 			<h2>History</h2>
 			<br>
+			  <jsp:useBean id="today" class="java.util.Date" />
+  			
 			<ul id="visitedCinemaProjections">
+				
 				<c:forEach items="${loggedUser.reservations}" var="reservation">
-					<c:if test="${reservation.accepted==true }">
+					<c:if test="${reservation.accepted==true && reservation.period.date lt today}">
 						<li><a>${reservation.projection.name}</a></li>
 					</c:if>
 				</c:forEach>

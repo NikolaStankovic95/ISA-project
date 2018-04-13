@@ -227,34 +227,42 @@ public class ReservationController {
 	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	private ResponseEntity<Object>  makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
+	private synchronized ResponseEntity<Object>  makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
-	
-		
-		if(invite.equals("true")){
-			try {
+		List<Reservation> reservations=reservationService.findAll();
+		boolean contains=reservations.stream().anyMatch(item->item.getInstitution().getId().equals(reservation.getInstitution().getId()) &&
+				item.getHall().getId().equals(reservation.getHall().getId()) &&
+				item.getPeriod().getId().equals(reservation.getPeriod().getId()) &&
+				item.getProjection().getId().equals(reservation.getProjection().getId()) &&
+				item.getSeat().getId().equals(reservation.getSeat().getId()));
+		System.out.println(contains);
+		if(contains==false){
+			if(invite.equals("true")){
+				try {
+					reservationService.save(reservation);
+					
+					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
+					return new ResponseEntity<>(reservation,HttpStatus.OK);
+				} catch (MailException | InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}else{
+				reservation.setAccepted(true);
+				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
-				
-				emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
-				return new ResponseEntity<>(HttpStatus.OK);
-			} catch (MailException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}else{
-			reservation.setAccepted(true);
-			emailService.notifyOwner(reservation.getOwner(),reservation);
-			reservationService.save(reservation);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(reservation,HttpStatus.OK);
+			}
+		}else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	@RequestMapping(value="/send/{topic}",method=RequestMethod.POST,
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public void  sender(@PathVariable String topic, @RequestBody Reservation reservation){
 		producer.sendMessageTo(topic,reservation.getSeats().getId());
-		System.out.println("Pogodio");
+		
 	}
 	
 	

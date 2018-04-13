@@ -2,7 +2,7 @@ window.onload = function(){
 	$.ajax({
 		type:'GET',
 		
-		url:'/userController/getLoggedUser',
+		url:'/userController/loggedUser',
 		contentType : 'application/json',
 		dataType : 'json',
 		
@@ -37,12 +37,17 @@ $(document).on('click','#change',function(e){
 	$.ajax({
 		type:'POST',
 		
-		url:'/userController/changeUser',
+		url:'/registrationController/changeUser',
 		contentType : 'application/json',
 		dataType : 'json',
 		data : user,
 		success:function(data){
-			alert("uspesna promena");
+			toastr.success("Successfully changed");
+			$("#email").val(data.email);
+			$("#name").val(data.name);
+			$("#surname").val(data.surname);
+			$("#city").val(data.city);
+			$("#number").val(data.number);
 			
 		}
 	})

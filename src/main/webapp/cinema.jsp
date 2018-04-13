@@ -3,9 +3,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script type="text/javascript"
-	src="${pageContext.request.contextPath}/jquery.min.js"> </script>
 
+	<script type="text/javascript"	src="${pageContext.request.contextPath}/jquery.min.js"> </script>
+	<script type="text/javascript"	src="${pageContext.request.contextPath}/toastr.min.js"> </script>
+	
 	<script type="text/javascript" src="//cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js"></script>
 	<script type="text/javascript"
 	src="${pageContext.request.contextPath}/cinema.js"> </script>
@@ -21,7 +22,8 @@
 	<script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/cinema.css">
-	
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/toastr.min.css">
+		
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -43,7 +45,10 @@
 	</script>
 </head>
 <body>
-	<nav id="navigation" class="navbar navbar-default">
+	<c:if test="${empty loggedUser }">
+		<c:redirect url="/Login.html"/>
+	</c:if>
+	<nav  id="navigation" class="navbar navbar-default">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div id="navigation" class="navbar-header">
@@ -83,8 +88,11 @@
 				<ul class="nav navbar-nav navbar-right">
 					<c:if test="${empty loggedUser}">
 						<li><a href="../../Login.html" id="Login">Log in</a></li>
+						<li><a href="../../Registration.html" id="Login">Registration</a></li>
+			
 					</c:if>
 					<c:if test="${not empty loggedUser}">
+						<li><a href="../updateUser.jsp">Update account</a></li>
 						<li><a href="../userController/logout">Log out</a></li>
 					</c:if>
 					

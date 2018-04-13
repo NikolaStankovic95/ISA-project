@@ -45,8 +45,11 @@ $(document).on('click','.delete',function(e){
 					
 				}
 				else{
-					alert("You can decline your reservation only 30 minutes before projection starts!")
+					toastr.error("You can decline your reservation only 30 minutes before projection starts!")
 				}
+			},error:function(data){
+				toastr.error("You can decline your reservation only 30 minutes before projection starts!")
+				
 			}
 		})
 	}
