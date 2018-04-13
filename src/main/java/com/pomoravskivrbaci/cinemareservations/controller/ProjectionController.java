@@ -1,13 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
-import com.pomoravskivrbaci.cinemareservations.model.Hall;
-import com.pomoravskivrbaci.cinemareservations.model.Period;
-import com.pomoravskivrbaci.cinemareservations.model.Projection;
-import com.pomoravskivrbaci.cinemareservations.model.Repertoire;
-import com.pomoravskivrbaci.cinemareservations.service.HallService;
-import com.pomoravskivrbaci.cinemareservations.service.PeriodService;
-import com.pomoravskivrbaci.cinemareservations.service.ProjectionService;
-import com.pomoravskivrbaci.cinemareservations.service.RepertoireService;
+import com.pomoravskivrbaci.cinemareservations.model.*;
+import com.pomoravskivrbaci.cinemareservations.service.*;
 import com.pomoravskivrbaci.cinemareservations.validation.ProjectionValidator;
 import com.pomoravskivrbaci.cinemareservations.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +33,9 @@ public class ProjectionController {
     @Autowired
     private RepertoireService repertoireService;
 
+    @Autowired
+    private ProjectionRatingService projectionRatingService;
+
     @RequestMapping(value = "projection/{id}", method = RequestMethod.GET)
     private String showProjectionPage(@PathVariable("id")Long id, HttpServletRequest request) {
         Projection projection = projectionService.findById(id);
@@ -52,7 +50,7 @@ public class ProjectionController {
             System.out.println(projectionValidator.getResults());
             return new ResponseEntity(projectionValidator.getResults(), HttpStatus.BAD_REQUEST);
         }
-        projectionService.setProjectionInfoById(id, projection.getName(), projection.getActors(), projection.getGenre(), projection.getDescription(), projection.getDirectorName(), projection.getRating(), projection.getPrice());
+        projectionService.setProjectionInfoById(id, projection.getName(), projection.getActors(), projection.getGenre(), projection.getDescription(), projection.getDirectorName(), projection.getPrice());
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -88,6 +86,35 @@ public class ProjectionController {
         projection.getRepertoires().forEach(repertoire -> repertoire.getProjections().removeIf(projection1 -> projection1.getId().equals(projection.getId())));
         projectionService.deleteById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value ="/projection/{id}/rate", method = RequestMethod.GET)
+    private String showRatePage(@PathVariable("id")Long id, HttpServletRequest request) {
+        Projection projection = projectionService.findById(id);
+        Institution institution = projection.getRepertoires().get(0).getInstitutions().get(0);
+        request.setAttribute("projection", projection);
+        request.setAttribute("institution", institution);
+        return "forward:/rate_projection.jsp";
+    }
+
+    @RequestMapping(value ="/projection/{id}/rate", method = RequestMethod.POST)
+    private ResponseEntity rate(@PathVariable("id")Long id, @RequestBody ProjectionRating projectionRating, HttpSession session) {
+        User loggedUser = (User)session.getAttribute("loggedUser");
+        if(loggedUser == null) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        for(ProjectionRating projRating : loggedUser.getProjectionRatings()) {
+            if(projRating.getProjection().getId().equals(id)) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+        }
+        Projection projection = projectionService.findById(id);
+        projectionRating.setProjection(projection);
+        projectionRating.setUser(loggedUser);
+        loggedUser.addProjectionRating(projectionRating);
+        projection.addRating(projectionRating);
+        projectionRatingService.saveOrUpdate(projectionRating);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }

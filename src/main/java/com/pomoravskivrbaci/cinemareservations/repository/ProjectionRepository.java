@@ -21,8 +21,8 @@ public interface ProjectionRepository extends PagingAndSortingRepository<Project
 	
 	@Modifying
 	@Transactional
-	@Query("update Projection p set p.name = ?2, p.actors = ?3, p.genre = ?4, p.description = ?5, p.directorName = ?6, p.rating = ?7, p.price = ?8 where p.id = ?1")
-	void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, double rating, Double price);
+	@Query("update Projection p set p.name = ?2, p.actors = ?3, p.genre = ?4, p.description = ?5, p.directorName = ?6, p.price = ?7 where p.id = ?1")
+	void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, Double price);
 
 	Projection findByPeriods(Period period);
 

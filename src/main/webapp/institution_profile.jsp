@@ -15,7 +15,7 @@
     <div>
         <h3>${ institution.name }</h3>
         <p>Adresa: ${ institution.address }</p>
-        <p>Ocena: ${ institution.rating }</p>
+        <p>Ocena: ${ institution.getAverageRating() }</p>
     </div>
 
     <div id="map"></div>

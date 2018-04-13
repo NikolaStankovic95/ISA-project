@@ -76,7 +76,7 @@
 
         function uploadImage() {
             let image = $('#imageInput').prop('files')[0];
-            var formData = new FormData();
+            let formData = new FormData();
             formData.append("image", image);
             $.ajax({
                 method: 'POST',

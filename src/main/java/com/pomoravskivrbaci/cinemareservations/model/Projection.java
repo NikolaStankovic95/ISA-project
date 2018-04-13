@@ -31,9 +31,6 @@ public class Projection implements Serializable{
 	@Column(name="image_link")
 	protected String imageLink;
 
-	@Column(name="rating")
-	protected Double rating;
-
 	@Column(name="description")
 	protected String description;
 
@@ -61,7 +58,10 @@ public class Projection implements Serializable{
 	@JsonIgnoreProperties("projection")
 	@OneToMany(mappedBy="projection")
 	protected List<Period> periods;
-	
+
+
+	@OneToMany(mappedBy = "projection")
+	protected List<ProjectionRating> ratings;
 
 	public List<Period> getPeriods() {
 		return periods;
@@ -135,14 +135,6 @@ public class Projection implements Serializable{
 		this.imageLink = imageLink;
 	}
 
-	public Double getRating() {
-		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -169,5 +161,24 @@ public class Projection implements Serializable{
 
 	public void setDuration(Integer duration) {
 		this.duration = duration;
+	}
+
+	public List<ProjectionRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<ProjectionRating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public Double getAverageRating() {
+		return ratings.stream()
+				.mapToDouble(rating -> rating.getRating())
+				.average()
+				.orElse(Double.NaN);
+	}
+
+	public void addRating(ProjectionRating rating) {
+		ratings.add(rating);
 	}
 }

@@ -1,7 +1,5 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
-import org.springframework.stereotype.Controller;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,14 +26,14 @@ public class Institution implements Serializable{
 	@Column(name="description", nullable = false)
 	private String description;
 
-	@Column(name="rating", nullable = false)
-	private float rating;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
 	
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	protected Repertoire repertoire;
+
+	@OneToMany(mappedBy = "institution")
+	protected List<InstitutionRating> ratings;
 	
 	
 	public Repertoire getRepertoire() {
@@ -70,14 +68,6 @@ public class Institution implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public float getRating() {
-		return rating;
-	}
-
-	public void setRating(float rating) {
-		this.rating = rating;
 	}
 
 	public String getName() {
@@ -119,4 +109,24 @@ public class Institution implements Serializable{
 				.findFirst()
 				.orElse(null);
 	}
+
+	public List<InstitutionRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<InstitutionRating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public Double getAverageRating() {
+		return ratings.stream()
+				.mapToDouble(rating -> rating.getRating())
+				.average()
+				.orElse(Double.NaN);
+	}
+
+	public void addRating(InstitutionRating institutionRating) {
+		ratings.add(institutionRating);
+	}
+
 }

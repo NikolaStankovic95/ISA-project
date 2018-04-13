@@ -14,7 +14,7 @@
 			<div>
 				<a href="/institution/${ cinema.id }"><h3>${ cinema.name }</h3></a>
 				<p>Adresa: ${ cinema.address }</p>
-				<p>Ocena: ${ cinema.rating }</p>
+				<p>Ocena: ${ cinema.getAverageRating() }</p>
 			</div>
 		</li>
 	</c:forEach>

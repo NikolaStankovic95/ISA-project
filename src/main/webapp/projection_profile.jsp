@@ -11,6 +11,12 @@
             <p>Opis: ${ projection.description }</p>
             <p>Glumci: ${ projection.actors }</p>
             <p>Zanr: ${ projection.genre }</p>
+            <c:if test="${ projection.getAverageRating() == null }">
+                <p>Ocena: nema ocena.</p>
+            </c:if>
+            <c:if test="${ projection.getAverageRating() != null }">
+                <p>Ocena: ${ projection.getAverageRating() }.</p>
+            </c:if>
             <img src="${ projection.imageLink }">
         </div>
 

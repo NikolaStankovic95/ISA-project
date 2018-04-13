@@ -103,6 +103,12 @@ public class User implements Serializable {
 		return reservations;
 	}
 
+	@OneToMany(mappedBy="user")
+	protected List<InstitutionRating> institutionRatings;
+
+	@OneToMany(mappedBy = "user")
+	protected List<ProjectionRating> projectionRatings;
+
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
 	}
@@ -163,8 +169,13 @@ public class User implements Serializable {
 		return surname;
 	}
 
-	
+	public void addProjectionRating(ProjectionRating projectionRating) {
+		projectionRatings.add(projectionRating);
+	}
 
+	public void addInstitutionRating(InstitutionRating institutionRating) {
+		institutionRatings.add(institutionRating);
+	}
 
 
 	@Override
@@ -224,5 +235,19 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	
+	public List<InstitutionRating> getInstitutionRatings() {
+		return institutionRatings;
+	}
+
+	public void setInstitutionRatings(List<InstitutionRating> institutionRatings) {
+		this.institutionRatings = institutionRatings;
+	}
+
+	public List<ProjectionRating> getProjectionRatings() {
+		return projectionRatings;
+	}
+
+	public void setProjectionRatings(List<ProjectionRating> projectionRatings) {
+		this.projectionRatings = projectionRatings;
+	}
 }

@@ -96,7 +96,7 @@
 				
 				<c:forEach items="${loggedUser.reservations}" var="reservation">
 					<c:if test="${reservation.accepted==true && reservation.period.date lt today}">
-						<li><a>${reservation.projection.name}</a></li>
+						<li><a href="/projection/${ reservation.projection.id }">${reservation.projection.name}</a> (<a href="/projection/${ reservation.projection.id }/rate">oceni</a>)</li>
 					</c:if>
 				</c:forEach>
 			</ul>
