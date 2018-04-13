@@ -1,4 +1,4 @@
-body {
+.regDiv {
  	position: absolute;
     top: 50%;
     left: 50%;
@@ -26,4 +26,17 @@ td{
 }
 tr{
 	 line-height: 20px;
+}
+.navbar-default .navbar-nav>li>a:hover{
+
+	color: red;
+
+}
+.navbar-default .navbar-nav>li>a{
+
+	color: white;
+
+}
+.navbar-default{
+	background-color: #0079bb;
 }

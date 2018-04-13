@@ -67,7 +67,19 @@ public class ReservationController {
 	
 	@Autowired
 	private HallSegmentService hallSegmentService;
-	
+	@RequestMapping("/cinemaReservation")
+	public String cinema(HttpServletRequest request){
+		List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
+		request.setAttribute("institutions", listOfCinemas);
+		return "forward:/cinema.jsp";
+	}
+	@RequestMapping("/theatreReservation")
+	public String theathre(HttpServletRequest request){
+		List<Institution> listOfTheatres=institutionService.findByType(InstitutionType.THEATRE);
+		request.setAttribute("institutions", listOfTheatres);
+		return "forward:/cinema.jsp";
+
+	}
 	@RequestMapping("/getCinemas")
 	private @ResponseBody List<Institution> findCinemas(){
 		
@@ -78,63 +90,52 @@ public class ReservationController {
 	
 	@RequestMapping("/getProjections/{id}/{date}")
 	private @ResponseBody List<Projection> findProjections(@PathVariable("id") String id,@PathVariable("date") String date){
-		System.out.println("Datumm"+date);
-		List<Projection> projections=projectionService.findByRepertoires_id(Long.parseLong(id));
 		List<Projection> onThisDate=new ArrayList<Projection>();
+		
+		if(id!="" && date!=""){
+		List<Projection> projections=projectionService.findByRepertoires_id(Long.parseLong(id));
 		for(Projection projection:projections){
 			for(Period period:projection.getPeriods()){
-				System.out.println(period.getDate().toString());
-				System.out.println(period.getDate().toString().split(" ")[0]);
 				if(period.getDate().toString().split(" ")[0].equals(date)){
 					onThisDate.add(projection);
 					break;
 				}
 			}
 		}
-		System.out.println(projections.size());
-		
+		}
 		return onThisDate;
 	}
 
 	@RequestMapping("/getProjectionsPeriod/{id}")
 	private @ResponseBody List<Period> findProjectionsPeriod(@PathVariable("id") String id){
-		
-		List<Period> periods=periodService.findByProjectionId(Long.parseLong(id));
-		for(Period item:periods){
-			Timestamp stamp = new Timestamp(item.getDate().getTime());
-			Date date = new Date(stamp.getTime());
-			System.out.println(date);
-			item.setDate(date);
+		List<Period> periods=new ArrayList<Period>();
+		if(id!="" || id!=null){
+			periods=periodService.findByProjectionId(Long.parseLong(id));
+			for(Period item:periods){
+				Timestamp stamp = new Timestamp(item.getDate().getTime());
+				Date date = new Date(stamp.getTime());
+				item.setDate(date);
+				}
 		}
-		System.out.println("Vreme:"+periods.get(0).getDate());
-		
 		return periods;
 	}
 
 	@RequestMapping("/getProjectionHalls/{id}")
 	private @ResponseBody List<Hall> findHalls(@PathVariable("id") String id){
-		
-		List<Hall> halls=hallService.findByProjection_id(Long.parseLong(id));
-		System.out.println(halls.size());
-		
+		List<Hall> halls=new ArrayList<Hall>();
+		if(id!="" || id!=null){
+			halls=hallService.findByProjection_id(Long.parseLong(id));
+		}
 		return halls;
 	}
 	
 	@RequestMapping("/getCinemasHall/{id}")
 	private @ResponseBody List<Hall> findCinemasHall(@PathVariable("id") String id){
-		
-		List<Hall> listOfCinemasHall=hallService.findByInstitutionId(Long.parseLong(id));
-		System.out.println(listOfCinemasHall.size());
+		List<Hall> listOfCinemasHall=new ArrayList<Hall>();
+		if(id!="" && id!=null)
+			listOfCinemasHall=hallService.findByInstitutionId(Long.parseLong(id));
 		return listOfCinemasHall;
 	}
-	
-	/*@RequestMapping("/getHallSeats/{id}")
-	private @ResponseBody List<Seat> findHallSeats(@PathVariable("id") String id){
-		
-		List<Seat> listOfSeats=seatService.findByHallId(Long.parseLong(id));
-		System.out.println(listOfSeats.size());
-		return listOfSeats;
-	}*/
 	
 	
 	
@@ -176,10 +177,13 @@ public class ReservationController {
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	private @ResponseBody List<HallSegment> getHallSeats(@RequestBody Object object){
+		List<HallSegment> hallSegments=new ArrayList<HallSegment>();
+		
 		String [] IDs=object.toString().substring(1,object.toString().length()-1).split(",");
+		if(IDs.length==4){
 		List<Reservation> allReservations=reservationService.findByInstitutionIdAndHallIdAndPeriodIdAndProjectionId(
 				Long.parseLong(IDs[0].split("=")[1]), Long.parseLong(IDs[1].split("=")[1]), Long.parseLong(IDs[2].split("=")[1]),Long.parseLong(IDs[3].split("=")[1]));
-		List<HallSegment> hallSegments=hallSegmentService.findHallSegmentByHallId(Long.parseLong(IDs[1].split("=")[1]));
+		hallSegments=hallSegmentService.findHallSegmentByHallId(Long.parseLong(IDs[1].split("=")[1]));
 		for(Reservation reservation:allReservations){
 			for(HallSegment segment:hallSegments){
 				for(Seat seat:segment.getSeats()){
@@ -188,6 +192,7 @@ public class ReservationController {
 					}
 				}
 			}
+		}
 		}
 		return hallSegments;
 	}
@@ -222,33 +227,42 @@ public class ReservationController {
 	@RequestMapping(value="/makeReservation/{invite}",method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	private String makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
+	private synchronized ResponseEntity<Object>  makeReservation(@PathVariable ("invite") String invite,@RequestBody Reservation reservation,HttpServletRequest request){
 		User loggedUser=(User)request.getSession().getAttribute("loggedUser");
-	
-		
-		if(invite.equals("true")){
-			try {
+		List<Reservation> reservations=reservationService.findAll();
+		boolean contains=reservations.stream().anyMatch(item->item.getInstitution().getId().equals(reservation.getInstitution().getId()) &&
+				item.getHall().getId().equals(reservation.getHall().getId()) &&
+				item.getPeriod().getId().equals(reservation.getPeriod().getId()) &&
+				item.getProjection().getId().equals(reservation.getProjection().getId()) &&
+				item.getSeat().getId().equals(reservation.getSeat().getId()));
+		System.out.println(contains);
+		if(contains==false){
+			if(invite.equals("true")){
+				try {
+					reservationService.save(reservation);
+					
+					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
+					return new ResponseEntity<>(reservation,HttpStatus.OK);
+				} catch (MailException | InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}else{
+				reservation.setAccepted(true);
+				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
-				
-				emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
-				
-			} catch (MailException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}else{
-			reservation.setAccepted(true);
-			emailService.notifyOwner(reservation.getOwner(),reservation);
-			reservationService.save(reservation);
-		}
-		return "";
+				return new ResponseEntity<>(reservation,HttpStatus.OK);
+			}
+		}else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	@RequestMapping(value="/send/{topic}",method=RequestMethod.POST,
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public void  sender(@PathVariable String topic, @RequestBody Reservation reservation){
 		producer.sendMessageTo(topic,reservation.getSeats().getId());
-		System.out.println("Pogodio");
+		
 	}
 	
 	

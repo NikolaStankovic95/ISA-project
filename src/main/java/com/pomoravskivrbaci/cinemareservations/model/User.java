@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
@@ -28,6 +29,20 @@ public class User implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public User(String email, String password, String name, String surname, String city, boolean activated,
+			boolean firstlogin, UserRole role, String number) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.city = city;
+		this.activated = activated;
+		this.firstlogin = firstlogin;
+		this.role = role;
+		this.number = number;
 	}
 
 	public void setId(Long id) {
@@ -56,25 +71,25 @@ public class User implements Serializable {
 	public void setFriendships(List<Friendship> friendships) {
 		this.friendships = friendships;
 	}
-
+	@NotNull
 	@Column(name="email",nullable = false)
 	protected String email;
-	
+	@NotNull
 	@Column(nullable = false)
 	protected String password;
-
+	@NotNull
 	@Column(nullable = false)
 	protected String name;
-
+	@NotNull
 	@Column(nullable = false)
 	protected String surname;
-
+	@NotNull
 	@Column(nullable = true)
 	protected String city;
-
+	@NotNull
 	@Column(nullable=false)
 	protected boolean activated;
-	
+	@NotNull
 	@Column(nullable=false)
 	protected boolean firstlogin;
 	
@@ -92,10 +107,11 @@ public class User implements Serializable {
 		this.reservations = reservations;
 	}
 
-	public User(String email, String password,
+	public User(Long id,String email, String password,
 			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
 			String number) {
 		super();
+		this.id=id;
 		this.email = email;
 		this.password = password;
 		this.name = name;
