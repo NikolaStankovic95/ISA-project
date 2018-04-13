@@ -39,6 +39,9 @@ public class Projection implements Serializable{
 
 	@Column(name="price")
 	protected Double price;
+
+	@Column(name="duration")
+	protected Integer duration;
 	
 	public String getName() {
 		return name;
@@ -52,7 +55,7 @@ public class Projection implements Serializable{
 		this.repertoires = repertoires;
 	}
 
-	@ManyToMany(mappedBy="projections", cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToMany(mappedBy="projections")
 	protected List<Repertoire> repertoires = new ArrayList<>();
 
 	@JsonIgnoreProperties("projection")
@@ -77,7 +80,7 @@ public class Projection implements Serializable{
 		this.halls = halls;
 	}
 
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinTable(name="projection_hall", joinColumns=@JoinColumn(name="projection_id"),
 			inverseJoinColumns=@JoinColumn(name="hall_id"))
 	@JsonIgnoreProperties("projections")
@@ -158,5 +161,13 @@ public class Projection implements Serializable{
 
 	public void addRepertoire(Repertoire repertoire) {
 		repertoires.add(repertoire);
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 }

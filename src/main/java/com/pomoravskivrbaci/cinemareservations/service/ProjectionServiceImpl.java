@@ -42,5 +42,10 @@ public class ProjectionServiceImpl implements ProjectionService{
 		return projectionRepository.save(projection);
 	}
 
+	@Override
+	public void deleteById(Long id) {
+		projectionRepository.delete(id);
+	}
+
 
 }

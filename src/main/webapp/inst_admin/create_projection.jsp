@@ -40,6 +40,7 @@
             var genre = $("#genreInput").val().trim();
             var directorName = $("#directorNameInput").val().trim();
             var price = $("#priceInput").val().trim();
+            var duration = $("#durationInput").val().trim();
 
             if(halls.size == 0 || periods.size == 0) {
                 alert("Niste izabrali halu.");
@@ -59,7 +60,8 @@
                     price: price,
                     halls: halls,
                     periods: periods,
-                    imageLink: image_url
+                    imageLink: image_url,
+                    duration: duration
                 }),
                 success: function(data) {
                     console.log(data);
@@ -67,7 +69,7 @@
                 },
                 error: function(data) {
                     console.log(data);
-                    alert("Neuspesno.");
+                    alert(data.responseText);
                 }
             });
         }
@@ -109,7 +111,7 @@
             halls.push({ id: $("#selectHall").val() });
             $("#selectedPeriods").append('<p>Sala ' + $("#selectHall").val() + ' Datum: ' + $("#selectPeriod").text()+'</p>');
         }
-
+        
     </script>
 
 </head>
@@ -132,6 +134,10 @@
     <tr>
         <td>Zanr:</td>
         <td><input id="genreInput" type="text"></td>
+    </tr>
+    <tr>
+        <td>Trajanje:</td>
+        <td><input id="durationInput" type="text"></td>
     </tr>
     <tr>
         <td>Ime reditelja:</td>

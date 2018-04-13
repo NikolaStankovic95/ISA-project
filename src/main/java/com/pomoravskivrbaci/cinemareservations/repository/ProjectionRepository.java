@@ -15,15 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface ProjectionRepository extends PagingAndSortingRepository<Projection,Long>{
 
-	public Projection findById(Long id);
+	Projection findById(Long id);
 
-	public List<Projection> findByRepertoires_id(Long id);
+	List<Projection> findByRepertoires_id(Long id);
 	
 	@Modifying
 	@Transactional
 	@Query("update Projection p set p.name = ?2, p.actors = ?3, p.genre = ?4, p.description = ?5, p.directorName = ?6, p.rating = ?7, p.price = ?8 where p.id = ?1")
 	void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, double rating, Double price);
 
-	public Projection findByPeriods(Period period);
-	
+	Projection findByPeriods(Period period);
+
 }

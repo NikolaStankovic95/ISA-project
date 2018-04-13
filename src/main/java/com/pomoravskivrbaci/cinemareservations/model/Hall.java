@@ -46,11 +46,9 @@ public class Hall implements Serializable {
 	@ManyToMany(mappedBy="halls")
 	protected List<Projection> projections;
 
-	@JsonIgnore
 	@OneToMany(mappedBy="hall", cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
 	protected List<HallSegment> hallSegments;
-	
-	
+
 	public Hall(String name, Institution institution) {
 		super();
 		this.name = name;
@@ -99,4 +97,5 @@ public class Hall implements Serializable {
 	public void addPeriod(Period period) {
 		periods.add(period);
 	}
+
 }

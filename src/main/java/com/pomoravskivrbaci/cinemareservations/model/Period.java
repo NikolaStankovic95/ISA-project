@@ -1,9 +1,6 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +9,6 @@ import javax.persistence.*;
 
 @Entity
 public class Period implements Serializable{
-
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
@@ -31,7 +26,7 @@ public class Period implements Serializable{
 	protected List<Hall> halls = new ArrayList<>();
 
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne()
 	protected Projection projection;
 	
 		

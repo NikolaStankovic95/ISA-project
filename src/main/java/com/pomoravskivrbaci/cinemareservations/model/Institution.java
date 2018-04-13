@@ -5,14 +5,7 @@ import org.springframework.stereotype.Controller;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,7 +34,7 @@ public class Institution implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	protected Repertoire repertoire;
 	
 	

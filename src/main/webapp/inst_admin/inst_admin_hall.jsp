@@ -28,7 +28,7 @@
         function initSegments() {
             segments.forEach(function(segment) {
                 $("#segment" + segment.type).removeClass("invisible");
-                drawSeats(segment.type)
+                drawSeats(segment);
                 if (segment.closed) {
                     $("#segment" + segment.type).addClass("closed")
                 }
@@ -38,12 +38,16 @@
         function initListeners() {
 
             $(".segment").click(function() {
-                let id = this.id[this.id.length - 1];
+                let id = this.id[this.id.length - 1]
+                let segment = segments.find(s => s.type == id);
+                console.log(segment);
                 $("#segmentNameFormInput").text($(this).text());
-                $("#numberOfRowsFormInput").val(segments[id].numberOfRows);
-                $("#numberOfColumnsFormInput").val(segments[id].numberOfColumns);
-                $("#isClosedFormInput").prop("checked", segments[id].closed);
-                $("#numberOfRowsFormInput, #numberOfColumnsFormInput, #isClosedFormInput").attr("name", id);
+                $("#numberOfRowsFormInput").val(segment.numberOfRows);
+                $("#numberOfColumnsFormInput").val(segment.numberOfColumns);
+                $("#isClosedFormInput").prop("checked", segment.closed);
+                $("#numberOfRowsFormInput").attr("name", id);
+                $("#numberOfColumnsFormInput").attr("name", id);
+                $("#isClosedFormInput").attr("name", id);
             });
 
             /*$("#numberOfRowsFormInput").change(function() {
@@ -57,11 +61,12 @@
             });
             */
             $("#isClosedFormInput").change(function() {
+                let inputName = this.name;
+                let segmentIndex = segments.findIndex(seg => seg.type == this.name);
                 if(this.checked) {
-                    var inputName = this.name;
                     $.ajax({
                         method: 'HEAD',
-                        url: '/hall_segment/' + segments[this.name].id + '/check_reservation',
+                        url: '/hall_segment/' + segments[segmentIndex].id + '/check_reservation',
                         contentType: 'application/json',
                         success: function (data) {
                             console.log(data);
@@ -70,7 +75,7 @@
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             if(jqXHR.status == 404) {
-                                segments[inputName].closed = true;
+                                segments[segmentIndex].closed = true;
                                 $("#segment" + inputName).addClass("closed");
                             } else {
                                 alert(errorThrown);
@@ -78,22 +83,19 @@
                         }
                     });
                 } else {
+                    segments[segmentIndex].closed = false;
                     $("#segment" + this.name).removeClass("closed");
                 }
              });
         }
 
-        function drawSeats(segmentId) {
-            let segment = segments[segmentId];
-            if(segment.numberOfColumns === 0 || segment.numberOfRows === 0) {
-                return;
-            }
-            $("#segment" + segmentId + " :not(:first-child)").remove();
+        function drawSeats(segment) {
+            $("#segment" + segment.type + " :not(:first-child)").remove();
             for(let i = 0; i < segment.numberOfRows; i++) {
                 for(let j = 0; j < segment.numberOfColumns; j++) {
-                    $("#segment" + segmentId).append("<input class='seat' type='checkbox'>");
+                    $("#segment" + segment.type).append("<input class='seat' type='checkbox'>");
                 }
-                $("#segment" + segmentId).append("<br>");
+                $("#segment" + segment.type).append("<br>");
             }
             $(".seat").on("click", false);
         }
@@ -138,11 +140,12 @@
                 }),
                 success: function(data) {
                     console.log(data);
-                    alert("Uspesno dodat period.");
+                    alert('Uspesno dodat period.');
+                    $("#periods").append("<p>Od " + startDateTime + " do " + endDateTime + "</p>");
                 },
                 error: function(data) {
                     console.log(data);
-                    alert("Greska prilikom dodavanja perioda.");
+                    alert(data.responseText);
                 }
             });
 
@@ -219,17 +222,25 @@
         </tr>
     </table>
 
-    <h3>Slobodni termini:</h3>
+    <h3>Dodaj termin:</h3>
     <p>Dan:</p>
     <input type="date" id="periodDayInput">
     <p>Pocetak termina:</p>
     <input type="time" id="periodStartInput">
     <p>Kraj termina:</p>
     <input type="time" id="periodEndInput">
-    <input type="submit" onclick="addPeriod()">
-    <c:forEach var="period" items="${ hall.periods }">
-        <p>${ period.date }</p>
-    </c:forEach>
+    <input type="submit" value="Dodaj" onclick="addPeriod()">
+    <h3>Termini</h3>
+    <div id="periods">
+        <c:forEach var="period" items="${ hall.periods }">
+            <p>
+                Od ${ period.date } do ${ period.dateEnd } 
+                <c:if test="${ period.projection != null}">
+                    (<a href="/projection/${ period.projection.id }">${ period.projection.name }</a>)
+                </c:if>
+            </p>
+        </c:forEach>
+    </div>
 </body>
 
 </html>

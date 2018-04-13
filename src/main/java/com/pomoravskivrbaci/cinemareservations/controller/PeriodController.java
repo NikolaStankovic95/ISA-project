@@ -4,6 +4,8 @@ import com.pomoravskivrbaci.cinemareservations.model.Hall;
 import com.pomoravskivrbaci.cinemareservations.model.Period;
 import com.pomoravskivrbaci.cinemareservations.service.HallService;
 import com.pomoravskivrbaci.cinemareservations.service.PeriodService;
+import com.pomoravskivrbaci.cinemareservations.validation.PeriodValidator;
+import com.pomoravskivrbaci.cinemareservations.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +26,13 @@ public class PeriodController {
 
     @RequestMapping(value = "/hall/{id}", method = RequestMethod.POST)
     private ResponseEntity editProjectionInfo(@PathVariable("id")Long hall_id, @RequestBody Period newPeriod) {
+        Validator periodValidator = new PeriodValidator(newPeriod);
         Hall hall = hallService.findById(hall_id);
-        hall.addPeriod(newPeriod);
         newPeriod.addHall(hall);
+        if(!periodValidator.validate()) {
+            return new ResponseEntity(periodValidator.getResults(), HttpStatus.BAD_REQUEST);
+        }
+        hall.addPeriod(newPeriod);
         periodService.saveOrUpdate(newPeriod);
         hallService.saveOrUpdate(hall);
         return new ResponseEntity(HttpStatus.OK);

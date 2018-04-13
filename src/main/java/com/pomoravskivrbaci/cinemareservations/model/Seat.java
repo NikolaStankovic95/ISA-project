@@ -1,5 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class Seat implements Serializable{
 	protected String regNumber;
 	
 
+	@JsonIgnore
 	@ManyToOne
 	protected HallSegment hallSegment;
 
