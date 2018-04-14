@@ -29,6 +29,9 @@ public class Reservation {
 	protected Period period;
 
 	@OneToOne
+	protected HallSegment hallSegment;
+
+	@OneToOne
 	protected Institution institution;
 	
 	@ManyToOne
