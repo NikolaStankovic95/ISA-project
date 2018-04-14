@@ -1,5 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,18 @@ public class FriendshipServiceImpl implements FriendshipService {
 		// TODO Auto-generated method stub
 		System.out.println("Brisanjeee");
 		 friendshipRepository.deleteById(id);
+	}
+
+	@Override
+	public List<Friendship> findAll() {
+		// TODO Auto-generated method stub
+		return (List<Friendship>) friendshipRepository.findAll();
+	}
+
+	@Override
+	public Friendship findOne(Long id) {
+		// TODO Auto-generated method stub
+		return friendshipRepository.findOne(id);
 	}
 
 }

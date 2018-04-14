@@ -12,7 +12,7 @@
 		<c:forEach var="theatre" items="${theatres}">
 			<li>
 				<div>
-					<h3>${ theatre.name }</h3>
+					<a href="/institution/${ theatre.id }"><h3>${ theatre.name }</h3></a>
 					<p>${ theatre.description }</p>
 					<p>Adresa: ${ theatre.address }</p>
 					<p>Ocena: ${ theatre.rating }</p>

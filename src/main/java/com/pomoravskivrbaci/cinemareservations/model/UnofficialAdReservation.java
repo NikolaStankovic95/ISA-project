@@ -10,6 +10,9 @@ import javax.persistence.OneToOne;
 @Entity
 public class UnofficialAdReservation {
 
+	private enum Status{
+		INIT,ACCEPTED
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
@@ -45,4 +48,11 @@ public class UnofficialAdReservation {
 	@OneToOne
 	protected User user;
 	
+	protected Status status;
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 }

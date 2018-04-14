@@ -21,4 +21,8 @@ public class RepertoireServiceImpl implements RepertoireService {
         repertoireRepository.setRepertoireInfoById(id, name);
     }
 
+    @Override
+    public Repertoire saveOrUpdate(Repertoire repertoire) {
+        return repertoireRepository.save(repertoire);
+    }
 }

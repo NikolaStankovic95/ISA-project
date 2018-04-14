@@ -1,22 +1,14 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Period implements Serializable{
-
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
@@ -26,13 +18,15 @@ public class Period implements Serializable{
 
 	@Column(name="date_end", nullable=false)
 	protected Date dateEnd;
-	
-	@ManyToMany
+
+	@JsonIgnore
+	@ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(name="period_hall", joinColumns=@JoinColumn(name="period_id"),
 	inverseJoinColumns=@JoinColumn(name="hall_id"))
-	protected List<Hall> halls;
-	
-	@ManyToOne
+	protected List<Hall> halls = new ArrayList<>();
+
+	@JsonIgnore
+	@ManyToOne()
 	protected Projection projection;
 	
 		
@@ -79,5 +73,17 @@ public class Period implements Serializable{
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public Date getDateEnd() {
+		return dateEnd;
+	}
+
+	public void setDateEnd(Date dateEnd) {
+		this.dateEnd = dateEnd;
+	}
+
+	public void addHall(Hall hall) {
+		halls.add(hall);
 	}
 }

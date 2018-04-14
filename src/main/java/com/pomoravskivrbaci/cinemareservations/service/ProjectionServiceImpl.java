@@ -28,8 +28,8 @@ public class ProjectionServiceImpl implements ProjectionService{
 	}
 
 	@Override
-	public void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, double rating, Double price) {
-		projectionRepository.setProjectionInfoById(id, name, actors, genre, description, directorName, rating, price);
+	public void setProjectionInfoById(Long id, String name, String actors, String genre, String description, String directorName, Double price) {
+		projectionRepository.setProjectionInfoById(id, name, actors, genre, description, directorName, price);
 	}
 	@Override
 	public Projection findByPeriods(Period period) {
@@ -37,6 +37,15 @@ public class ProjectionServiceImpl implements ProjectionService{
 		return projectionRepository.findByPeriods(period);
 	}
 
+	@Override
+	public Projection saveOrUpdate(Projection projection) {
+		return projectionRepository.save(projection);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		projectionRepository.delete(id);
+	}
 
 
 }

@@ -1,5 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Seat implements Serializable{
 
@@ -25,6 +29,7 @@ public class Seat implements Serializable{
 	protected String regNumber;
 	
 
+	@JsonIgnore
 	@ManyToOne
 	protected HallSegment hallSegment;
 
@@ -63,5 +68,9 @@ public class Seat implements Serializable{
 
 	public void setHallSegment(HallSegment hallSegment) {
 		this.hallSegment = hallSegment;
+	}
+	@JsonIgnore
+	public HallSegment getHallSegment() {
+		return hallSegment;
 	}
 }

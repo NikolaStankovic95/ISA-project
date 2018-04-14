@@ -1,0 +1,32 @@
+p {
+	color: #000040;
+	font-family: 'Raleway', sans-serif;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 32px;
+	margin: 0 0 24px;
+}
+
+h1 {
+	color: #0000ff;
+	font-family: 'Raleway', sans-serif;
+	font-size: 62px;
+	font-weight: 800;
+	line-height: 72px;
+	margin: 0 0 24px;
+	text-align: center;
+	text-transform: uppercase;
+}
+.navbar-default .navbar-nav>li>a:hover{
+
+	color: red;
+
+}
+.navbar-default .navbar-nav>li>a{
+
+	color: white;
+
+}
+.navbar-default{
+	background-color: #0079bb;
+}

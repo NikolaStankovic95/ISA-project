@@ -1,16 +1,21 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,18 +43,29 @@ public class RegistrationController {
 	}
 	
 	@RequestMapping(value="/login")
-	private ResponseEntity<User> login(@RequestBody User user,HttpServletRequest request){
+	private ResponseEntity<Object> login(@RequestBody User user,HttpServletRequest request) throws URISyntaxException{
     User loggedUser=userService.findUserByEmailAndPassword(user.getEmail(), user.getPassword());
+    URI uri = null;
 		if(loggedUser!=null){
-		
+			 
 			if(loggedUser.isActivated()){
+				 uri=new URI("/userController/user/"+loggedUser.getId());
+				
+				 HttpHeaders httpHeaders = new HttpHeaders();
+				
+				httpHeaders.setLocation(uri);
 				request.getSession().setAttribute("loggedUser", loggedUser);
-				return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+				return new ResponseEntity<>(uri, HttpStatus.OK);
 			}
-			else 
-				return null;
-		}else 
-			return null;
+			else {
+				 uri=new URI("/Login.html");
+				return  new ResponseEntity<>(uri, HttpStatus.BAD_REQUEST);
+				}
+		}else {
+			
+			 uri=new URI("/Login.html");
+			return  new ResponseEntity<>(uri, HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	/**
@@ -76,9 +92,17 @@ public class RegistrationController {
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	private ResponseEntity<User> registrateUser(
-			@RequestBody User user){
-		
+	private ResponseEntity<Object> registrateUser(
+			@Validated @RequestBody User user,Errors errors){
+		if (errors.hasErrors()) {
+			return new ResponseEntity<>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+		}
+		for(User item:userService.findAll()){
+			if(item.getEmail().equals(user.getEmail())){
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				
+			}
+		}
 		user.setRole(UserRole.USER);
 		user.setActivated(false);
 		user.setFirstlogin(false);
@@ -94,7 +118,7 @@ public class RegistrationController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<User>(addedUser, HttpStatus.OK);
+		return new ResponseEntity<>(addedUser, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/changePass", method = RequestMethod.POST)
 	private String chagePass(

@@ -1,0 +1,63 @@
+
+h2{
+}
+.lists {
+	display:flex;
+	flex-direction:row;
+}
+.searchDiv{
+		display:flex;
+	flex-direction:column;
+		
+}
+.friends{
+	border: 1px black;
+	width:30%;
+}
+.btn-danger{
+	width:105px !important;
+	height:25px !important;
+	text-aligh:center !important;
+}
+.btn-info{
+	width:105px !important;
+	height:25px !important;
+	text-aligh:center !important;
+}
+.btn-success{
+	width:115px !important;
+	height:25px !important;
+	text-aligh:center !important;
+}
+.btn-warning{
+	width:105px !important;
+	height:25px !important;
+	text-aligh:center !important;
+}
+.header{
+	background-color:#6a6aff;
+	color:white;
+}
+ul {
+  list-style-type: none;
+}
+.history{
+	color: red;
+	text-align:center;
+	background-color:#e7e7eb;
+	width:400px;
+	margin: auto;
+}
+.navbar-default .navbar-nav>li>a:hover{
+
+	color: red;
+
+}
+.navbar-default .navbar-nav>li>a{
+
+	color: white;
+
+}
+.navbar-default{
+	background-color: #0079bb;
+}

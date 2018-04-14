@@ -44,6 +44,7 @@
 			</li>
 		</c:forEach>
 	</ul>
+	<a href="/inst_admin/institution/${ institution.id }/repertoire/${ repertoire.id }/create_projection">Dodaj projekciju</a>
 </body>
 
 </html>

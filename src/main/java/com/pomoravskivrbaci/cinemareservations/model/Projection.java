@@ -1,19 +1,13 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Projection implements Serializable{
@@ -37,14 +31,14 @@ public class Projection implements Serializable{
 	@Column(name="image_link")
 	protected String imageLink;
 
-	@Column(name="rating")
-	protected Double rating;
-
 	@Column(name="description")
 	protected String description;
 
 	@Column(name="price")
 	protected Double price;
+
+	@Column(name="duration")
+	protected Integer duration;
 	
 	public String getName() {
 		return name;
@@ -59,12 +53,17 @@ public class Projection implements Serializable{
 	}
 
 	@ManyToMany(mappedBy="projections")
-	protected List<Repertoire> repertoires;
-	
+	protected List<Repertoire> repertoires = new ArrayList<>();
+
+	@JsonIgnoreProperties("projection")
 	@OneToMany(mappedBy="projection")
 	protected List<Period> periods;
-	
+
+
 	@JsonIgnore
+	@OneToMany(mappedBy = "projection")
+	protected List<ProjectionRating> ratings;
+
 	public List<Period> getPeriods() {
 		return periods;
 	}
@@ -73,7 +72,7 @@ public class Projection implements Serializable{
 		this.periods = periods;
 	}
 
-	@JsonIgnore
+
 	public List<Hall> getHalls() {
 		return halls;
 	}
@@ -82,9 +81,10 @@ public class Projection implements Serializable{
 		this.halls = halls;
 	}
 
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinTable(name="projection_hall", joinColumns=@JoinColumn(name="projection_id"),
 			inverseJoinColumns=@JoinColumn(name="hall_id"))
+	@JsonIgnoreProperties("projections")
 	protected List<Hall> halls;
 	
 	public Long getId() {
@@ -136,14 +136,6 @@ public class Projection implements Serializable{
 		this.imageLink = imageLink;
 	}
 
-	public Double getRating() {
-		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -158,5 +150,36 @@ public class Projection implements Serializable{
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public void addRepertoire(Repertoire repertoire) {
+		repertoires.add(repertoire);
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public List<ProjectionRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<ProjectionRating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public Double getAverageRating() {
+		return ratings.stream()
+				.mapToDouble(rating -> rating.getRating())
+				.average()
+				.orElse(Double.NaN);
+	}
+
+	public void addRating(ProjectionRating rating) {
+		ratings.add(rating);
 	}
 }

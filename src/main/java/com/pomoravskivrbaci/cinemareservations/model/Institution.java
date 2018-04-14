@@ -1,18 +1,9 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
-import org.springframework.stereotype.Controller;
-
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,16 +26,26 @@ public class Institution implements Serializable{
 	@Column(name="description", nullable = false)
 	private String description;
 
-	@Column(name="rating", nullable = false)
-	private float rating;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	protected Repertoire repertoire;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "institution")
+	protected List<InstitutionRating> ratings;
 	
-	
+	@ManyToMany
+	protected List<User> admins;
+	public List<User> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<User> admins) {
+		this.admins = admins;
+	}
+
 	public Repertoire getRepertoire() {
 		return repertoire;
 	}
@@ -79,14 +80,6 @@ public class Institution implements Serializable{
 		this.description = description;
 	}
 
-	public float getRating() {
-		return rating;
-	}
-
-	public void setRating(float rating) {
-		this.rating = rating;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -119,5 +112,31 @@ public class Institution implements Serializable{
 	public void setType(InstitutionType type) {
 		this.type = type;
 	}
-	
+
+	public Hall getHallById(Long id) {
+		return halls.stream()
+				.filter(hall -> hall.id == id)
+				.findFirst()
+				.orElse(null);
+	}
+
+	public List<InstitutionRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<InstitutionRating> ratings) {
+		this.ratings = ratings;
+	}
+	@JsonIgnore
+	public Double getAverageRating() {
+		return ratings.stream()
+				.mapToDouble(rating -> rating.getRating())
+				.average()
+				.orElse(Double.NaN);
+	}
+
+	public void addRating(InstitutionRating institutionRating) {
+		ratings.add(institutionRating);
+	}
+
 }

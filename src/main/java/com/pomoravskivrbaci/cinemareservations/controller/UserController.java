@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
+import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.FriendshipService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
@@ -76,6 +77,7 @@ public class UserController {
 	@RequestMapping(value="/notFriends",method=RequestMethod.GET)
 	private ResponseEntity<List<User>> notFriends(HttpServletRequest request) {
 		User loggedUser = (User) request.getSession().getAttribute("loggedUser");
+		if(loggedUser!=null){
 		loggedUser = userService.findUserById(loggedUser.getId());
 		List<User> users = userService.findAll();
 		users.remove(loggedUser);
@@ -87,6 +89,9 @@ public class UserController {
 		request.getSession().setAttribute("loggedUser", loggedUser);
 		return new ResponseEntity<List<User>>(notFriends, HttpStatus.OK);
 
+		}
+		return null;
+		
 	}
 
 	private List<User> loggedUserFriends(User userProfile, List<User> users) {
@@ -128,7 +133,7 @@ public class UserController {
 	 * 
 	 * return new ResponseEntity<User>(u, HttpStatus.OK); }
 	 */
-
+	
 	@RequestMapping(value = "/checkFriendRequest")
 	public ResponseEntity<Friendship> checkFriendRequest(HttpServletRequest request, @RequestBody String userProfile) {
 		User loggedUser = (User) request.getSession().getAttribute("loggedUser");
@@ -162,6 +167,7 @@ public class UserController {
 	@RequestMapping(value = "/deleteFriend")
 	public ResponseEntity<List<Friendship>> deleteFriend(HttpServletRequest request, @RequestBody String email) {
 		User user = (User) request.getSession().getAttribute("loggedUser");
+		user=userService.findUserByEmail(user.getEmail());
 		User friend = (User) userService.findUserByEmail(email);
 		Friendship userFriendship = friendshipService.findByUserAndFriend(user, friend);
 		Friendship friendFriendship = friendshipService.findByUserAndFriend(friend, user);
@@ -292,5 +298,22 @@ public class UserController {
 			return new ResponseEntity<List<User>>(getFriends,HttpStatus.OK);
 		
 		}
+	}
+	@RequestMapping("/logout")
+	public String logout(HttpServletRequest request){
+		request.getSession().invalidate();
+		request.setAttribute("loggedUser", null);
+		return "redirect:/Login.html";
+	}
+	@RequestMapping(value="/changeRole", method = RequestMethod.PATCH)
+	public ResponseEntity<User> changeRole(@RequestBody String str){
+		String[] params = str.split("#");
+		Long id = Long.parseLong(params[0]);
+		User user = userService.findUserById(id);
+		user.setRole(UserRole.valueOf(params[1]));
+		
+		userService.createUser(user);
+		
+		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 }
