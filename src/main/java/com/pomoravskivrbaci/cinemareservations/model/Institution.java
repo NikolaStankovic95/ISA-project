@@ -36,7 +36,16 @@ public class Institution implements Serializable{
 	@OneToMany(mappedBy = "institution")
 	protected List<InstitutionRating> ratings;
 	
-	
+	@ManyToMany
+	protected List<User> admins;
+	public List<User> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<User> admins) {
+		this.admins = admins;
+	}
+
 	public Repertoire getRepertoire() {
 		return repertoire;
 	}
@@ -119,6 +128,7 @@ public class Institution implements Serializable{
 		this.ratings = ratings;
 	}
 
+	@JsonIgnore
 	public Double getAverageRating() {
 		return ratings.stream()
 				.mapToDouble(rating -> rating.getRating())

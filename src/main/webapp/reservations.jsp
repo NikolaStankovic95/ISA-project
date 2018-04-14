@@ -84,29 +84,13 @@
 		
 	<c:forEach items="${reservations}" var="reservation">
 		<c:if test="${loggedUser.email==reservation.owner.email}">
-			
 			<tr>
 				<td>${reservation.institution.name}</td>
 				<td>${reservation.hall.name}</td>
 				<td>${reservation.projection.name}</td>
 				<td>${reservation.period.date}</td>
 				<td>${reservation.seats.regNumber}</td>
-				<c:choose>
-					<c:when test="${reservation.seats.hallSegment.type eq 'VIP'}">
-						<td>VIP</td>
-					</c:when>
-					<c:when test="${reservation.seats.hallSegment.type eq 'LEFT_BALCONY'}">
-						<td>Left balcony</td>
-					</c:when>
-					<c:when test="${reservation.seats.hallSegment.type eq 'RIGHT_BALCONY'}">
-						<td>Right balcony</td>
-					</c:when>
-					<c:when test="${reservation.seats.hallSegment.type eq 'PARTER'}">
-						<td>Parter</td>
-					</c:when>
-		
-				</c:choose>
-				
+				<td>${reservation.hallSegment.type }</td>
 				<td><a class="delete" href="/myReservations/delete/${reservation.id}">Decline</a></td>
 			</tr>
 		</c:if>

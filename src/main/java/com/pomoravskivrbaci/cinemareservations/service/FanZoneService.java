@@ -8,5 +8,7 @@ import com.pomoravskivrbaci.cinemareservations.model.FanZone;
 public interface FanZoneService {
 
 	FanZone findFanZoneById(Long id);
+
+	void save(FanZone fanZone);
 	
 }

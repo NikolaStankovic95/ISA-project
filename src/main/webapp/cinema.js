@@ -110,7 +110,7 @@ function setSeats(div,segment){
 	var rbm=0
 	for(r=0;r<segment.numberOfRows;r++){
 			for(k=0;k<segment.numberOfColumns;k++){
-    			if(segment.seats[rbm].free==true){
+    			if(segment.seats[rbm].free==false){
     				div.append('<input class=\'check\'  type=\'checkbox\' value=\''+segment.seats[rbm].id+'\'>');
     				rbm++
     			}else{
@@ -269,10 +269,12 @@ function findInvitedUsers(index){
 
 $(document).on('click',"#submit",function(e){
 	var checkList=[];
+	var segments=[];
 	$("input:checkbox[type=checkbox]:checked").each(function(){
 		
 		if($(this).prop('disabled')==false){
 			checkList.push($(this).val());
+			console.log($(this).parent().get(0).tagClass)
 		}
 	});
 	var invited=$("#invitedFriends option").length;

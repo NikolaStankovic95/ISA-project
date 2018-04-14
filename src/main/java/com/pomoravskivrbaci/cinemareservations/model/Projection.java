@@ -172,7 +172,7 @@ public class Projection implements Serializable{
 		this.ratings = ratings;
 	}
 
-	public Double getAverageRating() {
+	public Double takeAverageRating() {
 		return ratings.stream()
 				.mapToDouble(rating -> rating.getRating())
 				.average()
