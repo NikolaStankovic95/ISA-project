@@ -124,6 +124,10 @@
         .segments div {
             border: 1px solid black;
         }
+
+        .invisible {
+            display: none;
+        }
     </style>
 
 </head>

@@ -39,12 +39,14 @@ public class HallController {
         }
         Institution institution = institutionService.findById(instId);
         newHall.getHallSegments().forEach((hallSegment -> {
-            int numberOfSeats = hallSegment.getNumberOfRows() * hallSegment.getNumberOfColumns();
-            for(int i = 0; i < numberOfSeats; i++) {
-                Seat seat = new Seat();
-                seat.setHallSegment(hallSegment);
-                hallSegment.addSeat(seat);
-                hallSegment.setHall(newHall);
+            for(int i = 0; i < hallSegment.getNumberOfRows(); i++) {
+                for (int j = 0; j < hallSegment.getNumberOfColumns(); j++) {
+                    Seat seat = new Seat();
+                    seat.setRegNumber((i+1) + ", " + (j+1));
+                    seat.setHallSegment(hallSegment);
+                    hallSegment.addSeat(seat);
+                    hallSegment.setHall(newHall);
+                }
             }
         }));
         newHall.setInstitution(institution);

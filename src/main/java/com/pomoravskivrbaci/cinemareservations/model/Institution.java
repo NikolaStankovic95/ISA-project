@@ -32,6 +32,7 @@ public class Institution implements Serializable{
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
 	protected Repertoire repertoire;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "institution")
 	protected List<InstitutionRating> ratings;
 	

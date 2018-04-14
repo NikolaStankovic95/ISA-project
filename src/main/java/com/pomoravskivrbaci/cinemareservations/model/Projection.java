@@ -60,6 +60,7 @@ public class Projection implements Serializable{
 	protected List<Period> periods;
 
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "projection")
 	protected List<ProjectionRating> ratings;
 

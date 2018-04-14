@@ -103,9 +103,11 @@ public class User implements Serializable {
 		return reservations;
 	}
 
+	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	protected List<InstitutionRating> institutionRatings;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	protected List<ProjectionRating> projectionRatings;
 

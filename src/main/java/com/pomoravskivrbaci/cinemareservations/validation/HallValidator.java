@@ -1,6 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.validation;
 
 import com.pomoravskivrbaci.cinemareservations.model.Hall;
+import com.pomoravskivrbaci.cinemareservations.model.HallSegment;
 
 public class HallValidator extends Validator{
 
@@ -19,7 +20,15 @@ public class HallValidator extends Validator{
         }
         if(hall.getHallSegments() == null || hall.getHallSegments().isEmpty()) {
             isValid = false;
-            addResult("Hall segments is required.");
+            addResult("Hall segments are required.");
+        } else {
+            for(HallSegment hallSegment : hall.getHallSegments()) {
+                if (hallSegment.getNumberOfColumns() == 0 || hallSegment.getNumberOfRows() == 0) {
+                    isValid = false;
+                    addResult("Hall segment number of rows/columns cannot be zero.");
+                    break;
+                }
+            }
         }
 
         return isValid;
