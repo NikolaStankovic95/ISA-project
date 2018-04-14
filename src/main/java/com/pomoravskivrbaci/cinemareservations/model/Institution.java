@@ -127,6 +127,7 @@ public class Institution implements Serializable{
 	public void setRatings(List<InstitutionRating> ratings) {
 		this.ratings = ratings;
 	}
+
 	@JsonIgnore
 	public Double getAverageRating() {
 		return ratings.stream()

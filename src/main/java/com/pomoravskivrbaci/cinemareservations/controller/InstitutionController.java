@@ -3,12 +3,8 @@ package com.pomoravskivrbaci.cinemareservations.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import com.pomoravskivrbaci.cinemareservations.model.Institution;
-import com.pomoravskivrbaci.cinemareservations.model.InstitutionRating;
-import com.pomoravskivrbaci.cinemareservations.model.User;
-import com.pomoravskivrbaci.cinemareservations.service.InstitutionRatingService;
-import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.pomoravskivrbaci.cinemareservations.model.FanZone;
 import com.pomoravskivrbaci.cinemareservations.model.Institution;
+import com.pomoravskivrbaci.cinemareservations.model.InstitutionRating;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.service.FanZoneService;
+import com.pomoravskivrbaci.cinemareservations.service.InstitutionRatingService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.security.acl.LastOwnerException;
+//github.com/jova1111/ISA-project.git
 
 @Controller
 @RequestMapping("/institution")
@@ -37,6 +32,7 @@ public class InstitutionController {
     private InstitutionService institutionService;
 
     @Autowired
+
     private FanZoneService fanzoneService;
     
     @Autowired
@@ -122,4 +118,7 @@ public class InstitutionController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+   
+
+    
 }

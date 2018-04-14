@@ -305,6 +305,7 @@ public class UserController {
 		request.setAttribute("loggedUser", null);
 		return "redirect:/Login.html";
 	}
+
 	@RequestMapping(value="/changeRole", method = RequestMethod.PATCH)
 	public ResponseEntity<User> changeRole(@RequestBody String str){
 		String[] params = str.split("#");
