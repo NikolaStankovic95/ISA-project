@@ -90,4 +90,10 @@ public class InstitutionAdminController {
         return("forward:/inst_admin/create_projection.jsp");
     }
 
+    @RequestMapping(value="/fast_reservation/{proj_id}", method = RequestMethod.GET)
+    private String showFastReservationPage(@PathVariable("proj_id")Long projId) {
+        //Projection
+        return("forward:/inst_admin/fast_reservation.jsp");
+    }
+
 }

@@ -101,10 +101,7 @@
         }
 
         function addDateAndHall() {
-            if (periods.filter(e => e.id == $("#selectPeriod").val()).length > 0) {
-                return;
-            }
-            if (halls.filter(e => e.id == $("#selectHall").val()).length > 0) {
+            if (periods.filter(e => e.id == $("#selectPeriod").val()).length > 0 && halls.filter(e => e.id == $("#selectHall").val()).length > 0) {
                 return;
             }
             periods.push({ id: $("#selectPeriod").val() });

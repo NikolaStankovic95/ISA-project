@@ -92,11 +92,6 @@
 				<td><input id="priceInput" type="text"
 					value="${ projection.price }"></td>
 			</tr>
-			<tr>
-				<td>Ocena:</td>
-				<td><input id="ratingInput" type="text"
-					value="${ projection.rating }"></td>
-			</tr>
 		</table>
 		<input type="button" value="Sacuvaj" onclick="editProjection()">
 		<input type="button" value="Izbrisi projekciju" onclick="deleteProjection()">

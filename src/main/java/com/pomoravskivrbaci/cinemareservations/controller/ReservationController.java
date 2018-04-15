@@ -264,7 +264,7 @@ public class ReservationController {
 		producer.sendMessageTo(topic,reservation.getSeats().getId());
 		
 	}
-	
-	
+
+
 	
 }
