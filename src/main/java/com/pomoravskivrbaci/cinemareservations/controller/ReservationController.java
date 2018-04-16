@@ -106,11 +106,11 @@ public class ReservationController {
 		return onThisDate;
 	}
 
-	@RequestMapping("/getProjectionsPeriod/{id}")
-	private @ResponseBody List<Period> findProjectionsPeriod(@PathVariable("id") String id){
+	@RequestMapping("/getProjectionsPeriod/{id}/{projectionId}")
+	private @ResponseBody List<Period> findProjectionsPeriod(@PathVariable("id") String id,@PathVariable("projectionId") Long projectionId){
 		List<Period> periods=new ArrayList<Period>();
 		if(id!="" || id!=null){
-			periods=periodService.findByProjectionId(Long.parseLong(id));
+			periods=periodService.findByHallIdAndProjectionId(Long.parseLong(id),projectionId);
 			for(Period item:periods){
 				Timestamp stamp = new Timestamp(item.getDate().getTime());
 				Date date = new Date(stamp.getTime());
@@ -175,7 +175,7 @@ public class ReservationController {
 		for(Reservation reservation:allReservations){
 			for(HallSegment segment:hallSegments){
 				for(Seat seat:segment.getSeats()){
-					if(seat.getId().equals(reservation.getSeat().getId())){
+					if(seat.getId().equals(reservation.getSeats().getId())){
 						seat.setFree(true);
 					}
 				}
@@ -227,7 +227,6 @@ public class ReservationController {
 		if(contains==false){
 			if(invite.equals("true")){
 				try {
-					reservation.setHallSegment(reservation.getSeats().getHallSegment());
 					reservationService.save(reservation);
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
@@ -237,7 +236,6 @@ public class ReservationController {
 					e.printStackTrace();
 				} 
 			}else{
-				reservation.setHallSegment(reservation.getSeats().getHallSegment());
 				
 				reservation.setAccepted(true);
 				emailService.notifyOwner(reservation.getOwner(),reservation);
@@ -255,7 +253,13 @@ public class ReservationController {
 		producer.sendMessageTo(topic,reservation.getSeats().getId());
 		
 	}
-
-
 	
+	@RequestMapping(value="/getHallSegment/{id}")
+	private ResponseEntity<HallSegment> getHallSegment(@PathVariable("id") String id){
+		HallSegment segment=hallSegmentService.findById(Long.parseLong(id));
+		return new ResponseEntity<HallSegment>(segment,HttpStatus.OK);
+	}
+
+
+
 }
