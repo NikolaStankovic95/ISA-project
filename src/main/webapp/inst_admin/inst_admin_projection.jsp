@@ -1,65 +1,68 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-<head>
+	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="application/javascript">
-        function editProjection() {
-            var name = $("#nameInput").val().trim();
-            var description = $("#descriptionInput").val().trim();
-            var actors = $("#actorsInput").val().trim();
-            var genre = $("#genreInput").val().trim();
-            var directorName = $("#directorNameInput").val().trim();
-            var price = $("#priceInput").val().trim();
-            var rating = $("#ratingInput").val().trim();
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="application/javascript">
+			function editProjection() {
+				var name = $("#nameInput").val().trim();
+				var description = $("#descriptionInput").val().trim();
+				var actors = $("#actorsInput").val().trim();
+				var genre = $("#genreInput").val().trim();
+				var directorName = $("#directorNameInput").val().trim();
+				var price = $("#priceInput").val().trim();
+				var rating = $("#ratingInput").val().trim();
 
-            $.ajax({
-                method: 'PATCH',
-                url: '/projection/${ projection.id }',
-                contentType : 'application/json',
-                data: JSON.stringify({
-                    name: name,
-                    description: description,
-                    actors: actors,
-                    genre: genre,
-                    directorName: directorName,
-                    rating: rating,
-                    price: price
-                }),
-                success: function(data) {
-                    console.log(data);
-                    alert("Uspesno apdejtovano.");
-                },
-                error: function(data) {
-                    console.log(data);
-                    alert("Neuspesno.");
-                }
-            });
-        }
+				$.ajax({
+					method: 'PATCH',
+					url: '/projection/${ projection.id }',
+					contentType : 'application/json',
+					data: JSON.stringify({
+						name: name,
+						description: description,
+						actors: actors,
+						genre: genre,
+						directorName: directorName,
+						rating: rating,
+						price: price
+					}),
+					success: function(data) {
+						console.log(data);
+						alert("Uspesno apdejtovano.");
+					},
+					error: function(data) {
+						console.log(data);
+						alert("Neuspesno.");
+					}
+				});
+			}
 
 
-        function deleteProjection() {
-            $.ajax({
-                method: 'DELETE',
-                url: '/projection/${ projection.id }',
-                success: function(data) {
-                    console.log(data);
-                    alert("Uspesno izbrisana projekcija.");
-                },
-                error: function(data) {
-                    console.log(data);
-                    alert(data.responseText);
-                }
-            });
-        }
+			function deleteProjection() {
+				$.ajax({
+					method: 'DELETE',
+					url: '/projection/${ projection.id }',
+					success: function(data) {
+						console.log(data);
+						alert("Uspesno izbrisana projekcija.");
+					},
+					error: function(data) {
+						console.log(data);
+						alert(data.responseText);
+					}
+				});
+			}
 
-	</script>
+		</script>
 
 	</head>
 
-	<body>
+	<body style="margin: 15px;">
+		<c:import url="../_navbar.jsp"></c:import>
+
 		<h4>Osnovne informacije:</h4>
 		<table>
 			<tr>

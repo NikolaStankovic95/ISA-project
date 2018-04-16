@@ -159,19 +159,7 @@ public class ReservationController {
 		Projection projection=projectionService.findById(id);
 		return new ResponseEntity<Projection>(projection,HttpStatus.OK);
 	}
-	@RequestMapping("/cinemas")
-	private String cinemasHomepage(HttpServletRequest request) {
-		List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
-		request.setAttribute("cinemas", listOfCinemas);
-		return "forward:/cinema_homepage.jsp";
-	}
 
-	@RequestMapping("/theatres")
-	private String theatresHomepage(HttpServletRequest request) {
-		List<Institution> listOfTheatres=institutionService.findByType(InstitutionType.THEATRE);
-		request.setAttribute("theatres", listOfTheatres);
-		return "forward:/theatre_homepage.jsp";
-	}
 	
 	@RequestMapping(value="/getHallSeats",	method=RequestMethod.POST,	
 			consumes = MediaType.APPLICATION_JSON_VALUE,

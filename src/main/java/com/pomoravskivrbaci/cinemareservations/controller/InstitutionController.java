@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.pomoravskivrbaci.cinemareservations.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.pomoravskivrbaci.cinemareservations.model.FanZone;
-import com.pomoravskivrbaci.cinemareservations.model.Institution;
-import com.pomoravskivrbaci.cinemareservations.model.InstitutionRating;
-import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.service.FanZoneService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionRatingService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
@@ -118,7 +115,19 @@ public class InstitutionController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-   
+    @RequestMapping("/cinemas")
+    private String cinemasHomepage(HttpServletRequest request) {
+        List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
+        request.setAttribute("cinemas", listOfCinemas);
+        return "forward:/cinema_homepage.jsp";
+    }
+
+    @RequestMapping("/theatres")
+    private String theatresHomepage(HttpServletRequest request) {
+        List<Institution> listOfTheatres=institutionService.findByType(InstitutionType.THEATRE);
+        request.setAttribute("theatres", listOfTheatres);
+        return "forward:/theatre_homepage.jsp";
+    }
 
     
 }

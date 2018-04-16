@@ -38,7 +38,7 @@ $(document).on('click','.delete',function(e){
 								"<td>"+reservation.projection.name+"</td>" +
 								"<td>"+convertDate(reservation.period.date)+"</td>" +
 								"<td>"+reservation.seats.regNumber+"</td>" +
-								"<td>"+reservation.hallSegment.type+"</td>"
+								"<td>"+reservation.hallSegment.type+"</td>" +
 								"<td><a class=\"delete\" href='/myReservations/delete/"+reservation.id+"\'>Decline</a></td></tr>");
 					})
 				}else if(data.length==0){

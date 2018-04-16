@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -156,7 +158,9 @@
 
     </head>
 
-    <body onload="init()">
+    <body onload="init()" style="margin: 15px;">
+        <c:import url="../_navbar.jsp"></c:import>
+
         <h3>Kreiranje brze rezervacije za projekciju ${ projection.name }</h3>
 
         <p>Izaberite halu u kojoj se projekcija prikazuje:</p>

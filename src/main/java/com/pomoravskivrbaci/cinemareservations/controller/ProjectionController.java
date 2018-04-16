@@ -36,6 +36,9 @@ public class ProjectionController {
     @Autowired
     private ProjectionRatingService projectionRatingService;
 
+    @Autowired
+    private ReservationService reservationService;
+
     @RequestMapping(value = "projection/{id}", method = RequestMethod.GET)
     private String showProjectionPage(@PathVariable("id")Long id, HttpServletRequest request) {
         Projection projection = projectionService.findById(id);
@@ -60,9 +63,11 @@ public class ProjectionController {
         List<Hall> chosenHalls = new ArrayList<>();
         List<Period> chosenPeriods = new ArrayList<>();
         Repertoire repertoire = repertoireService.findById(repId);
-        projection.getHalls().forEach(hall ->
-            chosenHalls.add(hallService.findById(hall.getId()))
-        );
+        projection.getHalls().forEach(hall -> {
+            if(chosenHalls.stream().noneMatch(chosenHall -> chosenHall.getId().equals(hall.getId()))) {
+                chosenHalls.add(hallService.findById(hall.getId()));
+            }
+        });
         projection.getPeriods().forEach(period ->
             chosenPeriods.add(periodService.findById(period.getId()))
         );
@@ -117,4 +122,29 @@ public class ProjectionController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/projection/{proj_id}/hall/{hall_id}/periods", method = RequestMethod.GET)
+    private ResponseEntity projectionPeriods(@PathVariable("proj_id")Long projId, @PathVariable("hall_id")Long hallId) {
+        Projection projection = projectionService.findById(projId);
+        List<Period> allPeriods = projection.getPeriods();
+        List<Period> periodsForHall = new ArrayList<>();
+        for(Period period : allPeriods) {
+            for(Hall periodHall : period.getHalls()) {
+                if (periodHall.getId().equals(hallId)) {
+                    periodsForHall.add(period);
+                }
+            }
+        }
+        return new ResponseEntity(periodsForHall, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "projection/{proj_id}/hall/{hall_id}/period/{per_id}/reserved_seats")
+    private ResponseEntity getReservedSeats(@PathVariable("proj_id")Long projId, @PathVariable("hall_id")Long hallId, @PathVariable("per_id")Long perId) {
+        List<Seat> reservedSeats = new ArrayList<>();
+        for(Reservation reservation : reservationService.findAll()) {
+            if(reservation.getPeriod().getId().equals(perId) && reservation.getHall().getId().equals(hallId) && reservation.getProjection().getId().equals(projId)) {
+                reservedSeats.add(reservation.getSeat());
+            }
+        }
+        return new ResponseEntity(reservedSeats, HttpStatus.OK);
+    }
 }

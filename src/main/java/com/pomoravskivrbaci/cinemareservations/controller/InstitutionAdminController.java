@@ -24,6 +24,10 @@ public class InstitutionAdminController {
     HallService hallService;
     @Autowired
     ReservationService reservationService;
+    @Autowired
+    PeriodService periodService;
+    @Autowired
+    SeatService seatService;
 
     @RequestMapping(method = RequestMethod.GET)
     private String chooseInstitution(HttpServletRequest request){
@@ -91,9 +95,24 @@ public class InstitutionAdminController {
     }
 
     @RequestMapping(value="/fast_reservation/{proj_id}", method = RequestMethod.GET)
-    private String showFastReservationPage(@PathVariable("proj_id")Long projId) {
-        //Projection
-        return("forward:/inst_admin/fast_reservation.jsp");
+    private String showFastReservationPage(@PathVariable("proj_id")Long projId, HttpServletRequest request) {
+        Projection projection = projectionService.findById(projId);
+        request.setAttribute("projection", projection);
+        return("forward:/inst_admin/fast_reservations.jsp");
     }
 
+
+    @RequestMapping(value="/fast_reservation/projection/{proj_id}/hall/{hall_id}/period/{per_id}/seat/{seat_id}", method = RequestMethod.POST)
+    private ResponseEntity createFastReservation(@PathVariable("proj_id")Long projId, @PathVariable("hall_id")Long hallId, @PathVariable("per_id")Long perId, @PathVariable("seat_id")Long seatId) {
+        Hall hall = hallService.findById(hallId);
+        Reservation newReservation = new Reservation();
+        newReservation.setAccepted(true);
+        newReservation.setHall(hall);
+        newReservation.setInstitution(hall.getInstitution());
+        newReservation.setPeriod(periodService.findById(perId));
+        newReservation.setProjection(projectionService.findById(projId));
+        newReservation.setSeat(seatService.findById(seatId));
+        reservationService.save(newReservation);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
