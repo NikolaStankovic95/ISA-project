@@ -9,4 +9,6 @@ public interface HallSegmentService {
 	List<HallSegment> findHallSegmentByHallId(Long id);
 
 	HallSegment saveOrUpdate(HallSegment hallSegment);
+	
+	HallSegment findById(Long id);
 }

@@ -28,6 +28,16 @@ public class PeriodServiceImpl implements PeriodService {
 	public Period saveOrUpdate(Period period) {
 		return periodRepository.save(period);
 	}
+	@Override
+	public List<Period> findByHallId(Long id) {
+		// TODO Auto-generated method stub
+		return periodRepository.findByHalls_Id(id);
+	}
+	@Override
+	public List<Period> findByHallIdAndProjectionId(Long hallId, Long projectionId) {
+		// TODO Auto-generated method stub
+		return periodRepository.findByHalls_IdAndProjectionId(hallId, projectionId);
+	}
 
 
 }

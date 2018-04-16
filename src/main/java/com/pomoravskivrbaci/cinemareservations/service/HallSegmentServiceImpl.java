@@ -25,4 +25,10 @@ public class HallSegmentServiceImpl implements HallSegmentService{
 		return hallSegmentRepository.save(hallSegment);
 	}
 
+	@Override
+	public HallSegment findById(Long id) {
+		// TODO Auto-generated method stub
+		return hallSegmentRepository.findOne(id);
+	}
+
 }
