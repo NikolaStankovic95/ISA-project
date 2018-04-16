@@ -135,10 +135,12 @@
 	<div id="reservation3" style="display:none">
     <label class="hall3">Sala</label>
     <select class="form-control hall3" id="projectionHalls2"></select><br>
+    <div>
       <div class="rotatedLeft hall3"></div>
       <div class="rotatedRight hall3"></div>
       <div class="VIP hall3"></div>
       <div class="parter hall3"></div>
+      </div>
       <br><br><br><br>
       <input type="button" value="Next" class="btn btn-primary" id="Next3"  onclick="next(4)">
     <input type="button" value="Back" class="btn btn-primary" onclick="back(2)">

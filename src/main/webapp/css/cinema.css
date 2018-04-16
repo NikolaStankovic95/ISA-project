@@ -75,8 +75,6 @@
 .rotatedRight.hall3 {
 	display: none;
 	position: absolute;
-	width: 200px;
-	max-height: 200px;
 	top: 70px;
 	left: 300px;
 	border-radius: 25%;

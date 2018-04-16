@@ -20,6 +20,14 @@ public class Reservation {
 	protected Projection projection;
 
 	@OneToOne
+	protected HallSegment hallSegment;
+	public HallSegment getHallSegment() {
+		return hallSegment;
+	}
+	public void setHallSegment(HallSegment hallSegment) {
+		this.hallSegment = hallSegment;
+	}
+	@OneToOne
 	protected Hall hall;
 
 	@OneToOne

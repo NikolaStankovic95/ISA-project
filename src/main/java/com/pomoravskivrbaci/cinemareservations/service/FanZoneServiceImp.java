@@ -19,5 +19,10 @@ public class FanZoneServiceImp implements FanZoneService{
 		// TODO Auto-generated method stub
 		return  fanZoneRepository.findById(id);
 	}
+	@Override
+	public void save(FanZone fanZone) {
+		fanZoneRepository.save(fanZone);
+		
+	}
 	
 }

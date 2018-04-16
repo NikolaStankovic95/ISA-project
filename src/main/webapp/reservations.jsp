@@ -78,7 +78,8 @@
 				<th>Projection</th>
 				<th>Date & Time</th>
 				<th>Seat number</th>
-			
+				<th>Hall segment</th>
+				<th></th>
 			</tr>
 		
 	<c:forEach items="${reservations}" var="reservation">
@@ -89,6 +90,7 @@
 				<td>${reservation.projection.name}</td>
 				<td>${reservation.period.date}</td>
 				<td>${reservation.seats.regNumber}</td>
+				<td>${reservation.hallSegment.type }</td>
 				<td><a class="delete" href="/myReservations/delete/${reservation.id}">Decline</a></td>
 			</tr>
 		</c:if>

@@ -187,8 +187,8 @@ public class ReservationController {
 		for(Reservation reservation:allReservations){
 			for(HallSegment segment:hallSegments){
 				for(Seat seat:segment.getSeats()){
-					if(seat.getRegNumber().equals(reservation.getSeat().getRegNumber())){
-						seat.setFree(false);
+					if(seat.getId().equals(reservation.getSeat().getId())){
+						seat.setFree(true);
 					}
 				}
 			}
@@ -239,6 +239,7 @@ public class ReservationController {
 		if(contains==false){
 			if(invite.equals("true")){
 				try {
+					reservation.setHallSegment(reservation.getSeats().getHallSegment());
 					reservationService.save(reservation);
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
@@ -248,6 +249,8 @@ public class ReservationController {
 					e.printStackTrace();
 				} 
 			}else{
+				reservation.setHallSegment(reservation.getSeats().getHallSegment());
+				
 				reservation.setAccepted(true);
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);

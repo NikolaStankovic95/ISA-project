@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -68,7 +69,7 @@ public class EmailService {
 		mail.setTo(owner.getEmail());
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sistem bioskopa/pozorišta");
-		mail.setText("Uspešno ste rezervisali "+reservation.getSeats().getRegNumber()+" mesto za projekciju "+reservation.getProjection().getName()
+		mail.setText("Uspešno ste rezervisali "+reservation.getSeat().getRegNumber()+" mesto za projekciju "+reservation.getProjection().getName()
 				+" u "+reservation.getInstitution().getName()+" na dan "+" "+date+" "+time+ " u sali "+
 				reservation.getHall().getName());
 		
@@ -77,6 +78,30 @@ public class EmailService {
 		System.out.println("Email poslat!");
 	
 	}
-
+	@Async
+	public void notifyAcceptedBider(User owner){
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(owner.getEmail());
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Sistem bioskopa/pozorišta");
+		mail.setText("Vaša ponuda za oglas je prihvacena");
+		
+		javaMailSender.send(mail);
+		System.out.println("Obavesten dobitnik");
+	}
+	@Async
+	public void notifyRefussedBider(List<User> rejected){
+		for(User user : rejected){
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(user.getEmail());
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Sistem bioskopa/pozorišta");
+		mail.setText("Vaša ponuda za oglas  nažalsot nije prihvacena");
+		
+		javaMailSender.send(mail);
+		}
+		System.out.println("Obavesteni gubitnik");
+	}
+	
 
 }

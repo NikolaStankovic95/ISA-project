@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
+import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.FriendshipService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
@@ -303,5 +304,17 @@ public class UserController {
 		request.getSession().invalidate();
 		request.setAttribute("loggedUser", null);
 		return "redirect:/Login.html";
+	}
+
+	@RequestMapping(value="/changeRole", method = RequestMethod.PATCH)
+	public ResponseEntity<User> changeRole(@RequestBody String str){
+		String[] params = str.split("#");
+		Long id = Long.parseLong(params[0]);
+		User user = userService.findUserById(id);
+		user.setRole(UserRole.valueOf(params[1]));
+		
+		userService.createUser(user);
+		
+		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
 }
