@@ -16,7 +16,7 @@
 </head>
 <body>
 	<c:if test="${empty loggedUser }">
-		<c:redirect url="/Login.html"/>
+		<c:redirect url="/Login.jsp"/>
 	</c:if>
 
 	<c:import url="_navbar.jsp"></c:import>

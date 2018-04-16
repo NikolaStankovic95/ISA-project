@@ -178,7 +178,7 @@ $(document).on('click',"#Next1",function(e){
 	getCinemaProjections();
 	getProjectionHalls();
 	getProjectionPeriods();
-
+	getProjectionPrice();
 
 		
 })
@@ -186,7 +186,7 @@ $(document).on('change',"#calendar",function(e){
 	getCinemaProjections();
 	getProjectionHalls();
 	getProjectionPeriods();
-	
+	getProjectionPrice()
 })
 $(document).on('change',"#projectionHalls",function(e){
 	getProjectionPeriods();
@@ -234,7 +234,7 @@ $(document).on('change',"#projections",function(e){
 	//getCinemaProjections();
 	getProjectionHalls();
 	getProjectionPeriods();
-	
+	getProjectionPrice()
 })
 
 $(document).on('change',"#nameOfCinema",function(e){
@@ -554,4 +554,15 @@ function getHallSegment(segmentId){
 		}
 	})
 	return hallSegment;
+}
+function getProjectionPrice(){
+	if($("#projections option:selected").val()!=undefined){
+		$.ajax({
+			url:'../reservation/getProjecitonPrice/'+$("#projections option:selected").val(),
+			type:'GET',
+			success:function(data){
+				$("#price").text(data);
+			}
+		})
+	}
 }

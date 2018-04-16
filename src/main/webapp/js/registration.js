@@ -1,5 +1,5 @@
 $(document).on('click','#login',function(e){
-	window.top.location="Login.html"
+	window.top.location="Login.jsp"
 })
 $(document).on('click','#register',function(e){
 	var email=$("#email").val();

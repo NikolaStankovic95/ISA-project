@@ -259,7 +259,11 @@ public class ReservationController {
 		HallSegment segment=hallSegmentService.findById(Long.parseLong(id));
 		return new ResponseEntity<HallSegment>(segment,HttpStatus.OK);
 	}
-
+	@RequestMapping(value="/getProjecitonPrice/{id}")
+	private @ResponseBody double getProjectionPrice(@PathVariable("id") Long id){
+		Projection projection=projectionService.findById(id);
+		return projection.getPrice();
+	}
 
 
 }

@@ -303,7 +303,7 @@ public class UserController {
 	public String logout(HttpServletRequest request){
 		request.getSession().invalidate();
 		request.setAttribute("loggedUser", null);
-		return "redirect:/Login.html";
+		return "redirect:/Login.jsp";
 	}
 
 	@RequestMapping(value="/changeRole", method = RequestMethod.PATCH)
