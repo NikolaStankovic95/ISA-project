@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProjectionController {
@@ -40,6 +41,9 @@ public class ProjectionController {
 
     @Autowired
     private ReservationService reservationService;
+
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping(value = "projection/{id}", method = RequestMethod.GET)
     private String showProjectionPage(@PathVariable("id")Long id, HttpServletRequest request) {
@@ -113,7 +117,17 @@ public class ProjectionController {
         Projection projection = projectionService.findById(id);
         projection.getPeriods().forEach(period -> period.setProjection(null));
         projection.getRepertoires().forEach(repertoire -> repertoire.getProjections().removeIf(projection1 -> projection1.getId().equals(projection.getId())));
-        projectionService.deleteById(id);
+        projection.setDeleted(true);
+        List<Reservation> pendingReservations = reservationService.findAll().stream()
+                .filter(reservation -> reservation.getPeriod().getDate().after(new Date()))
+                .collect(Collectors.toList());
+        List<User> reservationOwners = pendingReservations.stream()
+                .filter(reservation -> reservation.getOwner() != null)
+                .map(reservation -> reservation.getOwner())
+                .collect(Collectors.toList());
+        emailService.notifyOwnersOfDeletedReservation(reservationOwners, projection.getName());
+        projectionService.saveOrUpdate(projection);
+        pendingReservations.forEach(reservation -> reservationService.delete(reservation.getId()));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

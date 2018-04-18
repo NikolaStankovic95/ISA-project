@@ -102,6 +102,17 @@ public class EmailService {
 		}
 		System.out.println("Obavesteni gubitnik");
 	}
-	
+
+	@Async
+	public void notifyOwnersOfDeletedReservation(List<User> owners, String projectionName) {
+		owners.forEach(owner -> {
+			SimpleMailMessage mail = new SimpleMailMessage();
+			mail.setTo(owner.getEmail());
+			mail.setFrom(env.getProperty("spring.mail.username"));
+			mail.setSubject("Sistem bioskopa/pozorišta");
+			mail.setText("Projekcija " + projectionName + "je otkazana pa vam je rezervacija sedista ponistena, novac ce vam biti vracen.");
+			javaMailSender.send(mail);
+		});
+	}
 
 }

@@ -39,7 +39,10 @@ public class Projection implements Serializable{
 
 	@Column(name="duration")
 	protected Integer duration;
-	
+
+	@Column(name="is_deleted")
+	protected Boolean deleted = false;
+
 	public String getName() {
 		return name;
 	}
@@ -190,5 +193,13 @@ public class Projection implements Serializable{
 
 	public void addPeriod(Period period) {
 		periods.add(period);
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 }
