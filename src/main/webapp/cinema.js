@@ -113,10 +113,10 @@ function setSeats(div,segment){
 	for(r=0;r<segment.numberOfRows;r++){
 			for(k=0;k<segment.numberOfColumns;k++){
     			if(segment.seats[rbm].free==false){
-    				div.append('<input class=\'check\' name=\''+segment.id+'\'  type=\'checkbox\' value=\''+segment.seats[rbm].id+'\'>');
+    				div.append('<input class=\'check\' name=\''+segment.id+'\' id=\'c'+segment.seats[rbm].id+'\' type=\'checkbox\' value=\''+segment.seats[rbm].id+'\'>');
     				rbm++
     			}else{
-    				div.append("<input class=\'check\' name=\'"+segment.id+"\' type=\'checkbox\' value=\'"+segment.seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
+    				div.append("<input class=\'check\' name=\'"+segment.id+"\' id=\'c"+segment.seats[rbm].id+"\'  type=\'checkbox\' value=\'"+segment.seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
     				rbm++
     			}
     		}
@@ -298,6 +298,10 @@ $(document).on('click',"#submit",function(e){
 				invited=invited-1
 				
 		for(i=0;i<invited;i++){
+			var s=$("#c"+seats[i].id)
+			s.prop('disabled',true)
+			s.prop('checked',true)
+			
 			var data=JSON.stringify({
 					"institution":institution,
 					"hall":hall,
@@ -309,10 +313,14 @@ $(document).on('click',"#submit",function(e){
 					
 			})
 			
-			callReservation(data,"false");
-		}
+				callReservation(data,"false");
+			}
 		}else{
 			for(i=0;i<seats.length;i++){
+				var s=$("#c"+seats[i].id)
+				s.prop('disabled',true)
+				s.prop('checked',true)
+						
 				var data=JSON.stringify({
 						"institution":institution,
 						"hall":hall,
@@ -346,7 +354,8 @@ $(document).on('click',"#submit",function(e){
 			}else
 				if( index < invited-1 )
 			        return true;
-			
+			$("#c"+seats[index].id).prop('disabled',true)
+			$("#c"+seats[index].id).prop('checked',true)
 			var data=JSON.stringify({
 				"institution":institution,
 				"hall":hall,
@@ -386,17 +395,7 @@ function callReservation(data,invite){
 	
 		}
 	})
-	$.ajax({
-		url:'../reservation/send/reservation',
-		type:'POST',
-		data:data,
-		contentType : 'application/json',
-		dataType : 'json',
-		async:false,
-		success:function(data){
-			
-		}
-	})
+	
 }
 function getSeats(data){
 	

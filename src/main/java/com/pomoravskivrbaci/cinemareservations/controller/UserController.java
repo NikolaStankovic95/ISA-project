@@ -67,6 +67,7 @@ public class UserController {
 			users.remove(i.getUser());
 		}
 		List<User> notFriends = loggedUserFriends(userProfile, users);
+		notFriends.sort((user1,user2)->user1.getName().compareTo(user2.getName()));
 		request.setAttribute("notFriends", notFriends);
 
 		request.setAttribute("user", userProfile);
@@ -86,6 +87,8 @@ public class UserController {
 			users.remove(i.getUser());
 		}
 		List<User> notFriends = loggedUserFriends(loggedUser, users);
+		notFriends.sort((user1,user2)->user1.getName().compareTo(user2.getName()));
+
 		request.getSession().setAttribute("loggedUser", loggedUser);
 		return new ResponseEntity<List<User>>(notFriends, HttpStatus.OK);
 
@@ -151,6 +154,7 @@ public class UserController {
 	public ResponseEntity<List<Friendship>> findUserFriends(HttpServletRequest request) {
 		User loggedUser = (User) request.getSession().getAttribute("loggedUser");
 		List<Friendship> userFriends = userService.findFriendRequests(loggedUser, true);
+		
 		request.setAttribute("friends", userFriends);
 		return new ResponseEntity<List<Friendship>>(userFriends, HttpStatus.OK);
 

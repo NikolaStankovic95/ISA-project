@@ -230,6 +230,8 @@ public class ReservationController {
 					reservationService.save(reservation);
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
+					producer.sendMessageTo("reservation",reservation.getSeats().getId());
+					
 					return new ResponseEntity<>(reservation,HttpStatus.OK);
 				} catch (MailException | InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -240,6 +242,8 @@ public class ReservationController {
 				reservation.setAccepted(true);
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
+				producer.sendMessageTo("reservation",reservation.getSeats().getId());
+				
 				return new ResponseEntity<>(reservation,HttpStatus.OK);
 			}
 		}else
@@ -250,7 +254,6 @@ public class ReservationController {
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public void  sender(@PathVariable String topic, @RequestBody Reservation reservation){
-		producer.sendMessageTo(topic,reservation.getSeats().getId());
 		
 	}
 	

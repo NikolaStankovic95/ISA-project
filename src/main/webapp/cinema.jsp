@@ -123,7 +123,7 @@ function back(rbrDIV) {
 
    document.getElementById("reservation"+(rbrDIV)).style.display = "block";
    document.getElementById("reservation"+(rbrDIV+1)).style.display = "none";
-     
+   getSeats($('#projectionHalls option:selected').val());   
 }
 
 </script>

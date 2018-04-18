@@ -24,6 +24,7 @@ public interface ReservationRepository extends PagingAndSortingRepository<Reserv
 	void update(User u,Long id);
 	
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Transactional
 	Reservation save(Reservation reservation);
 	List<Reservation> findByOwnerId(Long id);
 } 
