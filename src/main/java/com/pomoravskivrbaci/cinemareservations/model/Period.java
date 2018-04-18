@@ -13,7 +13,7 @@ public class Period implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 
-	@Column(name="date",unique=true,nullable=false)
+	@Column(name="date", nullable=false)
 	protected Date date;
 
 	@Column(name="date_end", nullable=false)

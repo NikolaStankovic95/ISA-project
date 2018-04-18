@@ -6,7 +6,9 @@ var seats=[];
 var period;
 window.onload=function(){
 	var date=new Date();
+	var now= date.toISOString().slice(0,10)
 	document.getElementById('calendar').value = date.toISOString().slice(0,10);
+	$('#calendar').prop('min', now);
 
 }
 function getLoggedUser(){
@@ -110,11 +112,11 @@ function setSeats(div,segment){
 	var rbm=0
 	for(r=0;r<segment.numberOfRows;r++){
 			for(k=0;k<segment.numberOfColumns;k++){
-    			if(segment.seats[rbm].free==true){
-    				div.append('<input class=\'check\'  type=\'checkbox\' value=\''+segment.seats[rbm].id+'\'>');
+    			if(segment.seats[rbm].free==false){
+    				div.append('<input class=\'check\' name=\''+segment.id+'\' id=\'c'+segment.seats[rbm].id+'\' type=\'checkbox\' value=\''+segment.seats[rbm].id+'\'>');
     				rbm++
     			}else{
-    				div.append("<input class=\'check\' type=\'checkbox\' value=\'"+segment.seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
+    				div.append("<input class=\'check\' name=\'"+segment.id+"\' id=\'c"+segment.seats[rbm].id+"\'  type=\'checkbox\' value=\'"+segment.seats[rbm].id+"\'  checked  {checkStat == 1 ? disabled : }>");
     				rbm++
     			}
     		}
@@ -133,11 +135,11 @@ function convertTime(time){
 }
 function getProjectionPeriods(){
 	$("#term").empty();
-	if($('#projections option:selected').val()!=undefined){
+	if($('#projectionHalls option:selected').val()!=undefined){
 
 		
 		$.ajax({
-			url:"../reservation/getProjectionsPeriod/"+$('#projections option:selected').val(),
+			url:"../reservation/getProjectionsPeriod/"+$('#projectionHalls option:selected').val()+"/"+$('#projections option:selected').val(),
 			type:"GET",
 			async:false,
 			contentType : 'application/json',
@@ -174,14 +176,19 @@ $(document).on('click',"#Next1",function(e){
 		}
 	})
 	getCinemaProjections();
-	getProjectionPeriods();
 	getProjectionHalls();
+	getProjectionPeriods();
+	getProjectionPrice();
 
 		
 })
 $(document).on('change',"#calendar",function(e){
 	getCinemaProjections();
 	getProjectionHalls();
+	getProjectionPeriods();
+	getProjectionPrice()
+})
+$(document).on('change',"#projectionHalls",function(e){
 	getProjectionPeriods();
 	
 })
@@ -227,7 +234,7 @@ $(document).on('change',"#projections",function(e){
 	//getCinemaProjections();
 	getProjectionHalls();
 	getProjectionPeriods();
-	
+	getProjectionPrice()
 })
 
 $(document).on('change',"#nameOfCinema",function(e){
@@ -269,17 +276,19 @@ function findInvitedUsers(index){
 
 $(document).on('click',"#submit",function(e){
 	var checkList=[];
+	var segment=[];
 	$("input:checkbox[type=checkbox]:checked").each(function(){
 		
 		if($(this).prop('disabled')==false){
 			checkList.push($(this).val());
+			segment.push($(this).attr("name"));
+			
 		}
 	});
 	var invited=$("#invitedFriends option").length;
 	if(checkList.length!=0){
 		reserveSeats(checkList);
 		
-		console.log("SEDISTA"+seats);
 		getSelectedPeriod();
 		getHallById();
 		getProjectionById();
@@ -289,27 +298,38 @@ $(document).on('click',"#submit",function(e){
 				invited=invited-1
 				
 		for(i=0;i<invited;i++){
+			var s=$("#c"+seats[i].id)
+			s.prop('disabled',true)
+			s.prop('checked',true)
+			
 			var data=JSON.stringify({
 					"institution":institution,
 					"hall":hall,
 					"seats":seats[i],
 					"projection":projection,
 					"period":period,
-					"owner":u
+					"owner":u,
+					"hallSegment":getHallSegment(segment[i])
 					
 			})
 			
-			callReservation(data,"false");
-		}
+				callReservation(data,"false");
+			}
 		}else{
 			for(i=0;i<seats.length;i++){
+				var s=$("#c"+seats[i].id)
+				s.prop('disabled',true)
+				s.prop('checked',true)
+						
 				var data=JSON.stringify({
 						"institution":institution,
 						"hall":hall,
 						"seats":seats[i],
 						"projection":projection,
 						"period":period,
-						"owner":u
+						"owner":u,
+						"hallSegment":getHallSegment(segment[i])
+						
 						
 				})
 				
@@ -334,7 +354,8 @@ $(document).on('click',"#submit",function(e){
 			}else
 				if( index < invited-1 )
 			        return true;
-			
+			$("#c"+seats[index].id).prop('disabled',true)
+			$("#c"+seats[index].id).prop('checked',true)
 			var data=JSON.stringify({
 				"institution":institution,
 				"hall":hall,
@@ -342,7 +363,8 @@ $(document).on('click',"#submit",function(e){
 				"projection":projection,
 				"period":period,
 				"owner":u,
-				"invited":findInvitedUsers(index)
+				"invited":findInvitedUsers(index),
+				"hallSegment":getHallSegment(segment[index])
 			
 				
 		})
@@ -373,17 +395,7 @@ function callReservation(data,invite){
 	
 		}
 	})
-	$.ajax({
-		url:'../reservation/send/reservation',
-		type:'POST',
-		data:data,
-		contentType : 'application/json',
-		dataType : 'json',
-		async:false,
-		success:function(data){
-			
-		}
-	})
+	
 }
 function getSeats(data){
 	
@@ -527,4 +539,29 @@ function combo2() {
 		}
 	})
 	
+}
+function getHallSegment(segmentId){
+	var hallSegment;
+	$.ajax({
+		url:'../reservation/getHallSegment/'+segmentId,
+		type:'GET',
+		contentType:'application/json',
+		async:false,
+		dataType:'json',
+		success:function(data){
+			hallSegment=data;
+		}
+	})
+	return hallSegment;
+}
+function getProjectionPrice(){
+	if($("#projections option:selected").val()!=undefined){
+		$.ajax({
+			url:'../reservation/getProjecitonPrice/'+$("#projections option:selected").val(),
+			type:'GET',
+			success:function(data){
+				$("#price").text(data);
+			}
+		})
+	}
 }

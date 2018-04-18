@@ -26,6 +26,11 @@ public class PeriodValidator extends Validator {
             return false;
         }
 
+        if(period.getDate().equals(period.getDateEnd())) {
+            addResult("Period start and end cannot be the same.");
+            return false;
+        }
+
         if(period.getDate().after(period.getDateEnd())) {
             isValid = false;
             addResult("Start date of period must be before end date.");

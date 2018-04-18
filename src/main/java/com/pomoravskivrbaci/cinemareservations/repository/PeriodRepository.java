@@ -10,6 +10,9 @@ import com.pomoravskivrbaci.cinemareservations.model.Period;
 public interface PeriodRepository extends PagingAndSortingRepository<Period,Long>{
 
 	public List<Period> findByProjectionId(Long id);
-	public Period findById(Long id);
+	public List<Period> findByHalls_Id(Long id);
 	
+	public Period findById(Long id);
+	List<Period> findByHalls_IdAndProjectionId(Long parseLong, Long projectionId);
+
 }

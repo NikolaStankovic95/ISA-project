@@ -106,11 +106,11 @@ public class ReservationController {
 		return onThisDate;
 	}
 
-	@RequestMapping("/getProjectionsPeriod/{id}")
-	private @ResponseBody List<Period> findProjectionsPeriod(@PathVariable("id") String id){
+	@RequestMapping("/getProjectionsPeriod/{id}/{projectionId}")
+	private @ResponseBody List<Period> findProjectionsPeriod(@PathVariable("id") String id,@PathVariable("projectionId") Long projectionId){
 		List<Period> periods=new ArrayList<Period>();
 		if(id!="" || id!=null){
-			periods=periodService.findByProjectionId(Long.parseLong(id));
+			periods=periodService.findByHallIdAndProjectionId(Long.parseLong(id),projectionId);
 			for(Period item:periods){
 				Timestamp stamp = new Timestamp(item.getDate().getTime());
 				Date date = new Date(stamp.getTime());
@@ -159,19 +159,7 @@ public class ReservationController {
 		Projection projection=projectionService.findById(id);
 		return new ResponseEntity<Projection>(projection,HttpStatus.OK);
 	}
-	@RequestMapping("/cinemas")
-	private String cinemasHomepage(HttpServletRequest request) {
-		List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
-		request.setAttribute("cinemas", listOfCinemas);
-		return "forward:/cinema_homepage.jsp";
-	}
 
-	@RequestMapping("/theatres")
-	private String theatresHomepage(HttpServletRequest request) {
-		List<Institution> listOfTheatres=institutionService.findByType(InstitutionType.THEATRE);
-		request.setAttribute("theatres", listOfTheatres);
-		return "forward:/theatre_homepage.jsp";
-	}
 	
 	@RequestMapping(value="/getHallSeats",	method=RequestMethod.POST,	
 			consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -187,8 +175,8 @@ public class ReservationController {
 		for(Reservation reservation:allReservations){
 			for(HallSegment segment:hallSegments){
 				for(Seat seat:segment.getSeats()){
-					if(seat.getRegNumber().equals(reservation.getSeat().getRegNumber())){
-						seat.setFree(false);
+					if(seat.getId().equals(reservation.getSeats().getId())){
+						seat.setFree(true);
 					}
 				}
 			}
@@ -242,15 +230,20 @@ public class ReservationController {
 					reservationService.save(reservation);
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
+					producer.sendMessageTo("reservation",reservation.getSeats().getId());
+					
 					return new ResponseEntity<>(reservation,HttpStatus.OK);
 				} catch (MailException | InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
 			}else{
+				
 				reservation.setAccepted(true);
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
+				producer.sendMessageTo("reservation",reservation.getSeats().getId());
+				
 				return new ResponseEntity<>(reservation,HttpStatus.OK);
 			}
 		}else
@@ -261,10 +254,19 @@ public class ReservationController {
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public void  sender(@PathVariable String topic, @RequestBody Reservation reservation){
-		producer.sendMessageTo(topic,reservation.getSeats().getId());
 		
 	}
 	
-	
-	
+	@RequestMapping(value="/getHallSegment/{id}")
+	private ResponseEntity<HallSegment> getHallSegment(@PathVariable("id") String id){
+		HallSegment segment=hallSegmentService.findById(Long.parseLong(id));
+		return new ResponseEntity<HallSegment>(segment,HttpStatus.OK);
+	}
+	@RequestMapping(value="/getProjecitonPrice/{id}")
+	private @ResponseBody double getProjectionPrice(@PathVariable("id") Long id){
+		Projection projection=projectionService.findById(id);
+		return projection.getPrice();
+	}
+
+
 }

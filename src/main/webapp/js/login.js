@@ -14,18 +14,18 @@ $(document).on('click','#login',function(e){
 		dataType : 'json',
 		data:user,
 		success:function(data){
-			if(data!="/Login.html"){
+			if(data!="/Login.jsp"){
 				window.top.location=data;
 				
 			}
 		},
 		error:function(data){
-				alert("You inserted wrong email or password");
+				toastr.error("You inserted wrong email or password");
 				
 			
 		}
 	})
 })
 $(document).on('click','#register',function(e){
-	window.top.location="Registration.html";
+	window.top.location="Registration.jsp";
 })

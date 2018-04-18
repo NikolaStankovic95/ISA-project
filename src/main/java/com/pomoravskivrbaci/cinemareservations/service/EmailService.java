@@ -69,7 +69,7 @@ public class EmailService {
 		mail.setTo(owner.getEmail());
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sistem bioskopa/pozorišta");
-		mail.setText("Uspešno ste rezervisali "+reservation.getSeats().getRegNumber()+" mesto za projekciju "+reservation.getProjection().getName()
+		mail.setText("Uspešno ste rezervisali "+reservation.getSeat().getRegNumber()+" mesto za projekciju "+reservation.getProjection().getName()
 				+" u "+reservation.getInstitution().getName()+" na dan "+" "+date+" "+time+ " u sali "+
 				reservation.getHall().getName());
 		

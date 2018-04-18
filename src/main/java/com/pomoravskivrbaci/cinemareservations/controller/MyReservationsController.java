@@ -65,7 +65,7 @@ public class MyReservationsController {
 	    long diffMinutes = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	    long diffHours = TimeUnit.HOURS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	    
-	    	if(diffDays>=0 && diffMinutes>30){
+	    	if(diffDays>=0 && diffMinutes>30 && reservation.getOwner().getId()==user.getId()){
 	    		producer.sendMessageTo("reservation",reservation.getSeats().getId());
 	    		System.out.println(reservations.size());
 	    		reservations.removeIf(item->item.getId().equals(reservation.getId()));
