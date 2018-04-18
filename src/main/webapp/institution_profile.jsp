@@ -46,7 +46,7 @@
 
                             <tr>
                                 <td>Ocena:</td>
-                                
+
                                 <c:if test="${ institution.getAverageRating() != 'NaN' }">
                                     <td>${ institution.getAverageRating() }</td>
                                 </c:if>
@@ -56,7 +56,7 @@
                                 </c:if>
 
                             </tr>
-                        
+
                         </table>
                     </div>
                 </div>

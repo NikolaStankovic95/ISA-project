@@ -36,7 +36,7 @@
             <ul id="nav" class="nav navbar-nav">
                 <c:if test="${not empty loggedUser}">
 
-                    <li><a href="/user/${loggedUser.id}">Profile</a></li>
+                    <li><a  href="/userController/user/${loggedUser.id}">Profile</a></li>
                     <li><a href="/myReservations/">My reservations</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +60,7 @@
                 </c:if>
                 <c:if test="${not empty loggedUser}">
                     <li><a href="/updateUser.jsp">Update account</a></li>
-                    <li><a href="/logout">Log out</a></li>
+                    <li><a href="/userController/logout">Log out</a></li>
                 </c:if>
 
             </ul>

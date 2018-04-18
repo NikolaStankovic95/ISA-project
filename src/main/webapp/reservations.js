@@ -21,37 +21,46 @@ function convertDate(time){
 }
 $(document).on('click','.delete',function(e){
 	e.preventDefault();
-	var confirmed=confirm("Are you sure you want to decline reservation?")
-	if(confirmed){
-		var url=$(this).attr("href");
-		$.ajax({
-			url:url,
-			type:"DELETE",
-			success:function(data){
-				if(data.length!=0){
-					$("tr:not('.header')").remove();
-					
-					$.each(data,function(index,reservation){
-						
-						$("#table").append("<tr><td>"+reservation.institution.name+"</td>" +
-								"<td>"+reservation.hall.name+"</td>" +
-								"<td>"+reservation.projection.name+"</td>" +
-								"<td>"+convertDate(reservation.period.date)+"</td>" +
-								"<td>"+reservation.seats.regNumber+"</td>" +
-								"<td>"+reservation.hallSegment.type+"</td>" +
-								"<td><a class=\"delete\" href='/myReservations/delete/"+reservation.id+"\'>Decline</a></td></tr>");
-					})
-				}else if(data.length==0){
-					$("tr:not('.header')").remove();
-					
-				}
-				else{
-					toastr.error("You can decline your reservation only 30 minutes before projection starts!")
-				}
-			},error:function(data){
-				toastr.error("You can decline your reservation only 30 minutes before projection starts!")
-				
-			}
-		})
-	}
+	  var url=$(this).attr("href");
+	toastr.info("<br /><br /><button type='button' id='confirmationRevertYes' class='btn clear'>Yes</button>&nbsp&nbsp&nbsp" +
+			"<button type='button' id='confirmationRevertNo' class='btn clear'>No</button>",'Are you sure you want to decline reservation?',
+			{
+      closeButton: false,
+      allowHtml: true,
+      onShown: function (toast) {
+          $("#confirmationRevertYes").click(function(){
+        	
+      		$.ajax({
+      			url:url,
+      			type:"DELETE",
+      			success:function(data){
+      				if(data.length!=0){
+      					$("tr:not('.header')").remove();
+      					
+      					$.each(data,function(index,reservation){
+      						
+      						$("#table").append("<tr><td>"+reservation.institution.name+"</td>" +
+      								"<td>"+reservation.hall.name+"</td>" +
+      								"<td>"+reservation.projection.name+"</td>" +
+      								"<td>"+convertDate(reservation.period.date)+"</td>" +
+      								"<td>"+reservation.seats.regNumber+"</td>" +
+      								"<td>"+reservation.hallSegment.type+"</td>" +
+      								"<td><a class=\"delete\" href='/myReservations/delete/"+reservation.id+"\'>Decline</a></td></tr>");
+      					})
+      				}else if(data.length==0){
+      					$("tr:not('.header')").remove();
+      					
+      				}
+      				else{
+      					toastr.error("You can decline your reservation only 30 minutes before projection starts!")
+      				}
+      			},error:function(data){
+      				toastr.error("You can decline your reservation only 30 minutes before projection starts!")
+      				
+      			}
+      		})
+          });
+        }
+  });
+	
 })

@@ -75,7 +75,7 @@
 .rotatedRight.hall3 {
 	display: none;
 	position: absolute;
-	top: 70px;
+	top: 200px;
 	left: 300px;
 	border-radius: 25%;
 	padding: 10px 10px 10px 10px;
@@ -124,6 +124,7 @@
 .hall3{
 	position:relative;
 	left:-400px;
+	top:100px;
 }
 .navbar-default .navbar-nav>li>a:hover{
 

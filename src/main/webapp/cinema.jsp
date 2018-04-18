@@ -33,9 +33,13 @@
 				stompClient.subscribe("/topic/reservation", function(data) {
 					var message = data.body;
 					$('input[type=checkbox]').each(function () {
-						if($(this).val()==message){
+						if($(this).val()==message && !$(this).is(':checked')){
 							$(this).prop('disabled','disabled')
 							$(this).prop('checked','checked')
+							
+						}else if($(this).val()==message && $(this).is(':checked')){
+							$(this).prop('disabled',false)
+							$(this).prop('checked',false)
 							
 						}
 				});
@@ -46,61 +50,9 @@
 </head>
 <body>
 	<c:if test="${empty loggedUser }">
-		<c:redirect url="/Login.html"/>
+		<c:redirect url="/Login.jsp"/>
 	</c:if>
-	<nav  id="navigation" class="navbar navbar-default">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div id="navigation" class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-					aria-expanded="false">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-
-
-			</div>
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-				<ul id="nav" class="nav navbar-nav">
-					<c:if test="${not empty loggedUser}">
-				
-							<li><a  href="../userController/user/${loggedUser.id}">Profile</a></li>
-							<li><a href="../../myReservations/">My reservations</a></li>
-										<li class="nav-item dropdown">
-      				   <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Create reservation
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="../../reservation/cinemaReservation">Cinema reservation</a>
-          <a class="dropdown-item" href="../../reservation/theatreReservation">Theatre reservation</a>
-        </div>
-      </li>
-					</c:if>
-					<li><a href="../../reservation/cinemas">Cinemas</a></li>
-					<li><a href="../../reservation/theatres">Theatres</a></li>
-		
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<c:if test="${empty loggedUser}">
-						<li><a href="../../Login.html" id="Login">Log in</a></li>
-						<li><a href="../../Registration.html" id="Login">Registration</a></li>
-			
-					</c:if>
-					<c:if test="${not empty loggedUser}">
-						<li><a href="../updateUser.jsp">Update account</a></li>
-						<li><a href="../userController/logout">Log out</a></li>
-					</c:if>
-					
-				</ul>
-			</div>
-		</div>
-		
-	</nav>
+	 <c:import url="_navbar.jsp"></c:import>
 	<c:if test="${not empty loggedUser}">
 	<div class="center">	
 		<div id="reservation1">
@@ -127,14 +79,15 @@
 		</select><br> <label>Projekcija</label> <select class="form-control" id="projections" name="id"></select><br>
 		<label>Datum</label><br> <input type="Date" id="calendar"><br>
 		<label>Termin</label> <select class="form-control" id="term"></select><br> <label>Sala</label>
-		<select class="form-control" id="projectionHalls"></select><br> <input type="button"
+		<select class="form-control" id="projectionHalls"></select><br><label >Price:</label> &nbsp&nbsp&nbsp<label id='price'></label><br> <input type="button"
 			value="Next" id="Next2" class="btn btn-primary" onclick="next(3)"> <input
 			type="button" value="Back" class="btn btn-primary" onclick="back(1)">
 
 	</div>
 	<div id="reservation3" style="display:none">
-    <label class="hall3">Sala</label>
+    <label class="hall3">Sala</label><br><br>
     <select class="form-control hall3" id="projectionHalls2"></select><br>
+    <br><br><br>
     <div>
       <div class="rotatedLeft hall3"></div>
       <div class="rotatedRight hall3"></div>
@@ -170,7 +123,7 @@ function back(rbrDIV) {
 
    document.getElementById("reservation"+(rbrDIV)).style.display = "block";
    document.getElementById("reservation"+(rbrDIV+1)).style.display = "none";
-     
+   getSeats($('#projectionHalls option:selected').val());   
 }
 
 </script>

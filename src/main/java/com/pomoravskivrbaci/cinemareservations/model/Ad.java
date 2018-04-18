@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 
 
 
@@ -22,8 +23,15 @@ public class Ad implements Serializable  {
 	protected String name;
 	@Column(nullable = true)
 	protected String description;
-	//dodaj datum i sliku
+	@Column(nullable = true)
+	protected String imageUrl;
 	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 	@ManyToOne(optional = false)
 	private FanZone fanZone;
 	
@@ -53,6 +61,15 @@ public class Ad implements Serializable  {
 	protected User publisher;
 	public User getPublisher() {
 		return publisher;
+	}
+	@Version	
+	private Long version;
+	
+	public Long getVersion() {
+		return version;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 	public void setPublisher(User publisher) {
 		this.publisher = publisher;

@@ -12,15 +12,18 @@ $(document).on('click', '#add', function(e) {
 		"quantity" : quantity,
 
 	})
+	var url = window.location.href;
+	var id = url.substring(url.lastIndexOf('#')+1,url.length);
 	$.ajax({
 			type : 'POST',
 
-			url : '/adController/addOfficialAd',
+			url : '/adController/addOfficialAd/'+id,
 			contentType : 'application/json',
 			dataType : 'json',
 			data : ad,
 			success : function(data) {
-				window.top.location = "fanZone.html";
+				alert("OK");
+				window.top.location="/fanzone/"+id;
 			}
 		})
 })

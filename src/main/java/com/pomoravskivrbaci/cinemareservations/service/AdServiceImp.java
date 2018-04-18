@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pomoravskivrbaci.cinemareservations.model.Ad;
 import com.pomoravskivrbaci.cinemareservations.model.AdStatus;
 import com.pomoravskivrbaci.cinemareservations.model.FanZone;
+import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.repository.AdRepository;
 import com.pomoravskivrbaci.cinemareservations.repository.FanZoneRepository;
 
@@ -33,8 +34,8 @@ public class AdServiceImp implements AdService {
 	}
 
 	@Override
-	public List<Ad> getInitAds() {
-		return adRepository.getInitAds();
+	public List<Ad> getInitAds(User user) {
+		return adRepository.getInitAds(user);
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class AdServiceImp implements AdService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = false)
 	public void update(AdStatus status, Long id) {
 		adRepository.update(status, id);
 		
@@ -52,13 +53,13 @@ public class AdServiceImp implements AdService {
 
 	@Override
 	public List<Ad> getOfficalAds(long l) {
-		FanZone fz = fanZoneRepository.findById(1L);
+		FanZone fz = fanZoneRepository.findById(l);
 		return adRepository.getOfficialAds(fz);
 	}
 
 	@Override
 	public List<Ad> getUnofficalAds(long l) {
-		FanZone fz = fanZoneRepository.findById(1L);
+		FanZone fz = fanZoneRepository.findById(l);
 		return adRepository.getUnofficialAds(fz);
 	}
 
@@ -66,6 +67,19 @@ public class AdServiceImp implements AdService {
 	@Transactional
 	public void updateQuantity(int i, Long id) {
 		adRepository.updateQuantity(i,id);
+		
+	}
+
+	@Override
+	public void delete(Ad foundedAd) {
+		adRepository.delete(foundedAd);
+		
+	}
+
+	@Override
+	@Transactional
+	public void updateAd(String name, String description, int quantity, Long id) {
+		adRepository.updateAd(name, description, quantity, id);
 		
 	}
 

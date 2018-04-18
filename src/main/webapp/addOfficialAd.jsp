@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="jquery.min.js"> </script>	
-	<script type="text/javascript" src="js/addOfficialAd.js"> </script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery.min.js"> </script>	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/addOfficialAd.js"> </script>
 	
 	<title>Create Ad</title>
 </head>

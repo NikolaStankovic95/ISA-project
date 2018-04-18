@@ -39,7 +39,7 @@ public class RegistrationController {
 	private EmailService emailService;
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getHomePage() {
-		return "redirect:/Registration.html";
+		return "redirect:/Registration.jsp";
 	}
 	
 	@RequestMapping(value="/login")
@@ -58,12 +58,12 @@ public class RegistrationController {
 				return new ResponseEntity<>(uri, HttpStatus.OK);
 			}
 			else {
-				 uri=new URI("/Login.html");
+				 uri=new URI("/Login.jsp");
 				return  new ResponseEntity<>(uri, HttpStatus.BAD_REQUEST);
 				}
 		}else {
 			
-			 uri=new URI("/Login.html");
+			 uri=new URI("/Login.jsp");
 			return  new ResponseEntity<>(uri, HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -80,10 +80,10 @@ public class RegistrationController {
 		if(user!=null){
 			
 		int flag=userService.setFixedActivatedFor(true, user.getId());
-		return "redirect:/Login.html";
+		return "redirect:/Login.jsp";
 		
 		}else {
-			return "redirect:/Login.html";
+			return "redirect:/Login.jsp";
 		}
 		
 	}
