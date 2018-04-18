@@ -1,5 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -46,6 +48,9 @@ public class Reservation {
 	protected User invited;
 	
 	protected boolean accepted;
+
+	@Column(name = "discount")
+	protected Integer discount = 0;
 	
 	public User getInvited() {
 		return invited;
@@ -116,7 +121,17 @@ public class Reservation {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	
-	
-	
+
+	public Integer getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(Integer discount) {
+		this.discount = discount;
+	}
+
+	@JsonIgnore
+	public Double getDiscountedPrice() {
+		return projection.getPrice() - projection.getPrice() * discount / 100;
+	}
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -47,13 +49,35 @@ public class ProjectionController {
     }
 
     @RequestMapping(value = "projection/{id}", method = RequestMethod.PATCH)
-    private ResponseEntity editProjectionInfo(@PathVariable("id")Long id, @RequestBody Projection projection) {
+    private ResponseEntity editProjectionInfo(@PathVariable("id")Long id, @RequestBody Projection newProjection) {
+        Projection projection = projectionService.findById(id);
+        projection.setActors(newProjection.getActors());
+        projection.setDescription(newProjection.getDescription());
+        projection.setDirectorName(newProjection.getDirectorName());
+        projection.setDuration(newProjection.getDuration());
+        if(newProjection.getImageLink() != null && !newProjection.getImageLink().isEmpty()) {
+            projection.setImageLink(newProjection.getImageLink());
+        }
+        projection.setGenre(newProjection.getGenre());
+        projection.setName(newProjection.getName());
+        projection.setPrice(newProjection.getPrice());
+        newProjection.getHalls().forEach(hall -> {
+            if(projection.getHalls().stream().noneMatch(chosenHall -> chosenHall.getId().equals(hall.getId()))) {
+                projection.addHall(hallService.findById(hall.getId()));
+            }
+        });
+        newProjection.getPeriods().forEach(period -> {
+            Period periodFromDatabase = periodService.findById(period.getId());
+            periodFromDatabase.setProjection(projection);
+            projection.addPeriod(periodFromDatabase);
+        });
         Validator projectionValidator = new ProjectionValidator(projection);
         if(!projectionValidator.validate()) {
             System.out.println(projectionValidator.getResults());
             return new ResponseEntity(projectionValidator.getResults(), HttpStatus.BAD_REQUEST);
         }
-        projectionService.setProjectionInfoById(id, projection.getName(), projection.getActors(), projection.getGenre(), projection.getDescription(), projection.getDirectorName(), projection.getPrice());
+
+        projectionService.saveOrUpdate(projection);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -128,6 +152,9 @@ public class ProjectionController {
         List<Period> allPeriods = projection.getPeriods();
         List<Period> periodsForHall = new ArrayList<>();
         for(Period period : allPeriods) {
+            if(period.getDate().before(new Date())) {
+                continue;
+            }
             for(Hall periodHall : period.getHalls()) {
                 if (periodHall.getId().equals(hallId)) {
                     periodsForHall.add(period);

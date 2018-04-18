@@ -1,0 +1,47 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.info-container {
+    margin-left: 20px;
+    margin-top: 40px;
+}
+
+#map {
+    margin-left: 150px;
+    margin-top: 30px;
+    width: 300px;
+    height: 300px;
+}
+
+.page-layout {
+    margin-left: 30px;
+}
+
+.projection-image {
+    width: 100px;
+    height: auto;
+    margin: 20px;
+}
+
+.projection-preview {
+    display: flex;
+    align-items: center;
+}
+
+.logged-user-actions-container {
+    margin-top: 20px;
+    display: flex;
+}
+
+.repertoire-container {
+    margin-right: 150px;
+}
+
+.fast-reservation-preview {
+    width: 320px;
+    margin: 30px;
+    padding: 20px;
+    border: 1px solid gray;
+}
