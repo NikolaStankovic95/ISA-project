@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="jquery.min.js">
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery.min.js">
 	
 </script>
-<script type="text/javascript" src="js/fanZoneAdmin.js">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/fanZoneAdmin.js">
 	
 </script>
 

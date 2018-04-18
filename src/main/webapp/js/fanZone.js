@@ -1,37 +1,31 @@
-window.onload = function() {
+var url = window.location.href;
+	var fzid = url.substring(url.lastIndexOf('/')+1,url.length);
 
+	window.onload = function() {
+	
+	console.log("id je" + fzid);
 	$.ajax({
-		
-		url : "fanZoneController/getFanzone",
+		url : "../adController/getOfficialAds/"+fzid,
 		type : "GET",
 		contentType : 'application/json',
 		dataType : 'json',
 
 		success : function(data) {
-
-			$("#name").append(data.name);
-		}
-
-	});
-
-	$.ajax({
-		url : "adController/getOfficialAds",
-		type : "GET",
-		contentType : 'application/json',
-		dataType : 'json',
-
-		success : function(data) {
+			console.log(data);
 			$.each(data, function(index, ad) {
+				
 				$("#OfficialAds").append(
 						"<fieldset>Title:" + ad.name
 								+ "<br> Description: " + ad.description
-								+ "<button onClick=Reserve("+ad.id+")>Reserve</button></fieldset>");
+								+ "<button onClick=Reserve("+ad.id+")>Reserve</button>" 
+								+"<button onClick=removeAd("+ad.id+")>Remove</button>"
+								+"<button onClick=changeAd("+ad.id+")>Remove</button></fieldset>");
 			})
 		}
 	});
 	
 	$.ajax({
-		url : "adController/getUnofficialAds",
+		url : "../adController/getUnofficialAds/"+fzid,
 		type : "GET",
 		contentType : 'application/json',
 		dataType : 'json',
@@ -61,17 +55,16 @@ $(document).on('click', '#adshop', function(e) {
 })
 
 $(document).on('click', '#addAd', function(e) {
-	console.log("Pogodio");
-	window.top.location="addOfficialAd.html";
+	window.top.location="/fanzone/createofficial#"+fzid;
 })
 $(document).on('click', '#addAdun', function(e) {
 	console.log("Pogodio");
-	window.top.location="addUnofficialAd.html";
+	window.top.location="/fanzone/createunofficial#"+fzid;
 })
 
 function Reserve(id){
 	$.ajax({
-		url : "adController/reserveAd/"+id,
+		url : "../adController/reserveAd/"+id,
 		type : "POST",
 		contentType : 'application/json',
 		dataType : 'json',
@@ -89,12 +82,28 @@ function Reserve(id){
 	});
 }
 
+function removeAd(id){
+	$.ajax({
+		url : "../adController/deleteAd/"+id,
+		type : "POST",
+		contentType : 'application/json',
+		dataType : 'json',
+
+		success : function(data) {
+				location.reload()
+			
+		},
+		error : function(error){
+			alert("You must be logged");
+		}
+	});
+}
 function makeBid(id){
 	var bid = $("#bid"+id+"").val();
 	var info = bid + "#" + id;
 	console.log(info);
 	$.ajax({
-		url : "adController/makeBid",
+		url : "../adController/makeBid",
 		type : "POST",
 		contentType : 'application/json',
 		data: info,
@@ -110,4 +119,8 @@ function makeBid(id){
 			alert("You must be logged");
 		}
 	});
+}
+
+function changeAd(id){
+	window.top.location="../adController/changeAd/"+id;
 }

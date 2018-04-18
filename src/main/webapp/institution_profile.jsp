@@ -14,6 +14,7 @@
 <body>
     <div>
         <h3>${ institution.name }</h3>
+        <a href = "/fanzone/${institution.id}">Fan zone </a>
         <p>Adresa: ${ institution.address }</p>
         <p>Ocena: ${ institution.getAverageRating() }</p>
     </div>

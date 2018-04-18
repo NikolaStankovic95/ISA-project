@@ -44,27 +44,49 @@ public class AdController {
 
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private UserService userService;
-	@RequestMapping(value = "/getOfficialAds", method = RequestMethod.GET)
-	private @ResponseBody List<Ad> getOfficialAds() {
-		List<Ad> ads = adService.getOfficalAds(1L);
+
+	
+	@RequestMapping(value = "/getAd/{id}", method = RequestMethod.GET)
+	private ResponseEntity <Ad> getAd(@PathVariable("id") Long id) {
+
+		Ad ad = adService.findById(id);
+
+		return new ResponseEntity <Ad>(ad,HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/getOfficialAds/{id}", method = RequestMethod.GET)
+	private @ResponseBody List<Ad> getOfficialAds(@PathVariable("id") Long id) {
+
+		List<Ad> ads = adService.getOfficalAds(id);
 
 		return ads;
 	}
 
-	@RequestMapping(value = "/getUnofficialAds", method = RequestMethod.GET)
-	private @ResponseBody List<Ad> getUnofficialAds() {
-		List<Ad> ads = adService.getUnofficalAds(1L);
-
+	@RequestMapping(value = "/getUnofficialAds/{id}", method = RequestMethod.GET)
+	private @ResponseBody List<Ad> getUnofficialAds(
+			@PathVariable("id") Long id, HttpServletRequest request) {
+		List<Ad> ads = adService.getUnofficalAds(id);
+		User loggedUser = (User) request.getSession()
+				.getAttribute("loggedUser");
+		
+		List<Ad> bidedAds = adReservationService.getMyBidedAds(loggedUser);
+		
+		for(Ad ad : bidedAds){
+			if(ads.contains(ad)){
+				ads.remove(ad);
+			}
+		}
 		return ads;
 	}
 
-	@RequestMapping(value = "/addOfficialAd", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/addOfficialAd/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<Ad> addOfficialAd(@RequestBody Ad ad,
-			HttpServletRequest request) throws IOException {
-		FanZone fz = fanZoneService.findFanZoneById(1L);
+			@PathVariable("id") Long id, HttpServletRequest request)
+			throws IOException {
+		FanZone fz = fanZoneService.findFanZoneById(id);
 		User loggedUser = (User) request.getSession()
 				.getAttribute("loggedUser");
 		ad.setPublisher(loggedUser);
@@ -80,10 +102,11 @@ public class AdController {
 		return new ResponseEntity<Ad>(addedAd, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/addUnofficialAd", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/addUnofficialAd/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<Ad> addUnofficialAd(@RequestBody Ad ad,
-			HttpServletRequest request) throws IOException {
-		FanZone fz = fanZoneService.findFanZoneById(1L);
+			@PathVariable("id") Long id, HttpServletRequest request)
+			throws IOException {
+		FanZone fz = fanZoneService.findFanZoneById(id);
 		User loggedUser = (User) request.getSession()
 				.getAttribute("loggedUser");
 		ad.setPublisher(loggedUser);
@@ -100,16 +123,22 @@ public class AdController {
 	}
 
 	@RequestMapping(value = "/getInitAds", method = RequestMethod.GET)
-	private @ResponseBody List<Ad> getInitAds() {
-		List<Ad> ads = adService.getInitAds();
+	private @ResponseBody List<Ad> getInitAds(HttpServletRequest request) {
+		User loggedUser = (User) request.getSession()
+				.getAttribute("loggedUser");
+		List<Ad> ads = adService.getInitAds(loggedUser);
 
 		return ads;
 	}
 
 	@RequestMapping(value = "/approveAd/{id}", method = RequestMethod.PATCH)
-	private ResponseEntity<Ad> approveAd(@PathVariable Long id) {
+	private ResponseEntity<Ad> approveAd(@RequestBody Ad ad,@PathVariable Long id) {
 		Ad foundedAd = adService.findById(id);
 		// foundedAd.setAdStatus(AdStatus.APPROVED);
+		System.out.println("Verzija nadjene: " +ad.getVersion()+ " Verzija poslate: "+ foundedAd.getVersion());
+		if(foundedAd.getVersion() != ad.getVersion()){
+			return new ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED);
+		}
 		adService.update(AdStatus.APPROVED, id);
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.NO_CONTENT);
 	}
@@ -139,6 +168,20 @@ public class AdController {
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/deleteAd/{id}", method = RequestMethod.POST)
+	private ResponseEntity<Ad> deleteAd(@PathVariable Long id,
+			HttpServletRequest request) {
+		Ad foundedAd = adService.findById(id);
+		/*
+		 * User loggedUser = (User) request.getSession()
+		 * .getAttribute("loggedUser"); if (loggedUser == null) { return new
+		 * ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED); }
+		 */
+		adService.delete(foundedAd);
+
+		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/makeBid", method = RequestMethod.POST)
 	private ResponseEntity<Ad> makeBid(@RequestBody String info,
 			HttpServletRequest request) {
@@ -153,7 +196,9 @@ public class AdController {
 			return new ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED);
 		}
 		foundedAd = adService.findById(id);
-		adReservationService.insertUnofficialAd(bid, foundedAd, loggedUser,0);
+		// adReservationService.save(new UnofficialAdReservation(bid, foundedAd,
+		// loggedUser,0);
+		adReservationService.insertUnofficialAd(bid, foundedAd, loggedUser, 0);
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
 	}
 
@@ -163,25 +208,74 @@ public class AdController {
 
 		User loggedUser = (User) request.getSession()
 				.getAttribute("loggedUser");
-		List<UnofficialAdReservation> myAds = adReservationService.getMyAds(loggedUser);
+		List<UnofficialAdReservation> myAds = adReservationService
+				.getMyAds(loggedUser);
 		if (loggedUser == null) {
-			return new ResponseEntity<List<UnofficialAdReservation>>(myAds, HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<List<UnofficialAdReservation>>(myAds,
+					HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<List<UnofficialAdReservation>>(myAds, HttpStatus.OK);
+		return new ResponseEntity<List<UnofficialAdReservation>>(myAds,
+				HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/notifyUsers", method = RequestMethod.PATCH)
 	private ResponseEntity<Ad> notifyUsers(@RequestBody String info) {
 		String[] str = info.split("#");
-		Long adId = Long.parseLong(str[0],10);
+		Long adId = Long.parseLong(str[0], 10);
 		Long userId = Long.parseLong(str[1], 10);
 		Ad foundedAd = adService.findById(adId);
 		adReservationService.AcceptAd(foundedAd);
 		User user = userService.findUserById(userId);
 		emailService.notifyAcceptedBider(user);
-		
-		List<User> rejected = adReservationService.getRejectedUsers(foundedAd,user);
+
+		List<User> rejected = adReservationService.getRejectedUsers(foundedAd,
+				user);
 		emailService.notifyRefussedBider(rejected);
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.NO_CONTENT);
+	}
+
+	@RequestMapping(value = "/getBidedAds", method = RequestMethod.GET)
+	private ResponseEntity<List<Object>> getBidedAds(HttpServletRequest request) {
+
+		User loggedUser = (User) request.getSession()
+				.getAttribute("loggedUser");
+		List<Object> myAds = adReservationService.getBidedAds(loggedUser);
+
+		request.setAttribute("ads", myAds);
+		return new ResponseEntity<List<Object>>(myAds, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/changeBid", method = RequestMethod.POST)
+	private ResponseEntity<Ad> changeBid(@RequestBody String info,
+			HttpServletRequest request) {
+
+		String[] str = info.split("#");
+		int bid = Integer.parseInt(str[0]);
+		Long id = Long.parseLong(str[1], 10);
+		Ad foundedAd = adService.findById(id);
+		User loggedUser = (User) request.getSession()
+				.getAttribute("loggedUser");
+		if (loggedUser == null) {
+			return new ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED);
+		}
+		foundedAd = adService.findById(id);
+		// adReservationService.save(new UnofficialAdReservation(bid, foundedAd,
+		// loggedUser,0);
+		adReservationService.changeBid(bid, foundedAd, loggedUser, 0);
+		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "changeAd/{id}")
+	private String changeAd(@PathVariable("id") Long id,HttpServletRequest request){
+		Ad ad = adService.findById(id);
+		request.setAttribute("ad", ad);
+		return "forward:/changeAd.jsp";
+	}
+	
+	@RequestMapping(value = "changeAdValue/{id}", method = RequestMethod.PATCH)
+	private ResponseEntity<Ad> changeAdValue(@RequestBody Ad ad,@PathVariable("id") Long id,HttpServletRequest request){
+		System.out.println(ad.getName()+ad.getDescription()+ad.getQuantity());
+		adService.updateAd(ad.getName(), ad.getDescription(), ad.getQuantity(), id);
+		return new ResponseEntity<Ad>(ad,HttpStatus.OK);
 	}
 }

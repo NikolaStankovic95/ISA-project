@@ -9,12 +9,16 @@ import com.pomoravskivrbaci.cinemareservations.model.Ad;
 import com.pomoravskivrbaci.cinemareservations.model.UnofficialAdReservation;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.repository.AdReservationRepository;
+import com.pomoravskivrbaci.cinemareservations.repository.UnofficialAdReservationRepository;
 
 @Service
 public class AdReservationImp implements AdReservationService {
 
 	@Autowired
 	private AdReservationRepository repository;
+
+	@Autowired
+	private UnofficialAdReservationRepository uarepository;
 
 	@Override
 	public void insertOfficalAd(Ad ad, User user) {
@@ -51,6 +55,33 @@ public class AdReservationImp implements AdReservationService {
 		// TODO Auto-generated method stub
 		return repository.getRejectedUsers(foundedAd,user);
 	}
+
+	@Override
+	public void save(UnofficialAdReservation unofficialAdReservation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Object> getBidedAds(User loggedUser) {
+		
+		return repository.getBidedAds(loggedUser);
+	}
+
+	@Override
+	public void changeBid(int bid, Ad foundedAd, User loggedUser, int i) {
+		repository.changeBid(bid,foundedAd,loggedUser);
+		
+	}
+
+	@Override
+	public List<Ad> getMyBidedAds(User loggedUser) {
+		// TODO Auto-generated method stub
+		return repository.getMyBidedAds(loggedUser);
+	}
+
+	
+	
 	
 	
 }

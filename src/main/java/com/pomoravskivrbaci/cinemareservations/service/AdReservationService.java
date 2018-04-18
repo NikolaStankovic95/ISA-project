@@ -12,12 +12,30 @@ public interface AdReservationService {
 
 	void insertOfficalAd(Ad ad, User user);
 
-	void insertUnofficialAd(int bid, Ad foundedAd, User loggedUser, int i);
+	
 
 	List<UnofficialAdReservation> getMyAds(User user);
 
 	void AcceptAd(Ad foundedAd);
 
 	List<User> getRejectedUsers(Ad foundedAd, User user);
+
+	void insertUnofficialAd(int bid, Ad ad, User user, int i);
+
+
+
+	void save(UnofficialAdReservation unofficialAdReservation);
+
+
+
+	List<Object> getBidedAds(User loggedUser);
+
+
+
+	void changeBid(int bid, Ad foundedAd, User loggedUser, int i);
+
+
+
+	List<Ad> getMyBidedAds(User loggedUser);
 
 }

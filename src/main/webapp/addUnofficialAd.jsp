@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="jquery.min.js"> </script>	
-	<script type="text/javascript" src="js/addUnofficialAd.js"> </script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery.min.js"> </script>	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/addUnofficialAd.js"> </script>
 	
 	<title>Create Ad</title>
 </head>
@@ -15,7 +15,8 @@
 	<input type="text"  id="desc" placeholder="Description" name=""><br>
 
 	<input type = "date" id="date" placeholder="Expiration date" name=""><br>
-	
+	<input id="imageInput" type="file" placeholder="Image">
+     <input type="button" value="Aploaduj" onclick="uploadImage()">
 	<input type="button" id="add" value="Add"><br>
 </div>
 

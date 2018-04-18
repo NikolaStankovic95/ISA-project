@@ -38,5 +38,14 @@ public interface AdReservationRepository extends
 
 	@Query("Select u from User u, UnofficialAdReservation uaf where u.id = uaf.user and uaf.user !=?2 and uaf.reservedAd=?1 ")
 	List<User> getRejectedUsers(Ad foundedAd, User user);
+	
+	@Query("select a, u.bid from UnofficialAdReservation u, Ad a where u.reservedAd = a.id and u.user=?1")
+	List<Object> getBidedAds(User loggedUser);
+	@Modifying
+	@Query(value = "update UnofficialAdReservation  u set u.bid=?1  where u.reservedAd=?2 and u.user=?3")
+	@Transactional
+	void changeBid(int bid, Ad foundedAd, User loggedUser);
+	@Query("select a from UnofficialAdReservation u, Ad a where u.reservedAd = a.id and u.user=?1")
+	List<Ad> getMyBidedAds(User loggedUser);
 
 }
