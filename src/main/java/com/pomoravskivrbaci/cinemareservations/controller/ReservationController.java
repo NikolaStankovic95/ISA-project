@@ -35,9 +35,11 @@ import com.pomoravskivrbaci.cinemareservations.service.HallSegmentService;
 import com.pomoravskivrbaci.cinemareservations.service.HallService;
 import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
 import com.pomoravskivrbaci.cinemareservations.service.PeriodService;
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
 import com.pomoravskivrbaci.cinemareservations.service.ProjectionService;
 import com.pomoravskivrbaci.cinemareservations.service.ReservationService;
 import com.pomoravskivrbaci.cinemareservations.service.SeatService;
+import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
 
 @Controller
@@ -62,10 +64,13 @@ public class ReservationController {
 	@Autowired
 	private ProjectionService projectionService;
 
-	
+	@Autowired
+	private PointsService pointsService;
+
 	@Autowired
 	private HallService hallService;
-	
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private HallSegmentService hallSegmentService;
 	@RequestMapping("/cinemaReservation")
@@ -224,7 +229,7 @@ public class ReservationController {
 				item.getPeriod().getId().equals(reservation.getPeriod().getId()) &&
 				item.getProjection().getId().equals(reservation.getProjection().getId()) &&
 				item.getSeat().getId().equals(reservation.getSeat().getId()));
-		System.out.println(contains);
+		
 		if(contains==false){
 			if(invite.equals("true")){
 				try {
@@ -232,7 +237,9 @@ public class ReservationController {
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
 					producer.sendMessageTo("reservation",reservation.getSeats().getId());
-
+					loggedUser.setPoints(loggedUser.getPoints()
+							+ pointsService.getPointsById(1L).getSeatReserved());
+					userService.createUser(loggedUser);
 					return new ResponseEntity<>(reservation,HttpStatus.OK);
 				} catch (MailException | InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -244,7 +251,9 @@ public class ReservationController {
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
 				producer.sendMessageTo("reservation",reservation.getSeats().getId());
-
+				loggedUser.setPoints(loggedUser.getPoints()
+						+ pointsService.getPointsById(1L).getSeatReserved());
+				userService.update(loggedUser,loggedUser.getId());
 				return new ResponseEntity<>(reservation,HttpStatus.OK);
 			}
 		}else

@@ -22,6 +22,7 @@ function convertDate(time){
 $(document).on('click','.delete',function(e){
 	e.preventDefault();
 	  var url=$(this).attr("href");
+	  var id=$(this).attr("id");
 	toastr.info("<br /><br /><button type='button' id='confirmationRevertYes' class='btn clear'>Yes</button>&nbsp&nbsp&nbsp" +
 			"<button type='button' id='confirmationRevertNo' class='btn clear'>No</button>",'Are you sure you want to decline reservation?',
 			{
@@ -35,18 +36,10 @@ $(document).on('click','.delete',function(e){
       			type:"DELETE",
       			success:function(data){
       				if(data.length!=0){
-      					$("tr:not('.header')").remove();
       					
-      					$.each(data,function(index,reservation){
-      						
-      						$("#table").append("<tr><td>"+reservation.institution.name+"</td>" +
-      								"<td>"+reservation.hall.name+"</td>" +
-      								"<td>"+reservation.projection.name+"</td>" +
-      								"<td>"+convertDate(reservation.period.date)+"</td>" +
-      								"<td>"+reservation.seats.regNumber+"</td>" +
-      								"<td>"+reservation.hallSegment.type+"</td>" +
-      								"<td><a class=\"delete\" href='/myReservations/delete/"+reservation.id+"\'>Decline</a></td></tr>");
-      					})
+      						$("#row"+id).remove()
+      				
+      					
       				}else if(data.length==0){
       					$("tr:not('.header')").remove();
       					

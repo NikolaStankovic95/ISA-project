@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +11,7 @@
 <title>FanZone</title>
 </head>
 <body>
-
+<c:import url="_navbar.jsp"></c:import>
 	<div class="tab">
 		<button class="tablinks" id="shop">Official Shop</button>
 		<button class="tablinks" id="adshop">Ads</button>
@@ -35,8 +36,6 @@
 		<div id="UnofficialAds"></div>
 
 	</div>
-	<a href = myAds.jsp>Active Ads</a>
-	<a href = "../bided_ads.jsp">Bided Ads</a>
-
+	
 </body>
 </html>

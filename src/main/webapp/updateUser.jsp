@@ -38,6 +38,7 @@
 		<tr><td colspan=2 align=center><input type="button" class="btn btn-primary" id="change" value="Change"></td></tr>
 	
 	</table>
+	<a href="/registrationController/changePass">Change password</a>
 </div>
 </body>
 </html>

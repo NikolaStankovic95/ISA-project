@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.pomoravskivrbaci.cinemareservations.messaging.Producer;
 import com.pomoravskivrbaci.cinemareservations.model.Reservation;
 import com.pomoravskivrbaci.cinemareservations.model.User;
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
 import com.pomoravskivrbaci.cinemareservations.service.ReservationService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
@@ -34,6 +35,8 @@ public class MyReservationsController {
 	@Autowired
 	private ReservationService reservationService;
 	
+	@Autowired
+	private PointsService pointsService;
 	@RequestMapping("/")
 	private String getMyReservations(HttpServletRequest request){
 		User user=(User) request.getSession().getAttribute("loggedUser");
@@ -71,6 +74,9 @@ public class MyReservationsController {
 	    		reservations.removeIf(item->item.getId().equals(reservation.getId()));
 				reservationService.delete(id);
 				System.out.println(reservations.size());
+				user.setPoints(user.getPoints()
+						- pointsService.getPointsById(1L).getSeatReserved());
+				userService.update(user, user.getId());
 	    	}
 	    	else{
 	    		return new ResponseEntity<List<Reservation>>(reservations,HttpStatus.BAD_REQUEST);

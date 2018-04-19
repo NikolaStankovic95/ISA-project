@@ -37,7 +37,7 @@
 		
 	<c:forEach items="${reservations}" var="reservation">
 		<c:if test="${loggedUser.email==reservation.owner.email}">
-			<tr>
+			<tr id="row${reservation.id}">
 				<td>${reservation.institution.name}</td>
 				<td>${reservation.hall.name}</td>
 				<td>${reservation.projection.name}</td>
@@ -46,7 +46,7 @@
 				<td>${reservation.hallSegment.type }</td>
 				<td>${reservation.getDiscountedPrice() }</td>
 				<td>${reservation.discount}%</td>
-				<td><a class="delete" href="/myReservations/delete/${reservation.id}">Decline</a></td>
+				<td><a class="delete" id="${reservation.id}" href="/myReservations/delete/${reservation.id}">Decline</a></td>
 			</tr>
 		</c:if>
 	

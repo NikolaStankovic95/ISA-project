@@ -15,7 +15,8 @@ public class PointsServiceImpl implements PointsService{
 	@Override
 	public void save(Points points) {
 		// TODO Auto-generated method stub
-		 pointsRepository.save(points.getLogin(),points.getAdReserved(),points.getSeatReserved(),points.getAddedFriend());
+		 pointsRepository.save(points.getLogin(),points.getAdReserved(),points.getSeatReserved(),points.getAddedFriend(),
+				 points.getGold(),points.getSilver(),points.getBronze());
 	}
 
 	@Override

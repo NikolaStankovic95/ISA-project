@@ -3,13 +3,15 @@ $(document).on('click', '#add', function(e) {
 	var type = $("#type").val();
 	var description = $("#description").val();
 	var address = $("#address").val();
-	
+	var image = $("#i")
+	console.log(image_url)
 	var institution = JSON.stringify({
 		"name" : name,
 		"type" : type,
 		"description" : description,
 		"address" : address,
 		"rating" : '0',
+		"image" : image_url,
 
 	})
 	var fzlist = [];
@@ -32,6 +34,7 @@ $(document).on('click', '#add', function(e) {
 		instlist.push(str.substring(13,str.length));
 	}
 	
+	console.log(institution)
 	
 	$.ajax({
 		type : 'POST',
@@ -65,6 +68,21 @@ $(document).on('click', '#add', function(e) {
 		}
 	});
 })
+
+function changeMap(){
+	var adress = $('#address').val()
+	$.get('https://maps.googleapis.com/maps/api/geocode/json?address='+adress, function(data){
+
+        var map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 17,
+            center: data.results[0].geometry.location
+        });
+        var marker = new google.maps.Marker({
+            position: data.results[0].geometry.location,
+            map: map
+        });
+    })
+}
 function myFunction() {
 	document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -126,4 +144,29 @@ function removeFromInstList(id,name){
 	$("#instlista").append("<li id=inst"+id+" value="+name+">"+name+
 					"<button  onclick=moveToInstList("+id+")>Choose</button></li>");
 	li.remove()
+}
+function uploadImage() {
+    let image = $('#imageInput').prop('files')[0];
+    let formData = new FormData();
+    formData.append("image", image);
+    $.ajax({
+        method: 'POST',
+        headers: {
+            'Authorization': 'Client-ID c98199048ba3773',
+            'Accept': 'application/json'
+        },
+        url: 'https://api.imgur.com/3/image',
+        data: formData,
+        processData: false,
+        contentType: false,
+        mimeType: 'multipart/form-data',
+        success: function(data) {
+            image_url = JSON.parse(data).data.link;
+            alert("Uspesno aploadovana.");
+        },
+        error: function(data) {
+            console.log(data);
+            alert("Neuspesno.");
+        }
+    });
 }

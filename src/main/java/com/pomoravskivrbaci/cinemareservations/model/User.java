@@ -115,6 +115,8 @@ public class User implements Serializable {
 		this.reservations = reservations;
 	}
 
+	@Column(nullable = false)
+	protected int points;
 	public User(Long id,String email, String password,
 			String name, String surname, String city, boolean activated, boolean firstlogin, UserRole role,
 			String number) {
@@ -141,6 +143,14 @@ public class User implements Serializable {
 
 
 	
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
 
 	public boolean isActivated() {
 		return activated;

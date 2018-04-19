@@ -19,6 +19,7 @@ import com.pomoravskivrbaci.cinemareservations.model.Friendship;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 import com.pomoravskivrbaci.cinemareservations.model.UserRole;
 import com.pomoravskivrbaci.cinemareservations.service.FriendshipService;
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
 @Controller
@@ -31,6 +32,8 @@ public class UserController {
 	@Autowired
 	private FriendshipService friendshipService;
 
+	@Autowired
+	private PointsService pointsService;
 	@RequestMapping("/users")
 	private String findAllUsers(HttpServletRequest request) {
 
@@ -180,7 +183,11 @@ public class UserController {
 		friendshipService.deleteById(friendFriendship.getId());
 		deleteUserFriend(user, userFriendship);
 		deleteUserFriend(friend, friendFriendship);
-
+		user.setPoints(user.getPoints()
+				- pointsService.getPointsById(1L).getAddedFriend());
+		friend.setPoints(friend.getPoints()
+				- pointsService.getPointsById(1L).getAddedFriend());
+	
 		User userReceived = userService.update(friend, friend.getId());
 		User userSent = userService.update(user, user.getId());
 
@@ -207,6 +214,12 @@ public class UserController {
 	public ResponseEntity<List<Friendship>> addFriend(HttpServletRequest request, @RequestBody String email) {
 		User user = (User) request.getSession().getAttribute("loggedUser");
 		User friend = (User) userService.findUserByEmail(email);
+		user.setPoints(user.getPoints()
+				+ pointsService.getPointsById(1L).getAddedFriend());
+		friend.setPoints(friend.getPoints()
+				+ pointsService.getPointsById(1L).getAddedFriend());
+		userService.update(user, user.getId());
+		
 		Friendship userFriendship = friendshipService.findByUserAndFriend(user, friend);
 		userFriendship.setAccepted(true);
 		friendshipService.update(userFriendship, userFriendship.getId());
@@ -219,7 +232,6 @@ public class UserController {
 		friend.getFriendships().add(friendship);
 
 		friend.setFriendships(friend.getFriendships());
-
 		User userReceived = userService.update(friend, friend.getId());
 		request.getSession().setAttribute("loggedUser", user);
 		
@@ -320,5 +332,17 @@ public class UserController {
 		userService.createUser(user);
 		
 		return new ResponseEntity<User>(user,HttpStatus.OK);
+	}
+	@RequestMapping("/createInst")
+	public String instRedirect(HttpServletRequest request){
+		return "forward:/createinstitution.jsp";
+	}
+	@RequestMapping("/chngRole")
+	public String usersRedirect(HttpServletRequest request){
+		return "forward:/allusers.jsp";
+	}
+	@RequestMapping("/setScale")
+	public String scaleRedirect(HttpServletRequest request){
+		return "forward:/points.jsp";
 	}
 }

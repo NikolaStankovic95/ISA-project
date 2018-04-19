@@ -54,6 +54,7 @@ public class InstitutionController {
     @RequestMapping(value="/createInstitution", method = RequestMethod.POST)
     private ResponseEntity<Institution> createInstitution(@RequestBody Institution inst) {
         System.out.println("Pogodio");
+        System.out.println(inst.getImage());
     	institutionService.saveOrUpdate(inst);
     	FanZone fz = new FanZone(inst.getId(),inst.getName()+" Fanzone ");
     	fanzoneService.save(fz);

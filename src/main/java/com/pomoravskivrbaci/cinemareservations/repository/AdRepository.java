@@ -32,7 +32,7 @@ public interface AdRepository extends PagingAndSortingRepository<Ad,Long> {
 	@Query("select r from Ad r where r.fanZone = ?1 and r.adType = 0 and r.quantity > 0" )
 	List<Ad> getOfficialAds(FanZone fz);
 	
-	@Query("select r from Ad r where r.fanZone = ?1 and r.adType = 1 and r.adStatus = 0 " )
+	@Query("select r from Ad r where r.fanZone = ?1 and r.adType = 1 and r.adStatus = 0 and r.expirationDate>=CURDATE()" )
 	List<Ad> getUnofficialAds(FanZone fz);
 	@Modifying
 	@Query("update Ad a set a.quantity = ?1 where a.id = ?2")

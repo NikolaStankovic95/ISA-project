@@ -5,13 +5,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.pomoravskivrbaci.cinemareservations.model.Reservation;
 import com.pomoravskivrbaci.cinemareservations.model.User;
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
 import com.pomoravskivrbaci.cinemareservations.service.ReservationService;
+import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
 
 @Controller
@@ -21,6 +22,11 @@ public class InvitationController {
 	@Autowired
 	private ReservationService reservationService;
 	
+	@Autowired
+	private PointsService pointsService;
+	
+	@Autowired
+	private UserService userService;
 	@RequestMapping("/invitation/{id}")
 	private String invitiation(@PathVariable ("id") Long id,HttpServletRequest request){
 		User user=(User) request.getSession().getAttribute("loggedUser");
@@ -41,6 +47,9 @@ public class InvitationController {
 	private String accept(HttpServletRequest request,@PathVariable ("id") Long id){
 		User user=(User) request.getSession().getAttribute("loggedUser");
 		Reservation reservation=reservationService.findById(id);
+		user.setPoints(user.getPoints()
+				+ pointsService.getPointsById(1L).getSeatReserved());
+		userService.update(user, user.getId());
 		reservation.setAccepted(true);
 		reservation.setOwner(user);
 		reservationService.update(user,reservation.getId());
@@ -51,6 +60,7 @@ public class InvitationController {
 	@RequestMapping(value="/reject/{id}",method=RequestMethod.GET)
 	private String reject(HttpServletRequest request,@PathVariable ("id") Long id){
 		User user=(User) request.getSession().getAttribute("loggedUser");
+		
 		reservationService.delete(id);
 		request.setAttribute("reservation",null);
 		return "redirect:/userController/user/"+user.getId();

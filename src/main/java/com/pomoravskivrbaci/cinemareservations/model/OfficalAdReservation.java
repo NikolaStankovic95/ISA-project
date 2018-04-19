@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Entity
+@Entity(name = "official_ad_reservation")
 public class OfficalAdReservation {
 
 	@Id
@@ -17,13 +17,14 @@ public class OfficalAdReservation {
 	protected Ad reservedAd;
 	@OneToOne
 	protected User user;
-	
-	public OfficalAdReservation(Ad reservedAd,User user) {
+
+	public OfficalAdReservation(Ad reservedAd, User user) {
 		this.reservedAd = reservedAd;
 		this.user = user;
 	}
 
-	public void OfficialAdReservation(){}
+	public void OfficialAdReservation() {
+	}
 
 	public Ad getReservedAd() {
 		return reservedAd;
@@ -40,6 +41,5 @@ public class OfficalAdReservation {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
+
 }
