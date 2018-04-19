@@ -134,4 +134,8 @@ public class Reservation {
 	public Double getDiscountedPrice() {
 		return projection.getPrice() - projection.getPrice() * discount / 100;
 	}
+
+	public void addDiscount(int amount) {
+		discount += amount;
+	}
 }

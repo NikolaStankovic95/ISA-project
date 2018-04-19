@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.pomoravskivrbaci.cinemareservations.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -233,6 +234,7 @@ public class ReservationController {
 		if(contains==false){
 			if(invite.equals("true")){
 				try {
+					reservation.addDiscount(UserUtils.determineUserDiscount(loggedUser.getRank()));
 					reservationService.save(reservation);
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
@@ -247,6 +249,7 @@ public class ReservationController {
 			}else{
 				
 				reservation.setAccepted(true);
+				reservation.addDiscount(UserUtils.determineUserDiscount(loggedUser.getRank()));
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
 				producer.sendMessageTo("reservation",reservation.getSeats().getId());
@@ -279,6 +282,7 @@ public class ReservationController {
 		}
 		Reservation reservation = reservationService.findById(id);
 		reservation.setOwner(loggedUser);
+		reservation.addDiscount(UserUtils.determineUserDiscount(loggedUser.getRank()));
 		reservationService.save(reservation);
 		return new ResponseEntity(HttpStatus.OK);
 	}

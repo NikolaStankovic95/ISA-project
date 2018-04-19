@@ -283,7 +283,7 @@ public class User implements Serializable {
 			rank = UserRank.BRONZE;
 		} else if(this.points >= scale.getSilver() && this.points < scale.getGold()) {
 			rank = UserRank.SILVER;
-		} else if(this.points >= scale.getSeatReserved()){
+		} else if(this.points >= scale.getGold()){
 			rank = UserRank.GOLD;
 		} else {
 			rank = UserRank.NONE;
