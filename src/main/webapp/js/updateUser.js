@@ -49,6 +49,10 @@ $(document).on('click','#change',function(e){
 			$("#city").val(data.city);
 			$("#number").val(data.number);
 			
+		},
+		error:function(data){
+			toastr.error("Email already used");
+			
 		}
 	})
 })

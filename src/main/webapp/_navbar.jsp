@@ -54,8 +54,8 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${empty loggedUser}">
-                    <li><a href="/Login.html" id="Login">Log in</a></li>
-                    <li><a href="/Registration.html" id="Login">Registration</a></li>
+                    <li><a href="/Login.jsp" id="Login">Log in</a></li>
+                    <li><a href="/Registration.jsp" id="Login">Registration</a></li>
 
                 </c:if>
                 <c:if test="${not empty loggedUser}">

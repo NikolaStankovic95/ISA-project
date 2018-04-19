@@ -146,9 +146,16 @@ public class RegistrationController {
 	@RequestMapping(value = "/changeUser", method = RequestMethod.POST)
 	private ResponseEntity<User> changeUser(@RequestBody User user,HttpSession session){
 		User loggedUser = (User) session.getAttribute("loggedUser");
+		User newUser=userService.findUserByEmail(user.getEmail());
+		if(newUser==null){
 		userService.updateUser(loggedUser.getId(),user.getEmail(),user.getCity(),user.getName(),user.getSurname(),user.getNumber());
 		loggedUser = userService.findUserById(loggedUser.getId());
 		session.setAttribute("loggedUser",loggedUser );
 		return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+		}else{
+			return new ResponseEntity<User>(loggedUser, HttpStatus.BAD_REQUEST);
+			
+		}
+		
 	}
 }
