@@ -15,9 +15,9 @@ public class HallSegmentServiceImpl implements HallSegmentService{
 	private HallSegmentRepository hallSegmentRepository;
 	
 	@Override
-	public List<HallSegment> findHallSegmentByHallId(Long id) {
+	public List<HallSegment> findHallSegmentByHallId(Long id,boolean closed) {
 		// TODO Auto-generated method stub
-		return hallSegmentRepository.findByHallId(id);
+		return hallSegmentRepository.findByHallIdAndClosed(id,closed);
 	}
 
 	@Override

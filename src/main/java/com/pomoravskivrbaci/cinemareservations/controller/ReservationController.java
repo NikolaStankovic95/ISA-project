@@ -178,7 +178,7 @@ public class ReservationController {
 		if(IDs.length==4){
 		List<Reservation> allReservations=reservationService.findByInstitutionIdAndHallIdAndPeriodIdAndProjectionId(
 				Long.parseLong(IDs[0].split("=")[1]), Long.parseLong(IDs[1].split("=")[1]), Long.parseLong(IDs[2].split("=")[1]),Long.parseLong(IDs[3].split("=")[1]));
-		hallSegments=hallSegmentService.findHallSegmentByHallId(Long.parseLong(IDs[1].split("=")[1]));
+		hallSegments=hallSegmentService.findHallSegmentByHallId(Long.parseLong(IDs[1].split("=")[1]),false);
 		for(Reservation reservation:allReservations){
 			for(HallSegment segment:hallSegments){
 				for(Seat seat:segment.getSeats()){
@@ -194,7 +194,7 @@ public class ReservationController {
 	
 	@RequestMapping(value="/getReservedSeats/{seats}/{id}")
 	private ResponseEntity<List<Seat>> getReservedSeats(@PathVariable("seats") String seats,@PathVariable ("id") Long id){
-		List<HallSegment> hallSegments=hallSegmentService.findHallSegmentByHallId(id);
+		List<HallSegment> hallSegments=hallSegmentService.findHallSegmentByHallId(id,false);
 		List<Seat> seatForReservation=new ArrayList<Seat>();
 		List<Seat> allSeats=new ArrayList<Seat>();
 		
