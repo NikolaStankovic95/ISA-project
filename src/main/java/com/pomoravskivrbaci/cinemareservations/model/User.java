@@ -278,6 +278,7 @@ public class User implements Serializable {
 
 	public void addPoints(int amount, Points scale) {
 		if(scale == null) return;
+		this.points += amount;
 		if(this.points >= scale.getBronze() && this.points < scale.getSilver()) {
 			rank = UserRank.BRONZE;
 		} else if(this.points >= scale.getSilver() && this.points < scale.getGold()) {
