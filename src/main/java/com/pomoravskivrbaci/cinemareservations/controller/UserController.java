@@ -321,4 +321,16 @@ public class UserController {
 		
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
+	@RequestMapping("/createInst")
+	public String instRedirect(HttpServletRequest request){
+		return "forward:/createinstitution.jsp";
+	}
+	@RequestMapping("/chngRole")
+	public String usersRedirect(HttpServletRequest request){
+		return "forward:/allusers.jsp";
+	}
+	@RequestMapping("/setScale")
+	public String scaleRedirect(HttpServletRequest request){
+		return "forward:/points.jsp";
+	}
 }

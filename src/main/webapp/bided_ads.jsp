@@ -13,6 +13,7 @@
 <title></title>
 </head>
 <body>
+<c:import url="_navbar.jsp"></c:import>
 <h1>Moji oglasi</h1>
 	<div id =Ads>
 		

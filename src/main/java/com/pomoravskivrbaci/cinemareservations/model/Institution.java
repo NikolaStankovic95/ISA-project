@@ -26,6 +26,9 @@ public class Institution implements Serializable{
 	@Column(name="description", nullable = false)
 	private String description;
 
+	@Column(name = "image",nullable = true)
+	private String image;
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "institution")
 	protected List<Hall> halls;
 	
@@ -90,6 +93,15 @@ public class Institution implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public Institution(){

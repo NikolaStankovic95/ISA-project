@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +8,7 @@
 	<title>Create Ad</title>
 </head>
 <body>
-
+<c:import url="_navbar.jsp"></c:import>
 <div>
 	
 	<input type="text" id="name" placeholder="Name of Ad" name=""><br>

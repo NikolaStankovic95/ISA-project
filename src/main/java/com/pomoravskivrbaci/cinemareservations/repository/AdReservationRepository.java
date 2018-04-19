@@ -28,24 +28,24 @@ public interface AdReservationRepository extends
 	void insertUnofficialAd(@Param("bid") int bid, @Param("ad") Ad ad,
 			@Param("user") User user, @Param("status") int i);
 
-	@Query("select u from UnofficialAdReservation u, Ad a where u.reservedAd = a.id and a.publisher=?1")
+	@Query("select u from unofficial_ad_reservation u, Ad a where u.reservedAd = a.id and a.publisher=?1 and u.status=0")
 	List<UnofficialAdReservation> getMyAds(User user);
 
 	@Modifying
-	@Query(value = "update UnofficialAdReservation  u set u.status=1  where u.reservedAd=?1")
+	@Query(value = "update unofficial_ad_reservation  u set u.status=1  where u.reservedAd=?1")
 	@Transactional
 	void AcceptAd(Ad foundedAd);
 
-	@Query("Select u from User u, UnofficialAdReservation uaf where u.id = uaf.user and uaf.user !=?2 and uaf.reservedAd=?1 ")
+	@Query("Select u from User u, unofficial_ad_reservation uaf where u.id = uaf.user and uaf.user !=?2 and uaf.reservedAd=?1 ")
 	List<User> getRejectedUsers(Ad foundedAd, User user);
 	
-	@Query("select a, u.bid from UnofficialAdReservation u, Ad a where u.reservedAd = a.id and u.user=?1")
+	@Query("select a, u.bid from unofficial_ad_reservation u, Ad a where u.reservedAd = a.id and u.user=?1 and u.status=0")
 	List<Object> getBidedAds(User loggedUser);
 	@Modifying
-	@Query(value = "update UnofficialAdReservation  u set u.bid=?1  where u.reservedAd=?2 and u.user=?3")
+	@Query(value = "update unofficial_ad_reservation  u set u.bid=?1  where u.reservedAd=?2 and u.user=?3")
 	@Transactional
 	void changeBid(int bid, Ad foundedAd, User loggedUser);
-	@Query("select a from UnofficialAdReservation u, Ad a where u.reservedAd = a.id and u.user=?1")
+	@Query("select a from unofficial_ad_reservation u, Ad a where u.reservedAd = a.id and u.user=?1")
 	List<Ad> getMyBidedAds(User loggedUser);
 
 }

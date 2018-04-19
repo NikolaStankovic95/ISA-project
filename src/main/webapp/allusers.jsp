@@ -14,6 +14,7 @@
 </head>
 
 <body>
+<c:import url="_navbar.jsp"></c:import>
 	<h1>All users</h1>
 	<ul id='lista'>
 		<c:forEach var="user" items="${users}">

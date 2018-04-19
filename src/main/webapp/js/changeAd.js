@@ -1,4 +1,4 @@
-function changeAd(id) {
+function changeAd(id,fzid) {
 	var name = $("#name").val();
 	var description = $("#desc").val();
 
@@ -12,7 +12,7 @@ function changeAd(id) {
 		"quantity" : quantity,
 
 	})
-	console.log(id)
+	console.log(fzid)
 	
 	$.ajax({
 			type : 'PATCH',
@@ -23,7 +23,8 @@ function changeAd(id) {
 			data : ad,
 			success : function(data) {
 				alert("OK");
-				window.top.location="/fanzone/"+id;
+				window.top.location="/fanzone/"+fzid;
 			}
 		})
+		
 }

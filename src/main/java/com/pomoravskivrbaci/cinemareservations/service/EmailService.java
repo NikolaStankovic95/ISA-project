@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.pomoravskivrbaci.cinemareservations.model.Ad;
 import com.pomoravskivrbaci.cinemareservations.model.Reservation;
 import com.pomoravskivrbaci.cinemareservations.model.User;
 
@@ -79,29 +80,40 @@ public class EmailService {
 	
 	}
 	@Async
-	public void notifyAcceptedBider(User owner){
+	public void notifyAcceptedBider(User owner, Ad foundedAd){
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(owner.getEmail());
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sistem bioskopa/pozorišta");
-		mail.setText("Vaša ponuda za oglas je prihvacena");
+		mail.setText("Vaša ponuda za oglas "+foundedAd.getName()+" je prihvacena");
 		
 		javaMailSender.send(mail);
 		System.out.println("Obavesten dobitnik");
 	}
 	@Async
-	public void notifyRefussedBider(List<User> rejected){
+	public void notifyRefussedBider(List<User> rejected, Ad foundedAd){
 		for(User user : rejected){
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Sistem bioskopa/pozorišta");
-		mail.setText("Vaša ponuda za oglas  nažalsot nije prihvacena");
+		mail.setText("Vaša ponuda za oglas "+foundedAd.getName()+" nažalsot nije prihvacena");
 		
 		javaMailSender.send(mail);
 		}
 		System.out.println("Obavesteni gubitnik");
 	}
-	
+
+	@Async
+	public void notifyOwnersOfDeletedReservation(List<User> owners, String projectionName) {
+		owners.forEach(owner -> {
+			SimpleMailMessage mail = new SimpleMailMessage();
+			mail.setTo(owner.getEmail());
+			mail.setFrom(env.getProperty("spring.mail.username"));
+			mail.setSubject("Sistem bioskopa/pozorišta");
+			mail.setText("Projekcija " + projectionName + "je otkazana pa vam je rezervacija sedista ponistena, novac ce vam biti vracen.");
+			javaMailSender.send(mail);
+		});
+	}
 
 }

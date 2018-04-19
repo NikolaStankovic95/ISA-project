@@ -15,11 +15,11 @@ var url = window.location.href;
 			$.each(data, function(index, ad) {
 				
 				$("#OfficialAds").append(
-						"<fieldset>Title:" + ad.name
+						"<fieldset><img src="+ad.imageUrl+" height = 100 width = 100 ><br>Title:" + ad.name
 								+ "<br> Description: " + ad.description
 								+ "<button onClick=Reserve("+ad.id+")>Reserve</button>" 
 								+"<button onClick=removeAd("+ad.id+")>Remove</button>"
-								+"<button onClick=changeAd("+ad.id+")>Remove</button></fieldset>");
+								+"<button onClick=changeAd("+ad.id+")>Change</button></fieldset>");
 			})
 		}
 	});
@@ -33,7 +33,7 @@ var url = window.location.href;
 		success : function(data) {
 			$.each(data, function(index, ad) {
 				$("#UnofficialAds").append(
-						"<fieldset>Title:" + ad.name
+						"<fieldset><img src="+ad.imageUrl+" height = 100 width = 100 >Title:" + ad.name
 								+ "<br> Description: " + ad.description
 								+ "<input type=text id=bid"+ad.id+"></input><button onClick=makeBid("+ad.id+")>Make bid</button></fieldset>");
 			})
@@ -55,6 +55,7 @@ $(document).on('click', '#adshop', function(e) {
 })
 
 $(document).on('click', '#addAd', function(e) {
+	
 	window.top.location="/fanzone/createofficial#"+fzid;
 })
 $(document).on('click', '#addAdun', function(e) {
@@ -94,7 +95,7 @@ function removeAd(id){
 			
 		},
 		error : function(error){
-			alert("You must be logged");
+			alert("You dont have premission to delete this");
 		}
 	});
 }

@@ -26,7 +26,7 @@ $(document).on('click', '#add', function(e) {
 		dataType : 'json',
 		data : ad,
 		success : function(data) {
-			window.top.location = "fanZone.html";
+			window.top.location = "/fanzone/"+id;
 		}
 	})
 

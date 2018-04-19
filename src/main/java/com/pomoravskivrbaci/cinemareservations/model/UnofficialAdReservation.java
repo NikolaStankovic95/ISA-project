@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Entity
+@Entity(name="unofficial_ad_reservation")
 public class UnofficialAdReservation implements Serializable {
 
 	private enum Status{
@@ -26,9 +26,10 @@ public class UnofficialAdReservation implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	@Column(nullable=false)
+	@Column(nullable=false,name="bid")
 	protected int bid;
 	
+	public UnofficialAdReservation(){}
 	public UnofficialAdReservation(int bid2, Ad foundedAd, User loggedUser,
 			int i) {
 		this.bid = bid2;
@@ -56,7 +57,7 @@ public class UnofficialAdReservation implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	@OneToOne
+	@OneToOne	
 	protected Ad reservedAd;
 	@OneToOne
 	protected User user;

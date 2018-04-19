@@ -27,6 +27,7 @@ import com.pomoravskivrbaci.cinemareservations.service.AdReservationService;
 import com.pomoravskivrbaci.cinemareservations.service.AdService;
 import com.pomoravskivrbaci.cinemareservations.service.EmailService;
 import com.pomoravskivrbaci.cinemareservations.service.FanZoneService;
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
 import com.pomoravskivrbaci.cinemareservations.service.UserService;
 
 @Controller
@@ -48,6 +49,9 @@ public class AdController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private PointsService pointsService;
+	
 	
 	@RequestMapping(value = "/getAd/{id}", method = RequestMethod.GET)
 	private ResponseEntity <Ad> getAd(@PathVariable("id") Long id) {
@@ -89,6 +93,20 @@ public class AdController {
 		FanZone fz = fanZoneService.findFanZoneById(id);
 		User loggedUser = (User) request.getSession()
 				.getAttribute("loggedUser");
+		System.out.println("logged user: " + loggedUser);
+		int flag=0;
+		for(User u : fz.getFanZoneAdmins()){
+			System.out.println("admin: " +u);
+			if(u.getEmail().equals(loggedUser.getEmail())){
+				flag=1;
+				break;
+			}
+		}
+		if(flag != 1){
+			return new ResponseEntity<Ad>(ad, HttpStatus.BAD_REQUEST);
+
+		}
+		
 		ad.setPublisher(loggedUser);
 		ad.setFanZone(fz);
 		ad.setAdStatus(AdStatus.INIT);
@@ -109,6 +127,9 @@ public class AdController {
 		FanZone fz = fanZoneService.findFanZoneById(id);
 		User loggedUser = (User) request.getSession()
 				.getAttribute("loggedUser");
+		if(loggedUser ==null){
+			return new ResponseEntity<Ad>(ad, HttpStatus.UNAUTHORIZED);
+		}
 		ad.setPublisher(loggedUser);
 		ad.setFanZone(fz);
 		ad.setAdStatus(AdStatus.INIT);
@@ -164,7 +185,9 @@ public class AdController {
 		adService.updateQuantity(foundedAd.getQuantity() - 1, id);
 		foundedAd = adService.findById(id);
 		adReservationService.insertOfficalAd(foundedAd, loggedUser);
-
+		loggedUser.setPoints(loggedUser.getPoints()+pointsService.getPointsById(1L).getAdReserved());
+		userService.createUser(loggedUser);
+		
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
 	}
 
@@ -172,11 +195,15 @@ public class AdController {
 	private ResponseEntity<Ad> deleteAd(@PathVariable Long id,
 			HttpServletRequest request) {
 		Ad foundedAd = adService.findById(id);
-		/*
-		 * User loggedUser = (User) request.getSession()
-		 * .getAttribute("loggedUser"); if (loggedUser == null) { return new
-		 * ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED); }
-		 */
+		
+		 User loggedUser = (User) request.getSession()
+		 .getAttribute("loggedUser"); if (loggedUser == null) { return new
+		 ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED); }
+		 
+		 if(!foundedAd.getPublisher().getEmail().equals(loggedUser.getEmail())){
+			 { return new
+					 ResponseEntity<Ad>(foundedAd, HttpStatus.UNAUTHORIZED); }
+		 }
 		adService.delete(foundedAd);
 
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
@@ -226,11 +253,14 @@ public class AdController {
 		Ad foundedAd = adService.findById(adId);
 		adReservationService.AcceptAd(foundedAd);
 		User user = userService.findUserById(userId);
-		emailService.notifyAcceptedBider(user);
+		emailService.notifyAcceptedBider(user,foundedAd);
 
 		List<User> rejected = adReservationService.getRejectedUsers(foundedAd,
 				user);
-		emailService.notifyRefussedBider(rejected);
+		emailService.notifyRefussedBider(rejected,foundedAd);
+		user.setPoints(user.getPoints()+pointsService.getPointsById(1L).getAdReserved());
+		userService.createUser(user);
+		
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.NO_CONTENT);
 	}
 
@@ -265,9 +295,18 @@ public class AdController {
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "changeAd/{id}")
+	@RequestMapping(value = "/changeAd/{id}", method = RequestMethod.GET)
 	private String changeAd(@PathVariable("id") Long id,HttpServletRequest request){
+		System.out.println("POGIO GAAA");
 		Ad ad = adService.findById(id);
+		User loggedUser = (User) request.getSession()
+				.getAttribute("loggedUser");
+		if (loggedUser == null) {
+			return  "forward:/Login.jsp";
+		}
+		if(!ad.getPublisher().getEmail().equals(loggedUser.getEmail())){
+			return "forward:/Login.jsp";
+		}
 		request.setAttribute("ad", ad);
 		return "forward:/changeAd.jsp";
 	}

@@ -12,7 +12,9 @@
 </head>
 <body>
 <c:import url="_navbar.jsp"></c:import>
-<h1>Offers</h1>
-<div id=ads></div>
+<h1>SYS ADMIN</h1>
+<a href="/institution/create">Create Institution</a>
+<a href="/institution/users">Change users role</a>
+<a href="/points/get">Set point scale</a>
 </body>
 </html>

@@ -1,11 +1,15 @@
 package com.pomoravskivrbaci.cinemareservations.controller;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.pomoravskivrbaci.cinemareservations.model.*;
+import com.pomoravskivrbaci.cinemareservations.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.pomoravskivrbaci.cinemareservations.service.FanZoneService;
-import com.pomoravskivrbaci.cinemareservations.service.InstitutionRatingService;
-import com.pomoravskivrbaci.cinemareservations.service.InstitutionService;
-import com.pomoravskivrbaci.cinemareservations.service.UserService;
 //github.com/jova1111/ISA-project.git
 
 @Controller
@@ -34,8 +33,12 @@ public class InstitutionController {
     
     @Autowired
     private UserService userService;
+
     @Autowired
     private InstitutionRatingService institutionRatingService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @RequestMapping(value="/{id}", method = RequestMethod.PATCH)
     private ResponseEntity editInstitutionDescription(@PathVariable("id")Long id, @RequestBody Institution inst) {
@@ -51,6 +54,7 @@ public class InstitutionController {
     @RequestMapping(value="/createInstitution", method = RequestMethod.POST)
     private ResponseEntity<Institution> createInstitution(@RequestBody Institution inst) {
         System.out.println("Pogodio");
+        System.out.println(inst.getImage());
     	institutionService.saveOrUpdate(inst);
     	FanZone fz = new FanZone(inst.getId(),inst.getName()+" Fanzone ");
     	fanzoneService.save(fz);
@@ -91,7 +95,14 @@ public class InstitutionController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     private String showInstitutionProfile(@PathVariable("id")Long id, HttpServletRequest request) {
         Institution institution = institutionService.findById(id);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date yesterday = cal.getTime();
+        List<Reservation> fastReservations = reservationService.findAll().stream()
+            .filter(reservation -> (reservation.getInstitution().getId().equals(id)) && (reservation.getOwner() == null) && (reservation.getPeriod().getDate().after(yesterday)))
+            .collect(Collectors.toList());
         request.setAttribute("institution", institution);
+        request.setAttribute("fastReservations", fastReservations);
         return "forward:/institution_profile.jsp";
     }
 

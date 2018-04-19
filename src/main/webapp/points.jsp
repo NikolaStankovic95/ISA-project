@@ -15,6 +15,7 @@
 </head>
 
 <body>
+<c:import url="_navbar.jsp"></c:import>
 	<h2>Points</h2>
 	Login: <input value="${points.login }" id="login"></input><br>
 	Reserved seat: <input value="${points.seatReserved } " id="seat"></input><br>
