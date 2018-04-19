@@ -59,7 +59,7 @@ public class RegistrationController {
 
 			if (loggedUser.isActivated()) {
 				if (loggedUser.isFirstlogin()
-						&& loggedUser.getRole().equals(UserRole.FANZONEADMIN)) {
+						&& (loggedUser.getRole().equals(UserRole.FANZONEADMIN) || loggedUser.getRole().equals(UserRole.INSTADMIN))) {
 					uri = new URI("/registrationController/changePass");
 
 					HttpHeaders httpHeaders = new HttpHeaders();
@@ -67,8 +67,7 @@ public class RegistrationController {
 					request.getSession().setAttribute("loggedUser", loggedUser);
 					
 					httpHeaders.setLocation(uri);
-					loggedUser.setPoints(loggedUser.getPoints()
-							+ pointsService.getPointsById(1L).getLogin());
+					loggedUser.addPoints(pointsService.getPointsById(1L).getLogin(), pointsService.getPointsById(1L));
 					userService.createUser(loggedUser);
 					return new ResponseEntity<>(uri, HttpStatus.OK);
 
@@ -81,8 +80,7 @@ public class RegistrationController {
 					request.getSession().setAttribute("loggedUser", loggedUser);
 					
 					httpHeaders.setLocation(uri);
-					loggedUser.setPoints(loggedUser.getPoints()
-							+ pointsService.getPointsById(1L).getLogin());
+					loggedUser.addPoints(pointsService.getPointsById(1L).getLogin(), pointsService.getPointsById(1L));
 					userService.createUser(loggedUser);
 					return new ResponseEntity<>(uri, HttpStatus.OK);
 
@@ -95,8 +93,7 @@ public class RegistrationController {
 					request.getSession().setAttribute("loggedUser", loggedUser);
 					
 					httpHeaders.setLocation(uri);
-					loggedUser.setPoints(loggedUser.getPoints()
-							+ pointsService.getPointsById(1L).getLogin());
+					loggedUser.addPoints(pointsService.getPointsById(1L).getLogin(), pointsService.getPointsById(1L));
 					userService.createUser(loggedUser);
 					return new ResponseEntity<>(uri, HttpStatus.OK);
 

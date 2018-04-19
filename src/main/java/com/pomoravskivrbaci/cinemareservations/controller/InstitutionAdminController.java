@@ -95,7 +95,7 @@ public class InstitutionAdminController {
     @RequestMapping(value = "/institution/{inst_id}/projection/{id}", method = RequestMethod.GET)
     private String getProjectionInfo(@PathVariable("id")Long id, @PathVariable("inst_id")Long instId, HttpServletRequest request) {
         Projection projection = projectionService.findById(id);
-        Institution institution = institutionService.findById(id);
+        Institution institution = institutionService.findById(instId);
         request.setAttribute("projection", projection);
         request.setAttribute("institution", institution);
         return("forward:/inst_admin/inst_admin_projection.jsp");

@@ -74,8 +74,7 @@ public class MyReservationsController {
 	    		reservations.removeIf(item->item.getId().equals(reservation.getId()));
 				reservationService.delete(id);
 				System.out.println(reservations.size());
-				user.setPoints(user.getPoints()
-						- pointsService.getPointsById(1L).getSeatReserved());
+				user.addPoints(-pointsService.getPointsById(1L).getSeatReserved(), pointsService.getPointsById(1L));
 				userService.update(user, user.getId());
 	    	}
 	    	else{

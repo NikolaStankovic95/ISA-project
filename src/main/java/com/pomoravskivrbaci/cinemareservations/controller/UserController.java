@@ -214,10 +214,8 @@ public class UserController {
 	public ResponseEntity<List<Friendship>> addFriend(HttpServletRequest request, @RequestBody String email) {
 		User user = (User) request.getSession().getAttribute("loggedUser");
 		User friend = (User) userService.findUserByEmail(email);
-		user.setPoints(user.getPoints()
-				+ pointsService.getPointsById(1L).getAddedFriend());
-		friend.setPoints(friend.getPoints()
-				+ pointsService.getPointsById(1L).getAddedFriend());
+		user.addPoints(pointsService.getPointsById(1L).getAddedFriend(), pointsService.getPointsById(1L));
+		user.addPoints(pointsService.getPointsById(1L).getAddedFriend(), pointsService.getPointsById(1L));
 		userService.update(user, user.getId());
 		
 		Friendship userFriendship = friendshipService.findByUserAndFriend(user, friend);
@@ -345,4 +343,5 @@ public class UserController {
 	public String scaleRedirect(HttpServletRequest request){
 		return "forward:/points.jsp";
 	}
+
 }

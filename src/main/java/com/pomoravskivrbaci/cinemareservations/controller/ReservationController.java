@@ -237,8 +237,7 @@ public class ReservationController {
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
 					producer.sendMessageTo("reservation",reservation.getSeats().getId());
-					loggedUser.setPoints(loggedUser.getPoints()
-							+ pointsService.getPointsById(1L).getSeatReserved());
+					loggedUser.addPoints(pointsService.getPointsById(1L).getSeatReserved(), pointsService.getPointsById(1L));
 					userService.createUser(loggedUser);
 					return new ResponseEntity<>(reservation,HttpStatus.OK);
 				} catch (MailException | InterruptedException e) {
@@ -251,8 +250,7 @@ public class ReservationController {
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
 				producer.sendMessageTo("reservation",reservation.getSeats().getId());
-				loggedUser.setPoints(loggedUser.getPoints()
-						+ pointsService.getPointsById(1L).getSeatReserved());
+				loggedUser.addPoints(pointsService.getPointsById(1L).getSeatReserved(), pointsService.getPointsById(1L));
 				userService.update(loggedUser,loggedUser.getId());
 				return new ResponseEntity<>(reservation,HttpStatus.OK);
 			}

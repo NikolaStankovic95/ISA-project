@@ -15,6 +15,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Entity
 public class User implements Serializable {
 
@@ -22,6 +25,8 @@ public class User implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public enum UserRank { NONE, BRONZE, SILVER, GOLD };
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -95,6 +100,9 @@ public class User implements Serializable {
 	
 	@Column(nullable=false)
 	protected UserRole role;
+
+	@Column(name="rank")
+	protected UserRank rank = UserRank.NONE;
 	
 	@OneToMany(mappedBy="owner",cascade={ALL},fetch=FetchType.LAZY)
 	protected List<Reservation> reservations;
@@ -141,8 +149,13 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
+	public UserRank getRank() {
+		return rank;
+	}
 
-	
+	public void setRank(UserRank rank) {
+		this.rank = rank;
+	}
 
 	public int getPoints() {
 		return points;
@@ -261,5 +274,18 @@ public class User implements Serializable {
 
 	public void setProjectionRatings(List<ProjectionRating> projectionRatings) {
 		this.projectionRatings = projectionRatings;
+	}
+
+	public void addPoints(int amount, Points scale) {
+		if(scale == null) return;
+		if(this.points >= scale.getBronze() && this.points < scale.getSilver()) {
+			rank = UserRank.BRONZE;
+		} else if(this.points >= scale.getSilver() && this.points < scale.getGold()) {
+			rank = UserRank.SILVER;
+		} else if(this.points >= scale.getSeatReserved()){
+			rank = UserRank.GOLD;
+		} else {
+			rank = UserRank.NONE;
+		}
 	}
 }

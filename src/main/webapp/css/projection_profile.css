@@ -1,0 +1,16 @@
+.projection-info {
+    display: flex;
+    margin: 50px;
+}
+
+.projection-image {
+    width: 250px;
+    height: auto;
+    align-self: center;
+    margin-right: 40px;
+}
+
+.page-layout {
+    margin-left: 20px;
+    margin-top: 15px;
+}

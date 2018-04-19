@@ -185,7 +185,7 @@ public class AdController {
 		adService.updateQuantity(foundedAd.getQuantity() - 1, id);
 		foundedAd = adService.findById(id);
 		adReservationService.insertOfficalAd(foundedAd, loggedUser);
-		loggedUser.setPoints(loggedUser.getPoints()+pointsService.getPointsById(1L).getAdReserved());
+		loggedUser.addPoints(pointsService.getPointsById(1L).getAdReserved(), pointsService.getPointsById(1L));
 		userService.createUser(loggedUser);
 		
 		return new ResponseEntity<Ad>(foundedAd, HttpStatus.OK);

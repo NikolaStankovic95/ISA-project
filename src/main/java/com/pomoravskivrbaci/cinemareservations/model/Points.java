@@ -1,5 +1,8 @@
 package com.pomoravskivrbaci.cinemareservations.model;
 
+import com.pomoravskivrbaci.cinemareservations.service.PointsService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,25 +17,26 @@ public class Points {
 	private Long id;
 	
 	@Column
-	private int login;
+	private int login = 0;
 	
 	@Column
-	private int seatReserved;
+	private int seatReserved = 0;
 	
 	@Column
-	private int addedFriend;
+	private int addedFriend = 0;
 	
 	@Column
-	private int adReserved;
+	private int adReserved = 0;
 	
 	@Column
-	private int gold;
+	private int gold = 1000;
 	
 	@Column
-	private int silver;
+	private int silver = 500;
 	
 	@Column
-	private int bronze;
+	private int bronze = 50;
+
 	
 	public int getGold() {
 		return gold;

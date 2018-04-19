@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import java.util.Date;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class HallSegmentController {
     private ResponseEntity checkIfSegmentHasReservatedSeat(@PathVariable("id")Long id) {
         List<Reservation> allReservations = reservationService.findAll();
         for (Reservation reservation : allReservations) {
-            if (reservation.getSeat().getHallSegment().getId() == id) {
+            if (reservation.getSeat().getHallSegment().getId() == id && reservation.getPeriod().getDate().after(new Date())) {
                 return new ResponseEntity(HttpStatus.OK);
             }
         }

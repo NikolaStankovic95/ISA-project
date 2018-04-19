@@ -59,13 +59,13 @@
             }
 
             function makeGraphData(array) {
-                result = { };
+                let result = { };
                 for(var i = 0; i < array.length; ++i) {
                     if(!result[array[i]])
                         result[array[i]] = 0;
                     ++result[array[i]];
                  }
-                 resultArray = []
+                 let resultArray = []
                  Object.keys(result).forEach(key => {
                      resultArray.push({ x_value: key, y_value: result[key] })
                  });
@@ -101,11 +101,15 @@
                 dailyReservations = makeGraphData(dailyReservations);
                 weeklyReservations = makeGraphData(weeklyReservations);
                 monthlyReservations = makeGraphData(monthlyReservations);
+
+                console.log(dailyReservations)
+                console.log(weeklyReservations);
             
             }
 
              function drawVisitedGraph(data) {
                 $("#visitedChartContainer").empty();
+                if(data.length == 0) return;
                 new Morris.Bar({
                     // ID of the element in which to draw the chart.
                     element: 'visitedChartContainer',
@@ -124,6 +128,7 @@
 
             function drawIncomeGraph(data) {
                 $("#incomeChartContainer").empty();
+                if(data.length == 0) return;
                 new Morris.Bar({
                     // ID of the element in which to draw the chart.
                     element: 'incomeChartContainer',
