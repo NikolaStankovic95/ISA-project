@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -231,7 +232,7 @@ public class ReservationController {
 					
 					emailService.inviteFriend(reservation.getInvited(), loggedUser, reservation);
 					producer.sendMessageTo("reservation",reservation.getSeats().getId());
-					
+
 					return new ResponseEntity<>(reservation,HttpStatus.OK);
 				} catch (MailException | InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -243,7 +244,7 @@ public class ReservationController {
 				emailService.notifyOwner(reservation.getOwner(),reservation);
 				reservationService.save(reservation);
 				producer.sendMessageTo("reservation",reservation.getSeats().getId());
-				
+
 				return new ResponseEntity<>(reservation,HttpStatus.OK);
 			}
 		}else
@@ -259,9 +260,22 @@ public class ReservationController {
 	
 	@RequestMapping(value="/getHallSegment/{id}")
 	private ResponseEntity<HallSegment> getHallSegment(@PathVariable("id") String id){
-		HallSegment segment=hallSegmentService.findById(Long.parseLong(id));
+		HallSegment segment = hallSegmentService.findById(Long.parseLong(id));
 		return new ResponseEntity<HallSegment>(segment,HttpStatus.OK);
 	}
+
+	@RequestMapping(value="/{id}/fast_reserve", method = RequestMethod.POST)
+	private ResponseEntity makeFastReservation(@PathVariable("id")Long id, HttpSession session) {
+		User loggedUser = (User)session.getAttribute("loggedUser");
+		if(loggedUser == null) {
+			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+		}
+		Reservation reservation = reservationService.findById(id);
+		reservation.setOwner(loggedUser);
+		reservationService.save(reservation);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
 	@RequestMapping(value="/getProjecitonPrice/{id}")
 	private @ResponseBody double getProjectionPrice(@PathVariable("id") Long id){
 		Projection projection=projectionService.findById(id);

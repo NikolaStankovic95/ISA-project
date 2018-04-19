@@ -2,11 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-    	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    	
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <script>
 
@@ -74,7 +73,7 @@
                         dataType: 'json',
                         success: function(data) {
                             enableAllSeats();
-                            for(reservedSeat of data) {
+                            for(let reservedSeat of data) {
                                 $("#seat" + reservedSeat.id).prop("disabled", true);
                             }
                             showSegmentContainer();
@@ -87,14 +86,18 @@
                 });
             }
 
-            function reserveSeat(id) {
+            function reserveSeat(seatId, segmentId) {
+                let discount = $("#discountInput").val().trim();
                 $.ajax({
                         method: 'POST',
-                        url: '/inst_admin/fast_reservation/projection/${ projection.id }/hall/' + $("#hallSelect").val() + '/period/' + $("#periodSelect").val() + '/seat/' + id,
+                        url: '/inst_admin/fast_reservation/projection/${ projection.id }/hall/' + $("#hallSelect").val() + '/segment/' + segmentId + '/period/' + $("#periodSelect").val() + '/seat/' + seatId,
+                        data: {
+                            discount: discount
+                        },
                         success: function(data) {
                             alert("Uspesno napravaljena brza rezervacija.");
-                            $("#seat" + id).prop("checked", false);
-                            $("#seat" + id).prop("disabled", true);
+                            $("#seat" + seatId).prop("checked", false);
+                            $("#seat" + seatId).prop("disabled", true);
                         },
                         error: function(data) {
                             console.log(data);
@@ -107,7 +110,7 @@
                 let seatIndex = 0;
                 for(let i = 0; i < segment.numberOfRows; i++) {
                     for(let j = 0; j < segment.numberOfColumns; j++) {
-                        $("#segment" + segment.type).append("<input id='seat" + segment.seats[seatIndex].id + "' class='seat' type='checkbox' onclick='reserveSeat(" + segment.seats[seatIndex].id + ")'>");
+                        $("#segment" + segment.type).append("<input id='seat" + segment.seats[seatIndex].id + "' class='seat' type='checkbox' onclick='reserveSeat(" + segment.seats[seatIndex].id + ", " + segment.id + ")'>");
                         seatIndex++;
                     }
                     $("#segment" + segment.type).append("<br>");
@@ -185,6 +188,8 @@
             </div>
             <div class="segment invisible" id="segmentRIGHT_BALCONY"><p>Desni balkon</p></div>
         </div>
+
+        Popust(%): <input type="text" value="0"  id="discountInput">
     </body>
 
 </html>

@@ -43,8 +43,11 @@
 			<ul id="visitedCinemaProjections">
 				
 				<c:forEach items="${loggedUser.reservations}" var="reservation">
-					<c:if test="${reservation.accepted==true && reservation.period.date lt today}">
+					<c:if test="${ reservation.accepted==true && reservation.period.date lt today && !reservation.projection.deleted }">
 						<li><a href="/projection/${ reservation.projection.id }">${reservation.projection.name}</a> (<a href="/projection/${ reservation.projection.id }/rate">oceni</a>)</li>
+					</c:if>
+					<c:if test="${ reservation.accepted==true && reservation.period.date lt today && reservation.projection.deleted }">
+						<li>${reservation.projection.name}</li>
 					</c:if>
 				</c:forEach>
 			</ul>

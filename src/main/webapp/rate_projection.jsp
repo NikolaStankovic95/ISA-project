@@ -8,6 +8,7 @@
 
         <script>
             function rate() {
+                rateInstitution();
                 rateProjection();
             }
             
@@ -23,7 +24,7 @@
                         rating: rating
                     }),
                     success: function(data) {
-                        rateInstitution();
+                        alert("Uspesno ste ocenili projekciju.");
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         if(jqXHR.status == 400) {

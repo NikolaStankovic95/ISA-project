@@ -1,6 +1,7 @@
 package com.pomoravskivrbaci.cinemareservations.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,9 @@ public class ProjectionServiceImpl implements ProjectionService{
 	@Override
 	public List<Projection> findByRepertoires_id(Long id) {
 		// TODO Auto-generated method stub
-		return projectionRepository.findByRepertoires_id(id);
+		return projectionRepository.findByRepertoires_id(id).stream()
+				.filter(projection -> !projection.getDeleted())
+				.collect(Collectors.toList());
 	}
 
 	@Override

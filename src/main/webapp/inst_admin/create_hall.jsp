@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
         <script type="application/javascript">
             var segments = [
@@ -17,13 +17,12 @@
 
 
             function init() {
-                initListeners()
-
+                initListeners();
             }
 
             function initListeners() {
-                $("[type = checkbox]").change(function() {
-                    if(this.checked) {
+                $("[type = checkbox]").change(function () {
+                    if (this.checked) {
                         $("#segment" + this.value).removeClass("invisible");
                     }
                     else {
@@ -31,7 +30,7 @@
                     }
                 });
 
-                $(".segment").click(function() {
+                $(".segment").click(function () {
                     let id = this.id[this.id.length - 1];
                     $("#segmentNameFormInput").text($(this).text());
                     $("#numberOfRowsFormInput").val(segments[id].numberOfRows);
@@ -40,30 +39,21 @@
                     $("#numberOfRowsFormInput, #numberOfColumnsFormInput, #isClosedFormInput").attr("name", id);
                 });
 
-                $("#numberOfRowsFormInput").change(function() {
+                $("#numberOfRowsFormInput").change(function () {
                     segments[this.name].numberOfRows = this.value;
                     drawSeats(this.name);
                 });
 
-                $("#numberOfColumnsFormInput").change(function() {
+                $("#numberOfColumnsFormInput").change(function () {
                     segments[this.name].numberOfColumns = this.value;
                     drawSeats(this.name);
                 });
-
-               /* $("#isClosedFormInput").change(function() {
-                   segments[this.name].isClosed = this.checked;
-                   if(this.checked) {
-                       $("#segment" + this.name).addClass("closed");
-                   } else {
-                       $("#segment" + this.name).removeClass("closed");
-                   }
-                });*/
             }
 
             function drawSeats(segmentId) {
                 let segment = segments[segmentId];
                 if(segment.numberOfColumns === 0 || segment.numberOfRows === 0) {
-                     return;
+                    return;
                 }
                 $("#segment" + segmentId + " :not(:first-child)").remove();
                 for(let i = 0; i < segment.numberOfRows; i++) {

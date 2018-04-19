@@ -30,6 +30,8 @@
 				<th>Date & Time</th>
 				<th>Seat number</th>
 				<th>Hall segment</th>
+				<th>Price</th>
+				<th>Discount</th>
 				<th></th>
 			</tr>
 		
@@ -42,6 +44,8 @@
 				<td>${reservation.period.date}</td>
 				<td>${reservation.seats.regNumber}</td>
 				<td>${reservation.hallSegment.type }</td>
+				<td>${reservation.getDiscountedPrice() }</td>
+				<td>${reservation.discount}%</td>
 				<td><a class="delete" href="/myReservations/delete/${reservation.id}">Decline</a></td>
 			</tr>
 		</c:if>

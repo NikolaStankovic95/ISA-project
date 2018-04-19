@@ -37,32 +37,38 @@
                 <c:if test="${not empty loggedUser}">
 
                     <li><a  href="/userController/user/${loggedUser.id}">Profile</a></li>
-                    <li><a href="../../myReservations/">My reservations</a></li>
+                    <li><a href="/myReservations/">My reservations</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Create reservation
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="../../reservation/cinemaReservation">Cinema reservation</a>
-                            <a class="dropdown-item" href="../../reservation/theatreReservation">Theatre reservation</a>
+                            <a class="dropdown-item" href="/reservation/cinemaReservation">Cinema reservation</a>
+                            <a class="dropdown-item" href="/reservation/theatreReservation">Theatre reservation</a>
                         </div>
                     </li>
                 </c:if>
+<<<<<<< HEAD
                 <li><a href="../../institution/cinemas">Cinemas</a></li>
                 <li><a href="../../institution/theatres">Theatres</a></li>
 				<c:if test="${not empty loggedUser}">
 				<li><a href="../../myAds.jsp">Offers</a></li>
                 <li><a href="../../bided_ads.jsp">My bids</a></li>
 				</c:if>	
+=======
+                <li><a href="/institution/cinemas">Cinemas</a></li>
+                <li><a href="/institution/theatres">Theatres</a></li>
+
+>>>>>>> branch 'master' of https://github.com/jova1111/ISA-project.git
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${empty loggedUser}">
-                    <li><a href="../../Login.jsp" id="Login">Log in</a></li>
-                    <li><a href="../../Registration.jsp" id="Login">Registration</a></li>
+                    <li><a href="/Login.html" id="Login">Log in</a></li>
+                    <li><a href="/Registration.html" id="Login">Registration</a></li>
 
                 </c:if>
                 <c:if test="${not empty loggedUser}">
-                    <li><a href="../../updateUser.jsp">Update account</a></li>
+                    <li><a href="/updateUser.jsp">Update account</a></li>
                     <li><a href="/userController/logout">Log out</a></li>
                 </c:if>
 
