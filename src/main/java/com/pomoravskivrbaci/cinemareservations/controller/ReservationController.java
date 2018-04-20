@@ -77,13 +77,18 @@ public class ReservationController {
 	@RequestMapping("/cinemaReservation")
 	public String cinema(HttpServletRequest request){
 		List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
+		listOfCinemas.sort((cinema1,cinema2)->cinema1.getName().compareTo(cinema2.getName()));
 		request.setAttribute("institutions", listOfCinemas);
+		
 		return "forward:/cinema.jsp";
 	}
 	@RequestMapping("/theatreReservation")
 	public String theathre(HttpServletRequest request){
 		List<Institution> listOfTheatres=institutionService.findByType(InstitutionType.THEATRE);
+		listOfTheatres.sort((cinema1,cinema2)->cinema1.getName().compareTo(cinema2.getName()));
+		
 		request.setAttribute("institutions", listOfTheatres);
+		
 		return "forward:/cinema.jsp";
 
 	}
@@ -92,6 +97,8 @@ public class ReservationController {
 		
 		List<Institution> listOfCinemas=institutionService.findByType(InstitutionType.CINEMA);
 		System.out.println(listOfCinemas.size());
+		listOfCinemas.sort((cinema1,cinema2)->cinema1.getName().compareTo(cinema2.getName()));
+		
 		return listOfCinemas;
 	}
 	
