@@ -100,6 +100,7 @@
                     success: function(data) {
                         image_url = JSON.parse(data).data.link;
                         alert("Uspesno aploadovana.");
+                        console.log(image_url);
                     },
                     error: function(data) {
                         console.log(data);

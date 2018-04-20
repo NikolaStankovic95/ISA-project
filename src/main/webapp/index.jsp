@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	 <script type="text/javascript"	src="${pageContext.request.contextPath}/jquery.min.js"> </script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript"	src="${pageContext.request.contextPath}/jquery.min.js"> </script>
 	<script>
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
@@ -20,8 +21,8 @@
 <body>
 	<c:import url="_navbar.jsp"></c:import>
 	<div class="main-container">
-		<a href="/institution/theatres"><img class="institution_image" src="http://tiannanori.com/wp-content/uploads/2012/05/THEATRE.jpg"></a>
-		<a href="/institution/cinemas"><img class="institution_image" src="https://img.argentdubeurre.com/content/3741/illustration/cine-4-moins-14-ans-4.jpg"></a>
+		<a href="/institution/theatres"><img class="institution_image" src="https://i.imgur.com/eCKG3qm.jpg"></a>
+		<a href="/institution/cinemas"><img class="institution_image" src="https://i.imgur.com/Rj6ElKS.jpg"></a>
 	</div>
 </body>
 
