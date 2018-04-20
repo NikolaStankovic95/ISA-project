@@ -157,6 +157,9 @@
             .segments {
                 display: flex;
                 flex-direction: row;
+                margin-top: 20px;
+                margin-left: 20px;
+                margin-bottom: 30px;
             }
 
             .middle-hall {
@@ -176,6 +179,29 @@
             .closed {
                 background-color: gray;
             }
+
+            .segment {
+                text-align: center;
+                min-height: 150px;
+                min-width: 150px;
+            }
+
+            .page-layout {
+                margin: 35px;
+            }
+
+            .segments-info {
+                margin-top: 30px;
+            }
+
+            .info {
+                margin: 35px;
+            }
+
+            #periods {
+                margin-top: 20px;
+                margin-left: 20px;
+            }
         </style>
 
     </head>
@@ -183,66 +209,88 @@
     <body onload="init()" style="margin: 15px;">
         <c:import url="../_navbar.jsp"></c:import>
 
-        <h4>Osnovne informacije:</h4>
-        <table>
-            <tr>
-                <td>Ime: </td>
-                <td><input id="nameInput" type="text" value="${ hall.name }"></td>
-            </tr>
-        </table>
-        <input type="button" value="Sacuvaj" onclick="saveHall()">
+        <div class="page-layout">
+            <div class="info">
+                <h4>Osnovne informacije:</h4>
+                <table class="table">
+                    <tr>
+                        <td>Ime: </td>
+                        <td><input id="nameInput" type="text" value="${ hall.name }"></td>
+                    </tr>
+                </table>
+                <input type="button" value="Sacuvaj" onclick="saveHall()">
 
-        <h4>Segmenti:</h4>
 
-        <div class="segments">
-            <div class="segment invisible" id="segment1"><p>Levi balkon</p></div>
-            <div class="middle-hall">
-                <div class="segment invisible" id="segment0"><p>VIP</p></div>
-                <div class="segment invisible" id="segment3"><p>Parter</p></div>
+                <div class="segments-info">
+                    <h4>Segmenti:</h4>
+
+                    <div class="segments">
+                        <div class="segment invisible" id="segment1"><p>Levi balkon</p></div>
+                        <div class="middle-hall">
+                            <div class="segment invisible" id="segment0"><p>VIP</p></div>
+                            <div class="segment invisible" id="segment3"><p>Parter</p></div>
+                        </div>
+                        <div class="segment invisible" id="segment2"><p>Desni balkon</p></div>
+                    </div>
+
+                    <table class="table">
+                        <tr>
+                            <td>Segment:</td>
+                            <td><span id="segmentNameFormInput"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Broj redova:</td>
+                            <td><input id="numberOfRowsFormInput" readonly type="text"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Broj kolona:</td>
+                            <td><input id="numberOfColumnsFormInput" readonly type="text"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Zatvoren:</td>
+                            <td><input id="isClosedFormInput" type="checkbox"></td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <h3>Dodaj termin:</h3>
+                <table class="table">
+                    <tr>
+                        <td>Dan:</td>
+                        <td>
+                            <input type="date" id="periodDayInput">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pocetak termina:</td>
+                        <td><input type="time" id="periodStartInput"></td>
+                    </tr>
+                    <tr>
+                        <td>Kraj termina:</td>
+                        <td><input type="time" id="periodEndInput"></td>
+                    </tr>
+                </table>
+                <input type="submit" value="Dodaj" onclick="addPeriod()">
+
+                <br>
+                <h3>Termini</h3>
+                <div id="periods">
+                    <jsp:useBean id="now" class="java.util.Date"/>
+                    <c:forEach var="period" items="${ hall.periods }">
+                        <c:if test="${ period.date > now }">
+                            <p>
+                                Od ${ period.date } do ${ period.dateEnd }
+                                <c:if test="${ period.projection != null}">
+                                    (<a href="/projection/${ period.projection.id }">${ period.projection.name }</a>)
+                                </c:if>
+                            </p>
+                        </c:if>
+                    </c:forEach>
+                </div>
             </div>
-            <div class="segment invisible" id="segment2"><p>Desni balkon</p></div>
-        </div>
-
-        <table>
-            <tr>
-                <td>Segment:</td>
-                <td><span id="segmentNameFormInput"></span></td>
-            </tr>
-
-            <tr>
-                <td>Broj redova:</td>
-                <td><input id="numberOfRowsFormInput" readonly type="text"></td>
-            </tr>
-
-            <tr>
-                <td>Broj kolona:</td>
-                <td><input id="numberOfColumnsFormInput" readonly type="text"></td>
-            </tr>
-
-            <tr>
-                <td>Zatvoren:</td>
-                <td><input id="isClosedFormInput" type="checkbox"></td>
-            </tr>
-        </table>
-
-        <h3>Dodaj termin:</h3>
-        <p>Dan:</p>
-        <input type="date" id="periodDayInput">
-        <p>Pocetak termina:</p>
-        <input type="time" id="periodStartInput">
-        <p>Kraj termina:</p>
-        <input type="time" id="periodEndInput">
-        <input type="submit" value="Dodaj" onclick="addPeriod()">
-        <h3>Termini</h3>
-        <div id="periods">
-            <c:forEach var="period" items="${ hall.periods }">
-                <p>
-                    Od ${ period.date } do ${ period.dateEnd }
-                    <c:if test="${ period.projection != null}">
-                        (<a href="/projection/${ period.projection.id }">${ period.projection.name }</a>)
-                    </c:if>
-                </p>
-            </c:forEach>
         </div>
     </body>
 

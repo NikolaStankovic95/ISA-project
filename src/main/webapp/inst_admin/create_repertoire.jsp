@@ -27,19 +27,33 @@
             }
         </script>
 
+        <style>
+            .page-layout {
+                margin: 35px;
+            }
+
+            .info {
+                margin: 35px;
+            }
+        </style>
     </head>
 
     <body >
         <c:import url="../_navbar.jsp"></c:import>
 
-        <h4>Osnovne informacije:</h4>
-        <table>
-            <tr>
-                <td>Ime:</td>
-                <td><input id="nameInput" type="text"></td>
-            </tr>
-        </table>
-        <input type="button" value="Sacuvaj" onclick="addRepertoire()">
+        <div class="page-layout">
+            <h3>Nov repertoar za instituciju ${ institution.name }:</h3>
+            <div class="info">
+                <h4>Osnovne informacije:</h4>
+                <table class="table">
+                    <tr>
+                        <td>Ime:</td>
+                        <td><input id="nameInput" type="text"></td>
+                    </tr>
+                </table>
+                <input type="button" value="Sacuvaj" onclick="addRepertoire()">
+            </div>
+        </div>
     </body>
 
 </html>

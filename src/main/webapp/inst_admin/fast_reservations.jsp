@@ -139,6 +139,8 @@
             .segments {
                 display: flex;
                 flex-direction: row;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
 
             .middle-hall {
@@ -158,6 +160,25 @@
             .closed {
                 background-color: gray;
             }
+
+            .page-layout {
+                margin: 35px;
+            }
+
+            .info {
+                margin: 35px;
+            }
+
+            .choose-info-container {
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+
+            .segment {
+                text-align: center;
+                min-height: 150px;
+                min-width: 150px;
+            }
         </style>
 
     </head>
@@ -165,31 +186,39 @@
     <body onload="init()" style="margin: 15px;">
         <c:import url="../_navbar.jsp"></c:import>
 
-        <h3>Kreiranje brze rezervacije za projekciju ${ projection.name }</h3>
+        <div class="page-layout">
+            <h3>Kreiranje brze rezervacije za projekciju ${ projection.name }:</h3>
 
-        <p>Izaberite halu u kojoj se projekcija prikazuje:</p>
-        <select id="hallSelect">
-            <option value="-1">Izaberi halu...</option>
-            <c:forEach var="hall" items="${ projection.halls }">
-                <option value="${ hall.id }">${ hall.name }</option>
-            </c:forEach>
-        </select>
+            <div class="info">
+                <div class="choose-info-container">
+                    <p>Izaberite halu u kojoj se projekcija prikazuje:</p>
+                    <select id="hallSelect">
+                        <option value="-1">Izaberi halu...</option>
+                        <c:forEach var="hall" items="${ projection.halls }">
+                            <option value="${ hall.id }">${ hall.name }</option>
+                        </c:forEach>
+                    </select>
+                </div>
 
-        <p>Izaberite termin u hali:</p>
-        <select id="periodSelect">
+                <div class="choose-info-container">
+                    <p>Izaberite termin u hali:</p>
+                    <select id="periodSelect">
 
-        </select>
+                    </select>
+                </div>
 
-         <div class="segments  invisible">
-            <div class="segment invisible" id="segmentLEFT_BALCONY"><p>Levi balkon</p></div>
-            <div class="middle-hall">
-                <div class="segment invisible" id="segmentVIP"><p>VIP</p></div>
-                <div class="segment invisible" id="segmentPARTER"><p>Parter</p></div>
+                 <div class="segments  invisible">
+                    <div class="segment invisible" id="segmentLEFT_BALCONY"><p>Levi balkon</p></div>
+                    <div class="middle-hall">
+                        <div class="segment invisible" id="segmentVIP"><p>VIP</p></div>
+                        <div class="segment invisible" id="segmentPARTER"><p>Parter</p></div>
+                    </div>
+                    <div class="segment invisible" id="segmentRIGHT_BALCONY"><p>Desni balkon</p></div>
+                </div>
+
+                Popust(%): <input type="text" value="0"  id="discountInput">
             </div>
-            <div class="segment invisible" id="segmentRIGHT_BALCONY"><p>Desni balkon</p></div>
         </div>
-
-        Popust(%): <input type="text" value="0"  id="discountInput">
     </body>
 
 </html>

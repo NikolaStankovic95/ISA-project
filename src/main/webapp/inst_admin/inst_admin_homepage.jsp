@@ -14,23 +14,28 @@
 			}
 		</script>
 
+		<style>
+			.page-layout {
+				margin: 35px;
+			}
+		</style>
 	</head>
 
 	<body style="margin: 15px;">
 		<c:import url="../_navbar.jsp"></c:import>
+		<div class="page-layout">
+			<h4>Izaberi instituciju:</h4>
 
-		<h4>Izaberi instituciju:</h4>
-
-		<select id="institutionSelect">
-			<c:forEach var="institution" items="${ institutions }">
-				<option value="${ institution.id } ">${ institution.name }
-					<c:if test="${ institution.type == 'CINEMA' }"> (bioskop)</c:if>
-					<c:if test="${ institution.type == 'THEATRE' }"> (pozoriste)</c:if>
-				</option>
-			</c:forEach>
+			<select id="institutionSelect">
+				<c:forEach var="institution" items="${ institutions }">
+					<option value="${ institution.id } ">${ institution.name }
+						<c:if test="${ institution.type == 'CINEMA' }"> (bioskop)</c:if>
+						<c:if test="${ institution.type == 'THEATRE' }"> (pozoriste)</c:if>
+					</option>
+				</c:forEach>
+			</select>
 			<input type="button" value="Dalje" onclick="chooseInstitution()">
-		</select>
-
+		</div>
 	</body>
 
 </html>

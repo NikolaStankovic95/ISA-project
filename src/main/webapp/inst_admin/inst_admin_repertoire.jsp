@@ -27,28 +27,43 @@
 			}
 		</script>
 
+		<style>
+			.page-layout {
+				margin: 35px;
+			}
+
+			.projections-container {
+				margin-top: 30px;
+			}
+		</style>
+
 	</head>
 
 	<body style="margin: 15px;">
 		<c:import url="../_navbar.jsp"></c:import>
 
-		<h4>Osnovne informacije:</h4>
-		<table>
-			<tr>
-				<td>Ime:</td>
-				<td><input id="nameInput" type="text"
-					value="${ repertoire.name }"></td>
-			</tr>
-		</table>
-		<input type="button" value="Sacuvaj" onclick="editRepertoire()">
-		<h4>Projekcije:</h4>
-		<ul>
-			<c:forEach var="projection" items="${ repertoire.projections }">
-				<li><a href="/inst_admin/institution/${ institution.id }/projection/${ projection.id }">${ projection.name }</a>
-				</li>
-			</c:forEach>
-		</ul>
-		<a href="/inst_admin/institution/${ institution.id }/repertoire/${ repertoire.id }/create_projection">Dodaj projekciju</a>
+		<div class="page-layout">
+			<h4>Osnovne informacije:</h4>
+			<table class="table">
+				<tr>
+					<td>Ime:</td>
+					<td><input id="nameInput" type="text"
+						value="${ repertoire.name }"></td>
+				</tr>
+			</table>
+			<input type="button" value="Sacuvaj" onclick="editRepertoire()">
+
+			<div class="projections-container">
+			<h4>Projekcije:</h4>
+			<ul>
+				<c:forEach var="projection" items="${ repertoire.projections }">
+					<li><a href="/inst_admin/institution/${ institution.id }/projection/${ projection.id }">${ projection.name }</a>
+					</li>
+				</c:forEach>
+			</ul>
+			<a href="/inst_admin/institution/${ institution.id }/repertoire/${ repertoire.id }/create_projection">Dodaj projekciju</a>
+			</div>
+		</div>
 	</body>
 
 </html>

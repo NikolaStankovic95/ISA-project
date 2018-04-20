@@ -166,65 +166,86 @@
             }
         </script>
 
+        <style>
+            .page-layout {
+                margin: 35px;
+            }
+
+            .repertoire-container {
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+
+            .halls-container {
+                margin-bottom: 30px;
+            }
+        </style>
     </head>
 
     <body onload="init()" style="margin: 15px;">
         <c:import url="../_navbar.jsp"></c:import>
 
-        <h4>Osnovne informacije:</h4>
-        <table>
-            <tr>
-                <td>Ime: </td>
-                <td><input id="nameInput" type="text" value="${ institution.name }"></td>
-            </tr>
-            <tr>
-                <td>Opis: </td>
-                <td><input id="descriptionInput" type="text" value="${ institution.description }"></td>
-            </tr>
-            <tr>
-                <td>Adresa: </td>
-                <td><input id="addressInput" type="text" value="${ institution.address }"></td>
-            </tr>
-        </table>
-        <input type="button" value="Sacuvaj" onclick="editInstitution()">
-        <h4>Repertoar:</h4>
-        <c:if test="${ institution.repertoire != null }">
-            <a href="/inst_admin/institution/${ institution.id }/repertoire/${ institution.repertoire.id }"><p>${ institution.repertoire.name }</p></a>
-        </c:if>
-        <c:if test="${ institution.repertoire == null }">
-            <a href="/inst_admin/institution/${ institution.id }/create_repertoire">Dodaj repertoar</a>
-        </c:if>
-        <h4>Sale:</h4>
-        <ul>
-            <c:forEach var="hall" items="${ institution.halls }">
-                <li><a href="/inst_admin/hall/${ hall.id }">${ hall.name }</a></li>
-            </c:forEach>
-        </ul>
-        <a href="/inst_admin/institution/${ institution.id }/create_hall">Dodaj salu</a>
+        <div class="page-layout">
 
-        <h4>Posecenost</h4>
+            <h4>Osnovne informacije:</h4>
+            <table class="table">
+                <tr>
+                    <td>Ime: </td>
+                    <td><input id="nameInput" type="text" value="${ institution.name }"></td>
+                </tr>
+                <tr>
+                    <td>Opis: </td>
+                    <td><input id="descriptionInput" type="text" value="${ institution.description }"></td>
+                </tr>
+                <tr>
+                    <td>Adresa: </td>
+                    <td><input id="addressInput" type="text" value="${ institution.address }"></td>
+                </tr>
+            </table>
+            <input type="button" value="Sacuvaj" onclick="editInstitution()">
 
-        <select id="visitedGraphPeriodSelect">
-            <option value="-1">Izaberite period...</option>
-            <option value="0">Danas</option>
-            <option value="1">Proteklih nedelju dana</option>
-            <option value="2">Proteklih mesec dana</option>
-        </select>
-        
+            <div class="repertoire-container">
+                <h4>Repertoar:</h4>
+                <c:if test="${ institution.repertoire != null }">
+                    <a href="/inst_admin/institution/${ institution.id }/repertoire/${ institution.repertoire.id }"><p>${ institution.repertoire.name }</p></a>
+                </c:if>
+                <c:if test="${ institution.repertoire == null }">
+                    <a href="/inst_admin/institution/${ institution.id }/create_repertoire">Dodaj repertoar</a>
+                </c:if>
+            </div>
 
-        <div id="visitedChartContainer" style="height: 250px;"></div>
+            <div class="halls-container">
+                <h4>Sale:</h4>
+                <ul>
+                    <c:forEach var="hall" items="${ institution.halls }">
+                        <li><a href="/inst_admin/hall/${ hall.id }">${ hall.name }</a></li>
+                    </c:forEach>
+                </ul>
+                <a href="/inst_admin/institution/${ institution.id }/create_hall">Dodaj salu</a>
+            </div>
+            <h4>Posecenost</h4>
 
-        <h4>Prihodi</h4>
+            <select id="visitedGraphPeriodSelect">
+                <option value="-1">Izaberite period...</option>
+                <option value="0">Danas</option>
+                <option value="1">Proteklih nedelju dana</option>
+                <option value="2">Proteklih mesec dana</option>
+            </select>
 
-        <select id="incomeGraphPeriodSelect">
-            <option value="-1">Izaberite period...</option>
-            <option value="0">Danas</option>
-            <option value="1">Proteklih nedelju dana</option>
-            <option value="2">Proteklih mesec dana</option>
-        </select>
 
-        <div id="incomeChartContainer" style="height: 250px;"></div>
+            <div id="visitedChartContainer" style="height: 250px;"></div>
 
+            <h4>Prihodi</h4>
+
+            <select id="incomeGraphPeriodSelect">
+                <option value="-1">Izaberite period...</option>
+                <option value="0">Danas</option>
+                <option value="1">Proteklih nedelju dana</option>
+                <option value="2">Proteklih mesec dana</option>
+            </select>
+
+            <div id="incomeChartContainer" style="height: 250px;"></div>
+        </div>
     </body>
 
 </html>

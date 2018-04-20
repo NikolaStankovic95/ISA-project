@@ -80,7 +80,6 @@
                     method: 'POST',
                     url: '/institution/${ institution.id }/hall',
                     contentType : 'application/json',
-                    dataType: 'json',
                     data: JSON.stringify({
                         name: name,
                         hallSegments: activeSegments
@@ -90,8 +89,7 @@
                         alert("Uspesno dodata hala.");
                     },
                     error: function(data) {
-                        console.log(data);
-                        alert("Neuspesno dodavanje.");
+                        alert(data.responseText);
                     }
                 });
             }
@@ -101,6 +99,8 @@
             .segments {
                 display: flex;
                 flex-direction: row;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
 
             .closed {
@@ -120,6 +120,24 @@
             .invisible {
                 display: none;
             }
+
+            .page-layout {
+                margin: 35px;
+            }
+
+            .info {
+                margin: 35px;
+            }
+
+            .segment-data {
+                margin: 35px;
+            }
+
+            .segment {
+                text-align: center;
+                min-height: 150px;
+                min-width: 150px;
+            }
         </style>
 
     </head>
@@ -127,58 +145,66 @@
     <body onload="init()" style="margin: 15px;">
         <c:import url="../_navbar.jsp"></c:import>
 
-        <h3>Dodaj halu za ${ institution.name }</h3>
-        <h4>Osnovne informacije:</h4>
-        <table>
-            <tr>
-                <td>Ime: </td>
-                <td><input id="nameInput" type="text" value="${ hall.name }"></td>
-            </tr>
-        </table>
+        <div class="page-layout">
 
-        <h4>Segmenti:</h4>
+            <h3>Dodaj halu za ${ institution.name }:</h3>
 
-        <div id="chooseSegment">
-            <input type="checkbox" id="vipCheckbox" name="vipCheckbox" value="0">
-            <label for="vipCheckbox">VIP</label>
-
-            <input type="checkbox" id="leftBalconyCheckbox" name="leftBalconyCheckbox" value="1">
-            <label for="leftBalconyCheckbox">Levi balkon</label>
-
-            <input type="checkbox" id="rightBalconyCheckbox" name="rightBalconyCheckbox" value="2">
-            <label for="rightBalconyCheckbox">Desni balkon</label>
-
-            <input type="checkbox" id="parterCheckbox" name="parterCheckbox" value="3">
-            <label for="parterCheckbox">Parter</label>
-        </div>
-
-        <div class="segments">
-            <div class="segment invisible" id="segment1"><p>Levi balkon</p></div>
-            <div class="middle-hall">
-                <div class="segment invisible" id="segment0"><p>VIP</p></div>
-                <div class="segment invisible" id="segment3"><p>Parter</p></div>
+            <div class="info">
+                <h4>Osnovne informacije:</h4>
+                <table class="table">
+                    <tr>
+                        <td>Ime: </td>
+                        <td><input id="nameInput" type="text" value="${ hall.name }"></td>
+                    </tr>
+                </table>
             </div>
-            <div class="segment invisible" id="segment2"><p>Desni balkon</p></div>
+
+            <div class="segment-data">
+                <h4>Segmenti:</h4>
+
+                <div id="chooseSegment">
+                    <input type="checkbox" id="vipCheckbox" name="vipCheckbox" value="0">
+                    <label for="vipCheckbox">VIP</label>
+
+                    <input type="checkbox" id="leftBalconyCheckbox" name="leftBalconyCheckbox" value="1">
+                    <label for="leftBalconyCheckbox">Levi balkon</label>
+
+                    <input type="checkbox" id="rightBalconyCheckbox" name="rightBalconyCheckbox" value="2">
+                    <label for="rightBalconyCheckbox">Desni balkon</label>
+
+                    <input type="checkbox" id="parterCheckbox" name="parterCheckbox" value="3">
+                    <label for="parterCheckbox">Parter</label>
+                </div>
+
+                <div class="segments">
+                    <div class="segment invisible" id="segment1"><p>Levi balkon</p></div>
+                    <div class="middle-hall">
+                        <div class="segment invisible" id="segment0"><p>VIP</p></div>
+                        <div class="segment invisible" id="segment3"><p>Parter</p></div>
+                    </div>
+                    <div class="segment invisible" id="segment2"><p>Desni balkon</p></div>
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <td>Segment:</td>
+                        <td><span id="segmentNameFormInput"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>Broj redova:</td>
+                        <td><input id="numberOfRowsFormInput" type="text"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Broj kolona:</td>
+                        <td><input id="numberOfColumnsFormInput" type="text"></td>
+                    </tr>
+
+                </table>
+                <input type="button" value="Sacuvaj" onclick="saveHall()">
+            </div>
         </div>
-
-        <table>
-            <tr>
-                <td>Segment:</td>
-                <td><span id="segmentNameFormInput"></span></td>
-            </tr>
-
-            <tr>
-                <td>Broj redova:</td>
-                <td><input id="numberOfRowsFormInput" type="text"></td>
-            </tr>
-
-            <tr>
-                <td>Broj kolona:</td>
-                <td><input id="numberOfColumnsFormInput" type="text"></td>
-            </tr>
-
-        </table>
-        <input type="button" value="Sacuvaj" onclick="saveHall()">
     </body>
 
 </html>

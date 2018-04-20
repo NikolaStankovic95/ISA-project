@@ -35,20 +35,20 @@
                     </tr>
                     <tr>
                         <td>Trajanje: </td>
-                        <td>${ projection.duration }</td>
+                        <td>${ projection.duration } min.</td>
                     </tr>
                     <tr>
                         <td>Cena:</td>
-                        <td>${ projection.price }</td>
+                        <td>${ projection.price } din.</td>
                     </tr>
                     <tr>
                         <c:if test="${ projection.getAverageRating() == null }">
                             <td>Ocena:</td>
-                            <td>nema ocene.</td>
+                            <td>nema ocene</td>
                         </c:if>
                         <c:if test="${ projection.getAverageRating() != null }">
                             <td>Ocena:</td>
-                            <td>${ projection.getAverageRating() }.</td>
+                            <td>${ projection.getAverageRating() }</td>
                         </c:if>
                     </tr>
                 </table>

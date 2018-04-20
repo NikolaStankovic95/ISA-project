@@ -1,13 +1,10 @@
-.navbar-default .navbar-nav>li>a:hover{
-
-	color: red;
-
+.main-container {
+	margin-top: 150px;
+	display: flex;
+	justify-content: space-evenly;
 }
-.navbar-default .navbar-nav>li>a{
 
-	color: white;
-
-}
-.navbar-default{
-	background-color: #0079bb;
+.institution_image {
+	width: 500px;
+	height: 333px;
 }

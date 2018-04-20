@@ -36,7 +36,7 @@
             <ul id="nav" class="nav navbar-nav">
                 <c:if test="${not empty loggedUser}">
 
-                    <li><a  href="/userController/user/${loggedUser.id}">Profile</a></li>
+                    <li><a href="/userController/user/${loggedUser.id}">Profile</a></li>
                     <li><a href="/myReservations/">My reservations</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,12 +48,15 @@
                         </div>
                     </li>
                 </c:if>
-                <li><a href="../../institution/cinemas">Cinemas</a></li>
-                <li><a href="../../institution/theatres">Theatres</a></li>
+                <li><a href="/institution/cinemas">Cinemas</a></li>
+                <li><a href="/institution/theatres">Theatres</a></li>
 				<c:if test="${not empty loggedUser}">
-				<li><a href="../../myAds.jsp">Offers</a></li>
-                <li><a href="../../bided_ads.jsp">My bids</a></li>
-				</c:if>	
+				<li><a href="/myAds.jsp">Offers</a></li>
+                <li><a href="/bided_ads.jsp">My bids</a></li>
+				</c:if>
+                <c:if test="${not empty loggedUser && loggedUser.role == 'INSTADMIN'}">
+                    <li><a href="/inst_admin">Institution admin</a></li>
+                </c:if>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${empty loggedUser}">

@@ -35,6 +35,10 @@
                         }
                     });
                 });
+
+                $("#imageInput").change(() => {
+                    uploadImage();
+				})
             }
 
 			function uploadImage() {
@@ -129,72 +133,85 @@
 
 		</script>
 
+		<style>
+			.page-layout {
+				margin: 35px;
+			}
+
+			#selectedPeriods {
+				margin-top: 20px;
+			}
+		</style>
+
 	</head>
 
 	<body onload="init()" style="margin: 15px;">
 		<c:import url="../_navbar.jsp"></c:import>
 
-		<h4>Osnovne informacije:</h4>
-		<table>
-			<tr>
-				<td>Ime:</td>
-				<td><input id="nameInput" type="text"
-					value="${ projection.name }"></td>
-			</tr>
-			<tr>
-				<td>Opis:</td>
-				<td><input id="descriptionInput" type="text"
-					value="${ projection.description }"></td>
-			</tr>
-			<tr>
-				<td>Glumci:</td>
-				<td><input id="actorsInput" type="text"
-					value="${ projection.actors }"></td>
-			</tr>
-			<tr>
-				<td>Zanr:</td>
-				<td><input id="genreInput" type="text"
-					value="${ projection.genre }"></td>
-			</tr>
-			<tr>
-				<td>Ime reditelja:</td>
-				<td><input id="directorNameInput" type="text"
-					value="${ projection.directorName }"></td>
-			</tr>
-			<tr>
-                <td>Slika:</td>
-                <td><input id="imageInput" type="file"></td>
-                <td><input type="button" value="Aploaduj" onclick="uploadImage()"></td>
-            </tr>
-			<tr>
-				<td>Trajanje:</td>
-				<td><input id="durationInput" type="text"
-					value="${ projection.duration }"></td>
-			</tr>
-			<tr>
-				<td>Cena:</td>
-				<td><input id="priceInput" type="text"
-					value="${ projection.price }"></td>
-			</tr>
-		</table>
+		<div class="page-layout">
 
-		<select id="selectHall">
-            <option value="-1">Izaberi salu...</option>
-            <c:forEach var="hall" items="${ institution.halls }">
-                <option value="${ hall.id } ">${ hall.name }</option>
-            </c:forEach>
-        </select>
-        <select id="selectPeriod">
+			<h4>Osnovne informacije:</h4>
+			<table class="table">
+				<tr>
+					<td>Ime:</td>
+					<td><input id="nameInput" type="text"
+						value="${ projection.name }"></td>
+				</tr>
+				<tr>
+					<td>Opis:</td>
+					<td><input id="descriptionInput" type="text"
+						value="${ projection.description }"></td>
+				</tr>
+				<tr>
+					<td>Glumci:</td>
+					<td><input id="actorsInput" type="text"
+						value="${ projection.actors }"></td>
+				</tr>
+				<tr>
+					<td>Zanr:</td>
+					<td><input id="genreInput" type="text"
+						value="${ projection.genre }"></td>
+				</tr>
+				<tr>
+					<td>Ime reditelja:</td>
+					<td><input id="directorNameInput" type="text"
+						value="${ projection.directorName }"></td>
+				</tr>
+				<tr>
+					<td>Slika:</td>
+					<td><input id="imageInput" type="file"></td>
+				</tr>
+				<tr>
+					<td>Trajanje (min):</td>
+					<td><input id="durationInput" type="text"
+						value="${ projection.duration }"></td>
+				</tr>
+				<tr>
+					<td>Cena:</td>
+					<td><input id="priceInput" type="text"
+						value="${ projection.price }"></td>
+				</tr>
+			</table>
 
-		</select>
-		<br>
-		<input type="button" value="Dodaj salu" onclick="addDateAndHall()">
-        <ul id="selectedPeriods">
+			<select id="selectHall">
+				<option value="-1">Izaberi salu...</option>
+				<c:forEach var="hall" items="${ institution.halls }">
+					<option value="${ hall.id } ">${ hall.name }</option>
+				</c:forEach>
+			</select>
+			<select id="selectPeriod">
 
-        </ul>
+			</select>
+			<input type="button" value="Dodaj salu" onclick="addDateAndHall()">
 
-		<input type="button" value="Sacuvaj" onclick="editProjection()">
-		<input type="button" value="Izbrisi projekciju" onclick="deleteProjection()">
+			<ul id="selectedPeriods">
+
+			</ul>
+
+			<input type="button" value="Sacuvaj" onclick="editProjection()">
+			<input type="button" value="Izbrisi projekciju" onclick="deleteProjection()">
+			<a href="/inst_admin/fast_reservation/${ projection.id }">Kreiraj brzu rezervaciju za ovu projekciju</a>
+		</div>
 	</body>
 
 </html>

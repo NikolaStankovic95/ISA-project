@@ -35,6 +35,10 @@
                         }
                     });
                 });
+
+                $("#imageInput").change(function() {
+                   uploadImage();
+                });
             }
 
             function saveProjection() {
@@ -115,63 +119,80 @@
 
         </script>
 
+        <style>
+            .page-layout {
+                margin: 35px;
+            }
+
+            #selectedPeriods {
+                margin-top: 20px;
+            }
+
+            .info {
+                margin: 35px;
+            }
+        </style>
     </head>
 
     <body onload="init()" style="margin: 15px;">
         <c:import url="../_navbar.jsp"></c:import>
 
-        <h4>Osnovne informacije:</h4>
-        <table>
-            <tr>
-                <td>Ime:</td>
-                <td><input id="nameInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Opis:</td>
-                <td><input id="descriptionInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Glumci:</td>
-                <td><input id="actorsInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Zanr:</td>
-                <td><input id="genreInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Trajanje:</td>
-                <td><input id="durationInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Ime reditelja:</td>
-                <td><input id="directorNameInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Cena:</td>
-                <td><input id="priceInput" type="text"></td>
-            </tr>
-            <tr>
-                <td>Slika:</td>
-                <td><input id="imageInput" type="file"></td>
-                <td><input type="button" value="Aploaduj" onclick="uploadImage()"></td>
-            </tr>
-        </table>
-        <select id="selectHall">
-            <option value="-1">Izaberi salu...</option>
-            <c:forEach var="hall" items="${ institution.halls }">
-                <option value="${ hall.id } ">${ hall.name }</option>
-            </c:forEach>
-        </select>
-        <select id="selectPeriod">
+        <div class="page-layout">
+            <h3>Nova projekcija za instituciju ${ institution.name }:</h3>
+            <div class="info">
+                <h4>Osnovne informacije:</h4>
+                <table class="table">
+                    <tr>
+                        <td>Ime:</td>
+                        <td><input id="nameInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Opis:</td>
+                        <td><input id="descriptionInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Glumci:</td>
+                        <td><input id="actorsInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Zanr:</td>
+                        <td><input id="genreInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Trajanje (min):</td>
+                        <td><input id="durationInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Ime reditelja:</td>
+                        <td><input id="directorNameInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Cena:</td>
+                        <td><input id="priceInput" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Slika:</td>
+                        <td><input id="imageInput" type="file"></td>
+                    </tr>
+                </table>
+                <select id="selectHall">
+                    <option value="-1">Izaberi salu...</option>
+                    <c:forEach var="hall" items="${ institution.halls }">
+                        <option value="${ hall.id } ">${ hall.name }</option>
+                    </c:forEach>
+                </select>
+                <select id="selectPeriod">
 
-        </select>
-        <input type="button" value="Dodaj salu" onclick="addDateAndHall()">
-        <ul id="selectedPeriods">
+                </select>
+                <input type="button" value="Dodaj salu" onclick="addDateAndHall()">
+                <ul id="selectedPeriods">
 
-        </ul>
-        <br>
-        <hr>
-        <input type="button" value="Sacuvaj" onclick="saveProjection()">
+                </ul>
+                <br>
+                <hr>
+                <input type="button" value="Sacuvaj" onclick="saveProjection()">
+            </div>
+        </div>
     </body>
 
 </html>

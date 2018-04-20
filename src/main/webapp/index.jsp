@@ -19,6 +19,10 @@
 
 <body>
 	<c:import url="_navbar.jsp"></c:import>
+	<div class="main-container">
+		<a href="/institution/theatres"><img class="institution_image" src="http://tiannanori.com/wp-content/uploads/2012/05/THEATRE.jpg"></a>
+		<a href="/institution/cinemas"><img class="institution_image" src="https://img.argentdubeurre.com/content/3741/illustration/cine-4-moins-14-ans-4.jpg"></a>
+	</div>
 </body>
 
 </html>
